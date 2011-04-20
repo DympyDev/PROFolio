@@ -211,7 +211,8 @@ div#main .withoutright div#content {
 /* footer */
 div#footer {
     width:900px;
-    margin:15px auto;
+	height:30px;
+    margin:10px auto;
     padding:13px 30px 10px 50px;
     clear:both;
     color:black;
@@ -238,13 +239,14 @@ div#footer {
 /* navigation menu */
 div#menu {
     background-color:white;
-    margin:35px 0 0 0;
+    margin:10px 0 0 0;
     padding:0 15px;
     overflow:hidden;
 }
 
 div#menu .nav {
     float:left;
+	margin:5px 0 0 0;
 }
 
 div#menu ul.mainmenu {
@@ -307,6 +309,7 @@ div#menu ul.submenu li a:hover {
 div.searchform {
     float:right;
     width:290px;
+	margin:5px 0 0 0;
 }
 
 div.searchform ul {
