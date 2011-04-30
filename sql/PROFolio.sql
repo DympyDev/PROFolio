@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS profolio`;
+CREATE DATABASE IF NOT EXISTS `profolio`;
 
 USE `profolio`;
 
