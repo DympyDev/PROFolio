@@ -1,12 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
     <head>
-        <title>PROFolio</title>
-        <meta name="robots" content="index, follow" />
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <meta name="author" content="RapidxHTML" />
-        <link href="css/style.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <?php
+        require "classes/class.website.php";
+        $website = new website();
+        echo $website->getHead();
+        ?>
     </head>
     <body id="page">
         <!-- wrapper -->
@@ -14,34 +13,13 @@
             <!-- header -->
             <div id="header">  
                 <!-- logo -->
-                <a href="index.html"><img id="logo" class="correct-png" src="images/logo.png" alt="Home" title="Home" /></a>
+                <a href="index.html"><img id="logo" class="correct-png" src="images/logo.png" alt="Home" title="Home"></a>
                 <!-- / logo -->    
                 <!-- loginform -->
                 <div class="loginform">
-                    <form action="" method="get">
-                        <ul class="clearingfix">
-                            <table align = right>
-                                <tr>		
-                                    <td>
-                                        <input type="text" name="username" class="login-field" value="Gebruikersnaam" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="text" name="password" class="login-field" value="Wachtwoord" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="submit" name="submit" class="login-submit" value="Login" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><a href="">Registreer</a></td>
-                                </tr>				
-                            </table> 
-                        </ul>
-                    </form>
+                    <?php
+                    echo $website->getLoginForm();
+                    ?>
                 </div>
                 <!-- / loginform -->  
             </div>
@@ -50,19 +28,15 @@
             <div id="menu">  
                 <div class="searchform">
                     <form action="" method="get">
-                        <ul>
-                            <li><input type="text" name="search" class="search-field" value="" /></li>
-                            <li><input type="submit" name="submit" class="search-submit" value="Zoek" /></li>
-                        </ul>
+                        <input type="text" name="search" class="search-field" value="">
+                        <input type="submit" name="submit" class="search-submit" value="Zoek">
                     </form>
                 </div>    
                 <!-- navigation -->
                 <div class="nav">
-                    <ul class="submenu">
-                        <li><a href="">Showcase</a></li>
-                        <li><a href="">POP</a></li>
-                        <li><a href="">Wie?</a></li>
-                    </ul>
+                    <?php
+                    echo $website->getNavMenu();
+                    ?>
                 </div>
                 <!-- / navigation -->  
             </div>
@@ -76,7 +50,9 @@
                                 <!-- right column -->
                                 <div id="right">
                                     <div id="right_container" class="clearingfix">
-                                        <p> Hier komt gebruiker info (afbeelding, naam, klas en leerlingnummer)</p>
+                                        <?php
+                                        echo $website->getUserInfo();
+                                        ?>
                                     </div>
                                 </div>
                                 <!-- / right column -->            

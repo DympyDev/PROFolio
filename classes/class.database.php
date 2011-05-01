@@ -17,11 +17,9 @@ Class database {
             if ($this->database) {
                 return true;
             } else {
-                echo "<center>" . mysql_error() . "</center><br>";
                 return false;
             }
         } else {
-            echo "<center>" . mysql_error() . "</center><br>";
             return false;
         }
     }
