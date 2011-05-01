@@ -22,13 +22,19 @@
                         <ul class="clearingfix">
                             <table align = right>
                                 <tr>		
-                                    <td><li><input type="text" name="username" class="login-field" value="Gebruikersnaam" /></li></td>
+                                    <td>
+                                        <input type="text" name="username" class="login-field" value="Gebruikersnaam" />
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><li><input type="text" name="password" class="login-field" value="Wachtwoord" /></li></td>
+                                    <td>
+                                        <input type="text" name="password" class="login-field" value="Wachtwoord" />
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><li><input type="submit" name="submit" class="login-submit" value="Login" /></li></td>
+                                    <td>
+                                        <input type="submit" name="submit" class="login-submit" value="Login" />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><a href="">Registreer</a></td>

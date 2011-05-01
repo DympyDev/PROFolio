@@ -77,13 +77,10 @@ body {
     font-size:12px;
 }
 
-/*\*/* html body {
+/* background */
+* html body {
     background-color:#13138B;
-}/*end*/
-
-/*\*/html*body {
-    background-color:#13138B;
-}/*end*/
+}
 
 /* wrapper setup */
 div.rapidxwpr {
@@ -211,7 +208,7 @@ div#main .withoutright div#content {
 /* footer */
 div#footer {
     width:900px;
-	height:30px;
+    height:30px;
     margin:10px auto;
     padding:13px 30px 10px 50px;
     clear:both;
@@ -246,7 +243,7 @@ div#menu {
 
 div#menu .nav {
     float:left;
-	margin:5px 0 0 0;
+    margin:5px 0 0 0;
 }
 
 div#menu ul.mainmenu {
@@ -309,7 +306,7 @@ div#menu ul.submenu li a:hover {
 div.searchform {
     float:right;
     width:290px;
-	margin:5px 0 0 0;
+    margin:5px 0 0 0;
 }
 
 div.searchform ul {
@@ -353,16 +350,7 @@ div.loginform {
     color:black;
 }
 
-div.loginform ul {
-    list-style:none;
-    margin:0 0 13px 0;
-}
-
-div.loginform ul li {
-    float:left;
-}
-
-div.loginform ul li input.login-field {
+div.loginform input.login-field {
     border:#b0b0a1 1px solid;
     padding:1px;
     margin:0 6px 0 0;
@@ -370,10 +358,9 @@ div.loginform ul li input.login-field {
     color:black;
 }
 
-div.loginform ul li input.login-submit {
+div.loginform input.login-submit {
     border:#8c8a72 1px solid;
     padding:0 1px;
-    margin:0;
     font-size:10px;
     color:#f6eed0;
     background:#090909;
