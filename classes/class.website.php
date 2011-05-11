@@ -140,7 +140,7 @@ class website {
     }
 
     function login($id, $password) {
-        $username = stripslashes(mysql_real_escape_string(strtolower($username)));
+        $username = stripslashes(mysql_real_escape_string($id));
         $password = stripslashes(mysql_real_escape_string($password));
         $result = $this->db->doQuery("SELECT `password` FROM `studenten` WHERE `id` = '$id';");
         if ($result != false) {     // Account bestaat...
