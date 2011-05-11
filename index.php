@@ -13,7 +13,7 @@
             <!-- header -->
             <div id="header">  
                 <!-- logo -->
-                <a href="index.html"><img id="logo" class="correct-png" src="images/logo.png" alt="Home" title="Home"></a>
+                <a href="index.php"><img id="logo" class="correct-png" src="images/logo.png" alt="Home" title="Home"></a>
                 <!-- / logo -->    
                 <!-- loginform -->
                 <div class="loginform">
@@ -63,8 +63,10 @@
                                         <?php
                                         if (isset($_GET['search'])) {
                                             echo $website->getResult($_GET['search']);
-                                        } else {
-                                            echo $website->getHomePage();
+                                        } else if(isset($_POST['register'])){                                            
+                                            echo $website->getRegisterForm();
+                                        }else {
+                                            echo $website->getHomepage();
                                         }
                                         ?>
                                     </div>

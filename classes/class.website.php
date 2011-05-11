@@ -59,9 +59,53 @@ class website {
         ';
         return $loginform;
     }
-    
+
     function getRegisterForm() {
-        
+        $registerform = '
+            <div align="center">
+                <form action="index.php" method="POST">
+                    <table>
+                        <tr>
+                            <td>Voor naam: </td> 
+                            <td><input type="text" name="firstname"></td>
+                        </tr>
+                        <tr>
+                            <td>Tussenvoegsel: </td>
+                            <td><input type="text" name="insertion"></td>
+                        </tr>
+                        <tr>
+                            <td>Achter naam: </td>
+                            <td><input type="text" name="lastname"></td>
+                        </tr>
+                        <tr>
+                            <td>Leerling Nr.: </td>
+                            <td><input type="text" name="llnr"></td>
+                        </tr>
+                        <tr>
+                            <td>Klas: </td>
+                            <td><input type="text" name="year"></td>
+                        </tr>
+                        <tr>
+                            <td>E-mail: </td>
+                            <td><input type="text" name="email"></td>
+                        </tr>                    
+                        <tr>
+                            <td>Gebruikersnaam: </td>
+                            <td><input type="text" name="username"></td>
+                        </tr>
+                        <tr>
+                            <td>Wachtwoord: </td>
+                            <td><input type="password" name="password"></td>
+                        </tr>
+                        <tr>
+                            <td> </td>
+                            <td><input type="submit" name="register" value="Registreer"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            ';
+        return $registerform;
     }
 
     function getNavMenu() {
@@ -84,7 +128,7 @@ class website {
         $password = stripslashes(mysql_real_escape_string($password));
         $result = $this->db->doQuery("SELECT `password` FROM `studenten` WHERE `username` = '" . $username . "';");
         if ($result != false) {     // Account bestaat...
-            if (mysql_result($result, 0) == sha1($password.":".$username)) {    // Correct password
+            if (mysql_result($result, 0) == sha1($password . ":" . $username)) {    // Correct password
                 require $this->mainConfigFile;
                 setcookie($cookiename, $username . "," . $password, time() + ($cookietime * 60));
             } else {
@@ -115,4 +159,5 @@ class website {
         ';
         return $homepage;
     }
+
 }
