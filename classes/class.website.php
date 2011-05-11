@@ -86,7 +86,7 @@ class website {
                 <form action="index.php" method="POST">
                     <table>
                         <tr>
-                            <td>Voor naam: </td> 
+                            <td>Voornaam: </td> 
                             <td><input type="text" name="firstname"></td>
                         </tr>
                         <tr>
@@ -94,15 +94,15 @@ class website {
                             <td><input type="text" name="insertion"></td>
                         </tr>
                         <tr>
-                            <td>Achter naam: </td>
+                            <td>Achternaam: </td>
                             <td><input type="text" name="lastname"></td>
                         </tr>
                         <tr>
-                            <td>E-mail: </td>
+                            <td>Email-adres: </td>
                             <td><input type="text" name="email"></td>
                         </tr>
                         <tr>
-                            <td>Leerling Nr.: </td>
+                            <td>Leerling Nummer: </td>
                             <td><input type="text" name="llnr"></td>
                         </tr>
                         <tr>
