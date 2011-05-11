@@ -22,7 +22,7 @@ class website {
         require "classes/class.database.php";
         require "classes/class.logger.php";
         require "classes/class.session.php";
-        $this->logger = new logger($ErrorFile);
+        $this->logger = new logger($LogDir);
         $this->db = new database($this->logger);
         $this->session = session::getInstance();
     }
