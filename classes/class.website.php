@@ -65,7 +65,7 @@ class website {
                     </tr>
                     <tr>
                         <td>
-                            <input type="password" name="password" class="login-field" value="Wachtwoord">
+                            <input type="password" name="password" class="login-field" value="Wachtwoord" onclick="this.value=\'\';">
                         </td>
                     </tr>
                     <tr>
@@ -153,6 +153,7 @@ class website {
                 setcookie($cookiename, $id . "," . $password, time() + ($cookietime * 60));
                 $this->session->id = $id;
                 $this->session->password = $password;
+                $this->getCurrentUser();
             } else {
                 return 'Onjuist wachtwoord';
             }

@@ -4,6 +4,9 @@
         <?php
         require "classes/class.website.php";
         $website = new website();
+        if (isset($_POST['login'])) {
+            $website->login($_POST['studentnr'], $_POST['password']);
+        }
         echo $website->getHead();
         ?>
     </head>
@@ -65,7 +68,7 @@
                                             echo $website->getResult($_GET['search']);
                                         } else if(isset($_POST['register'])){                                            
                                             echo $website->getRegisterForm();
-                                        }else {
+                                        } else {
                                             echo $website->getHomepage();
                                         }
                                         ?>
