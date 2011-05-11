@@ -55,28 +55,40 @@ class website {
     }
 
     function getLoginForm() {
-        $loginform = '
-            <form action="index.php" method="POST">
+        if (!$this->getCurrentUser()) {
+            $loginform = '
+                <form action="index.php" method="POST">
+                    <table align="right">
+                        <tr>		
+                            <td>
+                                <input type="text" name="studentnr" class="login-field" value="Leerlingnummer" onclick="this.value=\'\';">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="password" name="password" class="login-field" value="Wachtwoord" onclick="this.value=\'\';">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="submit" name="login" class="login-submit" value="Login">
+                                <input type="submit" name="register" class="login-submit" value="Register">
+                            </td>
+                        </tr>				
+                    </table>
+                </form>
+            ';
+        } else {
+            $loginform = '
                 <table align="right">
-                    <tr>		
-                        <td>
-                            <input type="text" name="studentnr" class="login-field" value="Leerlingnummer" onclick="this.value=\'\';">
-                        </td>
-                    </tr>
                     <tr>
                         <td>
-                            <input type="password" name="password" class="login-field" value="Wachtwoord" onclick="this.value=\'\';">
+                            <input type="submit" name="logout" class="login-submit" value="Logout">
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <input type="submit" name="login" class="login-submit" value="Login">
-                            <input type="submit" name="register" class="login-submit" value="Register">
-                        </td>
-                    </tr>				
                 </table>
-            </form>
-        ';
+            ';
+        }
         return $loginform;
     }
 
@@ -142,7 +154,8 @@ class website {
     function login($id, $password) {
         $username = stripslashes(mysql_real_escape_string($id));
         $password = stripslashes(mysql_real_escape_string($password));
-        $result = $this->db->doQuery("SELECT `password` FROM `studenten` WHERE `id` = '$id';");
+        $query = "SELECT `password` FROM `studenten` WHERE `id` = '$id';";
+        $result = $this->db->doQuery($query);
         if ($result != false) {     // Account bestaat...
             if (mysql_result($result, 0) == sha1($password . ":" . $id)) {    // Correct password
                 require $this->mainConfigFile;
@@ -154,7 +167,7 @@ class website {
                 return 'Onjuist wachtwoord';
             }
         } else {
-            return 'Onbekende gebruikersnaam.';
+            return 'Onbekend leerlingnummer.';
         }
     }
 
@@ -167,9 +180,10 @@ class website {
         $email =  stripslashes(mysql_real_escape_string($_POST['email']));
         $year =  stripslashes(mysql_real_escape_string($_POST['year']));
         $password = sha1("$password :  $id");
-        $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year) "
-                + "VALUES('" + $id + "', '" + $firstname + "', '" + $insertion + "', '" + $lastname 
-                + "', '" + $password + "', '" + $email + "', '" + $year + "')";
+        $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
+                VALUES('$id', '$firstname', '$insertion', '$lastname',
+                '$password', '$email', '$year')";
+        echo $query;
         $result = $this->db->doQuery($query);
         return $this->login($id, $password);
     }

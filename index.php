@@ -5,8 +5,8 @@
         require "classes/class.website.php";
         $website = new website();
         if (isset($_POST['login'])) {
-            $website->login($_POST['studentnr'], $_POST['password']);
-        }else if(isset($_POST['registreer'])) {
+            echo $website->login($_POST['studentnr'], $_POST['password']);
+        } else if (isset($_POST['registreer'])) {
             $website->register($_POST['registreer']);
         }
         echo $website->getHead();
