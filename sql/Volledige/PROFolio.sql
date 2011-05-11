@@ -20,7 +20,6 @@ DROP TABLE IF EXISTS `studenten`;
 
 CREATE TABLE `studenten` (
   `id` int(9) NOT NULL,
-  `username` varchar(25) NOT NULL,
   `firstname` varchar(25) NOT NULL,
   `insertion` varchar(10) DEFAULT NULL,
   `lastname` varchar(25) NOT NULL,

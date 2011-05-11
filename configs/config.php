@@ -14,4 +14,5 @@ $AvatarSaveDir = "./avatars/";      // Map waarin de plaatjes komen
 $AvatarMaxDimensions = "50x50";
 $AvatarAllowedFiletypes = array("image/png", "image/jpg", "image/jpeg", "image/bmp");
 $LanguageDir = "./languages/";
+$LogDir = "./logs/";
 ?>

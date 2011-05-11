@@ -14,13 +14,19 @@ class website {
 
     var $db;
     var $session;
+    var $logger;
+    var $user = "";
     var $mainConfigFile = "configs/config.php";
 
     function __construct() {
+        require $this->mainConfigFile;
         require "classes/class.database.php";
+        require "classes/class.logger.php";
         require "classes/class.session.php";
-        $this->db = new database();
+        $this->logger = new logger($LogDir);
+        $this->db = new database($this->logger);
         $this->session = session::getInstance();
+        $this->getCurrentUser();
     }
 
     function getHead() {
@@ -30,8 +36,22 @@ class website {
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
             <link href="css/style.css" rel="stylesheet" type="text/css">
             <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+            <script type="text/javascript">
+            if (typeof jQuery == "undefined") { // Als jQuery niet bestaat op dit punt, is de file niet bereikbaar
+                var fileref = document.createElement("script"); //  Maak een nieuw script object
+                fileref.setAttribute("type","text/javascript"); //  Definieer het als een javascript file
+                fileref.setAttribute("src", "./js/jquery.js");  //  Laad de lokale versie in de src attribuut
+                if (typeof fileref != "undefined") {            //  Als ons net aangemaakte script object nog correc is
+                    document.getElementsByTagName("head")[0].appendChild(fileref);  // Stop het in de head (laad de file)
+                }
+            }
+            </script>
         ';
         return $head;
+    }
+    
+    function getFooter() {
+        return 'Copyright rommel komt hier';
     }
 
     function getLoginForm() {
@@ -40,12 +60,12 @@ class website {
                 <table align="right">
                     <tr>		
                         <td>
-                            <input type="text" name="username" class="login-field" value="Gebruikersnaam">
+                            <input type="text" name="studentnr" class="login-field" value="Leerlingnummer" onclick="this.value=\'\';">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input type="password" name="password" class="login-field" value="Wachtwoord">
+                            <input type="password" name="password" class="login-field" value="Wachtwoord" onclick="this.value=\'\';">
                         </td>
                     </tr>
                     <tr>
@@ -104,7 +124,7 @@ class website {
                     </table>
                 </form>
             </div>
-            ';
+        ';
         return $registerform;
     }
 
@@ -123,14 +143,17 @@ class website {
         return "Hier komt de gebruikerinfo";
     }
 
-    function login($username, $password) {
+    function login($id, $password) {
         $username = stripslashes(mysql_real_escape_string(strtolower($username)));
         $password = stripslashes(mysql_real_escape_string($password));
-        $result = $this->db->doQuery("SELECT `password` FROM `studenten` WHERE `username` = '" . $username . "';");
+        $result = $this->db->doQuery("SELECT `password` FROM `studenten` WHERE `id` = '$id';");
         if ($result != false) {     // Account bestaat...
-            if (mysql_result($result, 0) == sha1($password . ":" . $username)) {    // Correct password
+            if (mysql_result($result, 0) == sha1($password . ":" . $id)) {    // Correct password
                 require $this->mainConfigFile;
-                setcookie($cookiename, $username . "," . $password, time() + ($cookietime * 60));
+                setcookie($cookiename, $id . "," . $password, time() + ($cookietime * 60));
+                $this->session->id = $id;
+                $this->session->password = $password;
+                $this->getCurrentUser();
             } else {
                 return 'Onjuist wachtwoord';
             }
@@ -169,6 +192,40 @@ class website {
             </p>
         ';
         return $homepage;
+    }
+    
+    function getUser($id) {
+        $query = "SELECT * FROM `studenten WHERE `id` = '$id';";
+        $result = $this->db->doQuery($query);
+        if ($result != false) {
+            return new user($id);
+        } else {
+            return false;
+        }
+    }
+    
+    function getCurrentUser() {
+        require $this->mainConfigFile;
+        if ($this->user == "") {
+            if (isset($this->session->id) && isset($this->session->password)) {
+                $user = new user($this->session->id, $this->session->password);
+                if ($user != false) {
+                    $this->user = $user;
+                }
+            } else if (isset($_COOKIE[$cookiename])) {
+                $pieces = explode(",", $_COOKIE[$cookiename]);
+                $id = $pieces[0];
+                $password = $pieces[1];
+                $user = new user($id, $password);
+                if ($user != false) {
+                    $this->user = $user;
+                    return $this->user;
+                }
+            }
+        } else {
+            return $this->user;
+        }
+        return false;
     }
 
 }

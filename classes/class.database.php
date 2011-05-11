@@ -4,8 +4,10 @@ Class database {
 
     var $connection;
     var $database;
+    var $logger;
 
-    function __construct() {
+    function __construct($logger) {
+        $this->logger = $logger;
         $this->makeConnection(true);
     }
 
@@ -17,9 +19,11 @@ Class database {
             if ($this->database) {
                 return true;
             } else {
+                $this->logger->writeToLog("Couldn't connect to database: $db_name.");
                 return false;
             }
         } else {
+            $this->logger->writeToLog("Couldn't connect to mysql: $db_host - $db_username - $db_password.");
             return false;
         }
     }
