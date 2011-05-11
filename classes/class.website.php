@@ -15,6 +15,7 @@ class website {
     var $db;
     var $session;
     var $logger;
+    var $user;
     var $mainConfigFile = "configs/config.php";
 
     function __construct() {
@@ -46,6 +47,10 @@ class website {
             </script>
         ';
         return $head;
+    }
+    
+    function getFooter() {
+        return 'Copyright rommel komt hier';
     }
 
     function getLoginForm() {
@@ -137,14 +142,16 @@ class website {
         return "Hier komt de gebruikerinfo";
     }
 
-    function login($username, $password) {
+    function login($id, $password) {
         $username = stripslashes(mysql_real_escape_string(strtolower($username)));
         $password = stripslashes(mysql_real_escape_string($password));
-        $result = $this->db->doQuery("SELECT `password` FROM `studenten` WHERE `username` = '" . $username . "';");
+        $result = $this->db->doQuery("SELECT `password` FROM `studenten` WHERE `id` = '$id';");
         if ($result != false) {     // Account bestaat...
-            if (mysql_result($result, 0) == sha1($password . ":" . $username)) {    // Correct password
+            if (mysql_result($result, 0) == sha1($password . ":" . $id)) {    // Correct password
                 require $this->mainConfigFile;
-                setcookie($cookiename, $username . "," . $password, time() + ($cookietime * 60));
+                setcookie($cookiename, $id . "," . $password, time() + ($cookietime * 60));
+                $this->session->id = $id;
+                $this->session->password = $password;
             } else {
                 return 'Onjuist wachtwoord';
             }
@@ -175,11 +182,33 @@ class website {
     }
     
     function getUser($id) {
-        
+        $query = "SELECT * FROM `studenten WHERE `id` = '$id';";
+        $result = $this->db->doQuery($query);
+        if ($result != false) {
+            return new user($id);
+        } else {
+            return false;
+        }
     }
     
     function getCurrentUser() {
-        
+        require $this->mainConfigFile;
+        if (isset($this->session->id) && isset($this->session->password)) {
+            $user = new user($this->session->id, $this->session->password);
+            if ($user != false) {
+                $this->user = $user;
+            }
+        } else if (isset($_COOKIE[$cookiename])) {
+            $pieces = explode(",", $_COOKIE[$cookiename]);
+            $id = $pieces[0];
+            $password = $pieces[1];
+            $user = new user($id, $password);
+            if ($user != false) {
+                $this->user = $user;
+                return $this->user;
+            }
+        }
+        return false;
     }
 
 }

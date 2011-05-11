@@ -85,9 +85,9 @@
         <div id="footer" class="clearingfix">
             <!-- footermenu -->
             <div class="footermenu">
-                <p>
-                    Overige crap die we kwijt willen(zoals copyright xD)
-                </p>
+                <?php
+                echo $website->getFooter();
+                ?>
             </div>
             <!-- footermenu -->
         </div>
