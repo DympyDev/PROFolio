@@ -54,7 +54,7 @@ class website {
                 <table align="right">
                     <tr>		
                         <td>
-                            <input type="text" name="username" class="login-field" value="Gebruikersnaam">
+                            <input type="text" name="studentnr" class="login-field" value="Leerlingnummer" onclick="this.value=\'\';">
                         </td>
                     </tr>
                     <tr>
