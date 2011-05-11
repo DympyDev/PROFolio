@@ -98,6 +98,10 @@ class website {
                             <td><input type="text" name="lastname"></td>
                         </tr>
                         <tr>
+                            <td>E-mail: </td>
+                            <td><input type="text" name="email"></td>
+                        </tr>
+                        <tr>
                             <td>Leerling Nr.: </td>
                             <td><input type="text" name="llnr"></td>
                         </tr>
@@ -106,20 +110,12 @@ class website {
                             <td><input type="text" name="year"></td>
                         </tr>
                         <tr>
-                            <td>E-mail: </td>
-                            <td><input type="text" name="email"></td>
-                        </tr>                    
-                        <tr>
-                            <td>Gebruikersnaam: </td>
-                            <td><input type="text" name="username"></td>
-                        </tr>
-                        <tr>
                             <td>Wachtwoord: </td>
                             <td><input type="password" name="password"></td>
                         </tr>
                         <tr>
                             <td> </td>
-                            <td><input type="submit" name="register" value="Registreer"></td>
+                            <td><input type="submit" name="registreer" value="Registreer"></td>
                         </tr>
                     </table>
                 </form>
@@ -172,9 +168,10 @@ class website {
         $year =  stripslashes(mysql_real_escape_string($_POST['year']));
         $password = sha1("$password :  $id");
         $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year) "
-                + "VALUES('" + $llnr + "', '" + $firstname + "', '" + $insertion + "', '" + $lastname 
+                + "VALUES('" + $id + "', '" + $firstname + "', '" + $insertion + "', '" + $lastname 
                 + "', '" + $password + "', '" + $email + "', '" + $year + "')";
         $result = $this->db->doQuery($query);
+        return $this->login($id, $password);
     }
 
     function getResult($search) {
