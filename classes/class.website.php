@@ -14,12 +14,16 @@ class website {
 
     var $db;
     var $session;
+    var $logger;
     var $mainConfigFile = "configs/config.php";
 
     function __construct() {
+        require $this->mainConfigFile;
         require "classes/class.database.php";
+        require "classes/class.logger.php";
         require "classes/class.session.php";
-        $this->db = new database();
+        $this->logger = new logger($ErrorFile);
+        $this->db = new database($this->logger);
         $this->session = session::getInstance();
     }
 
