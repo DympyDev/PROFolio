@@ -34,6 +34,16 @@ class website {
             <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
             <link href="css/style.css" rel="stylesheet" type="text/css">
             <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+            <script type="text/javascript">
+            if (typeof jQuery == "undefined") { // Als jQuery niet bestaat op dit punt, is de file niet bereikbaar
+                var fileref = document.createElement("script"); //  Maak een nieuw script object
+                fileref.setAttribute("type","text/javascript"); //  Definieer het als een javascript file
+                fileref.setAttribute("src", "./js/jquery.js");  //  Laad de lokale versie in de src attribuut
+                if (typeof fileref != "undefined") {            //  Als ons net aangemaakte script object nog correc is
+                    document.getElementsByTagName("head")[0].appendChild(fileref);  // Stop het in de head (laad de file)
+                }
+            }
+            </script>
         ';
         return $head;
     }
@@ -108,7 +118,7 @@ class website {
                     </table>
                 </form>
             </div>
-            ';
+        ';
         return $registerform;
     }
 
@@ -162,6 +172,14 @@ class website {
             </p>
         ';
         return $homepage;
+    }
+    
+    function getUser($id) {
+        
+    }
+    
+    function getCurrentUser() {
+        
     }
 
 }
