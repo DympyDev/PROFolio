@@ -15,7 +15,7 @@ class website {
     var $db;
     var $session;
     var $logger;
-    var $user;
+    var $user = "";
     var $mainConfigFile = "configs/config.php";
 
     function __construct() {
@@ -26,6 +26,7 @@ class website {
         $this->logger = new logger($LogDir);
         $this->db = new database($this->logger);
         $this->session = session::getInstance();
+        $this->getCurrentUser();
     }
 
     function getHead() {
@@ -193,20 +194,24 @@ class website {
     
     function getCurrentUser() {
         require $this->mainConfigFile;
-        if (isset($this->session->id) && isset($this->session->password)) {
-            $user = new user($this->session->id, $this->session->password);
-            if ($user != false) {
-                $this->user = $user;
+        if ($this->user == "") {
+            if (isset($this->session->id) && isset($this->session->password)) {
+                $user = new user($this->session->id, $this->session->password);
+                if ($user != false) {
+                    $this->user = $user;
+                }
+            } else if (isset($_COOKIE[$cookiename])) {
+                $pieces = explode(",", $_COOKIE[$cookiename]);
+                $id = $pieces[0];
+                $password = $pieces[1];
+                $user = new user($id, $password);
+                if ($user != false) {
+                    $this->user = $user;
+                    return $this->user;
+                }
             }
-        } else if (isset($_COOKIE[$cookiename])) {
-            $pieces = explode(",", $_COOKIE[$cookiename]);
-            $id = $pieces[0];
-            $password = $pieces[1];
-            $user = new user($id, $password);
-            if ($user != false) {
-                $this->user = $user;
-                return $this->user;
-            }
+        } else {
+            return $this->user;
         }
         return false;
     }
