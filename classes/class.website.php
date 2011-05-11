@@ -140,7 +140,18 @@ class website {
     }
 
     function register($_POST) {
-        
+        $id =  stripslashes(mysql_real_escape_string($_POST['llnr']));
+        $firstname =  stripslashes(mysql_real_escape_string($_POST['firstname']));
+        $insertion =  stripslashes(mysql_real_escape_string($_POST['insertion']));
+        $lastname =  stripslashes(mysql_real_escape_string($_POST['lastname']));
+        $password =  stripslashes(mysql_real_escape_string($_POST['password']));
+        $email =  stripslashes(mysql_real_escape_string($_POST['email']));
+        $year =  stripslashes(mysql_real_escape_string($_POST['year']));
+        $password = sha1("$password :  $id");
+        $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year) "
+                + "VALUES('" + $llnr + "', '" + $firstname + "', '" + $insertion + "', '" + $lastname 
+                + "', '" + $password + "', '" + $email + "', '" + $year + "')";
+        $result = $this->db->doQuery($query);
     }
 
     function getResult($search) {
