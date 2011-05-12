@@ -7,7 +7,7 @@
         if (isset($_POST['login'])) {
             echo $website->login($_POST['studentnr'], $_POST['password']);
         } else if (isset($_POST['registreer'])) {
-            $website->register($_POST['registreer']);
+            $website->register($_POST);
         }
         echo $website->getHead();
         ?>
