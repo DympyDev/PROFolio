@@ -49,13 +49,13 @@ class website {
         ';
         return $head;
     }
-    
+
     function getFooter() {
         return 'Copyright rommel komt hier';
     }
 
     function getLoginForm() {
-        if (!$this->getCurrentUser()) {
+        if ($this->getCurrentUser() == false) {
             $loginform = '
                 <form action="index.php" method="POST">
                     <table align="right">
@@ -80,13 +80,15 @@ class website {
             ';
         } else {
             $loginform = '
-                <table align="right">
-                    <tr>
-                        <td>
-                            <input type="submit" name="logout" class="login-submit" value="Logout">
-                        </td>
-                    </tr>
-                </table>
+                <form action="index.php" method="POST">
+                    <table align="right">
+                        <tr>
+                            <td>
+                                <input type="submit" name="logout" class="login-submit" value="Logout">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
             ';
         }
         return $loginform;
@@ -156,7 +158,8 @@ class website {
         $query = "SELECT `password` FROM `studenten` WHERE `id` = '$id';";
         $result = $this->db->doQuery($query);
         if ($result != false) {         // Account bestaat...
-            if (mysql_result($result, 0) == sha1($password . " : " . $id)) {    // Correct password
+            $password = sha1($password . " : " . $id);
+            if (mysql_result($result, 0) == $password) {    // Correct password
                 require $this->mainConfigFile;
                 setcookie($cookiename, $id . "," . $password, time() + ($cookietime * 60));
                 $this->session->id = $id;
@@ -169,14 +172,20 @@ class website {
             return 'Onbekend leerlingnummer.';
         }
     }
+    
+    function logout() {
+        require $this->mainConfigFile;
+        setcookie($cookiename, "", time() - 600);
+        $this->session->destroy();
+    }
 
     function register($_POST) {
-        $id =  stripslashes(mysql_real_escape_string($_POST['llnr']));
-        $firstname =  stripslashes(mysql_real_escape_string($_POST['firstname']));
-        $insertion =  stripslashes(mysql_real_escape_string($_POST['insertion']));
-        $lastname =  stripslashes(mysql_real_escape_string($_POST['lastname']));
-        $email =  stripslashes(mysql_real_escape_string($_POST['email']));
-        $year =  stripslashes(mysql_real_escape_string($_POST['year']));
+        $id = stripslashes(mysql_real_escape_string($_POST['llnr']));
+        $firstname = stripslashes(mysql_real_escape_string($_POST['firstname']));
+        $insertion = stripslashes(mysql_real_escape_string($_POST['insertion']));
+        $lastname = stripslashes(mysql_real_escape_string($_POST['lastname']));
+        $email = stripslashes(mysql_real_escape_string($_POST['email']));
+        $year = stripslashes(mysql_real_escape_string($_POST['year']));
         $password = sha1($_POST['password'] . " : " . $id);
         $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
                 VALUES('$id', '$firstname', '$insertion', '$lastname',
@@ -201,36 +210,41 @@ class website {
         ';
         return $homepage;
     }
-    
+
     function getUser($id) {
-        require "classes/class.user.php";
+        if (!class_exists('user')) {
+            require "classes/class.user.php";
+        }
         $query = "SELECT * FROM `studenten WHERE `id` = '$id';";
         $result = $this->db->doQuery($query);
         if ($result != false) {
-            return new user($id);
+            return new user($this->db, $id);
         } else {
             return false;
         }
     }
-    
+
     function getCurrentUser() {
         require $this->mainConfigFile;
-        require "classes/class.user.php";
+        if (!class_exists('user')) {
+            require "classes/class.user.php";
+        }
         if ($this->user == "") {
+            $user = "";
             if (isset($this->session->id) && isset($this->session->password)) {
-                $user = new user($this->session->id, $this->session->password);
-                if ($user != false) {
-                    $this->user = $user;
-                }
+                $user = new user($this->db, $this->session->id, $this->session->password);
             } else if (isset($_COOKIE[$cookiename])) {
                 $pieces = explode(",", $_COOKIE[$cookiename]);
                 $id = $pieces[0];
                 $password = $pieces[1];
-                $user = new user($id, $password);
-                if ($user != false) {
-                    $this->user = $user;
-                    return $this->user;
-                }
+                $user = new user($this->db, $id, $password);
+            } else {
+                return false;
+            }
+
+            if ($user->exists == true) {
+                $this->user = $user;
+                return $this->user;
             }
         } else {
             return $this->user;
