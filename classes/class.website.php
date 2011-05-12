@@ -118,7 +118,7 @@ class website {
                             <td><input type="text" name="llnr"></td>
                         </tr>
                         <tr>
-                            <td>Klas: </td>
+                            <td>Studiejaar: </td>
                             <td><input type="text" name="year"></td>
                         </tr>
                         <tr>
