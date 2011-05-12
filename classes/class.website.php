@@ -152,12 +152,11 @@ class website {
     }
 
     function login($id, $password) {
-        $username = stripslashes(mysql_real_escape_string($id));
-        $password = stripslashes(mysql_real_escape_string($password));
+        $id = stripslashes(mysql_real_escape_string($id));
         $query = "SELECT `password` FROM `studenten` WHERE `id` = '$id';";
         $result = $this->db->doQuery($query);
-        if ($result != false) {     // Account bestaat...
-            if (mysql_result($result, 0) == sha1($password . ":" . $id)) {    // Correct password
+        if ($result != false) {         // Account bestaat...
+            if (mysql_result($result, 0) == sha1($password . " : " . $id)) {    // Correct password
                 require $this->mainConfigFile;
                 setcookie($cookiename, $id . "," . $password, time() + ($cookietime * 60));
                 $this->session->id = $id;
@@ -176,16 +175,14 @@ class website {
         $firstname =  stripslashes(mysql_real_escape_string($_POST['firstname']));
         $insertion =  stripslashes(mysql_real_escape_string($_POST['insertion']));
         $lastname =  stripslashes(mysql_real_escape_string($_POST['lastname']));
-        $password =  stripslashes(mysql_real_escape_string($_POST['password']));
         $email =  stripslashes(mysql_real_escape_string($_POST['email']));
         $year =  stripslashes(mysql_real_escape_string($_POST['year']));
-        $password = sha1("$password :  $id");
+        $password = sha1($_POST['password'] . " : " . $id);
         $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
                 VALUES('$id', '$firstname', '$insertion', '$lastname',
                 '$password', '$email', '$year')";
-        echo $query;
         $result = $this->db->doQuery($query);
-        return $this->login($id, $password);
+        return $this->login($id, $_POST['password']);
     }
 
     function getResult($search) {
@@ -206,6 +203,7 @@ class website {
     }
     
     function getUser($id) {
+        require "classes/class.user.php";
         $query = "SELECT * FROM `studenten WHERE `id` = '$id';";
         $result = $this->db->doQuery($query);
         if ($result != false) {
@@ -217,6 +215,7 @@ class website {
     
     function getCurrentUser() {
         require $this->mainConfigFile;
+        require "classes/class.user.php";
         if ($this->user == "") {
             if (isset($this->session->id) && isset($this->session->password)) {
                 $user = new user($this->session->id, $this->session->password);

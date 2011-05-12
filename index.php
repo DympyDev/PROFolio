@@ -68,7 +68,7 @@
                                         <?php
                                         if (isset($_GET['search'])) {
                                             echo $website->getResult($_GET['search']);
-                                        } else if(isset($_POST['register'])){                                            
+                                        } else if(isset($_POST['register'])) {                                            
                                             echo $website->getRegisterForm();
                                         } else {
                                             echo $website->getHomepage();
