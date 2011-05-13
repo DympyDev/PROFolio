@@ -9,7 +9,7 @@
         } else if (isset($_POST['registreer'])) {
             $website->register($_POST);
         } else if (isset($_POST['logout'])) {
-            $website->logout();
+            echo $website->logout();
         }
         echo $website->getHead();
         ?>

@@ -26,7 +26,6 @@ class website {
         $this->logger = new logger($LogDir);
         $this->db = new database($this->logger);
         $this->session = session::getInstance();
-        $this->getCurrentUser();
     }
 
     function getHead() {
@@ -177,6 +176,7 @@ class website {
         require $this->mainConfigFile;
         setcookie($cookiename, "", time() - 600);
         $this->session->destroy();
+        return '<script type="text/javascript">window.location="index.php";</script>';
     }
 
     function register($_POST) {
