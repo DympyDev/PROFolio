@@ -25,7 +25,12 @@ class logger {
             mkdir($this->logDir);
         }
         if (file_exists($this->errorFile)) {
-            $text = file_get_contents($this->errorFile) . "\n" . $text;
+            $file_content = file_get_contents($this->errorFile);
+            if (strpos($file_content, $text) === false) {   // Als de huidige error nog NIET in de errorlog zit...
+                $text = $file_content . "\n" . $text;
+            } else {
+                return;
+            }
         }
         $errorWriter = fopen($this->errorFile, 'w');
         fwrite($errorWriter, $text);
