@@ -8,6 +8,8 @@
             echo $website->login($_POST['studentnr'], $_POST['password']);
         } else if (isset($_POST['registreer'])) {
             $website->register($_POST);
+        } else if (isset($_POST['logout'])) {
+            echo $website->logout();
         }
         echo $website->getHead();
         ?>
