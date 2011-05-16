@@ -53,12 +53,10 @@
                         <div id="main_container" class="clearingfix">
                             <div id="mainmiddle" class="floatbox withright" >          
                                 <!-- right column -->
-                                <div id="right">
-                                    <div id="right_container" class="clearingfix">
-                                        <?php
-                                        echo $website->getUserInfo();
-                                        ?>
-                                    </div>
+                                <div id="right_container" class="clearingfix">
+                                    <?php
+                                    echo $website->getUserInfo();
+                                    ?>
                                 </div>
                                 <!-- / right column -->            
                                 <!-- content column -->
@@ -68,7 +66,7 @@
                                         <?php
                                         if (isset($_GET['search'])) {
                                             echo $website->getResult($_GET['search']);
-                                        } else if(isset($_POST['register'])) {                                            
+                                        } else if (isset($_POST['register'])) {
                                             echo $website->getRegisterForm();
                                         } else {
                                             echo $website->getHomepage();
