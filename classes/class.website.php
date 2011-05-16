@@ -149,7 +149,12 @@ class website {
     }
 
     function getUserInfo() {
-        return "Hier komt de gebruikerinfo";
+        $userinfo = '
+            <div id="avatar">
+                <img src="/profolio/images/no-pic.bmp"/>
+            </div>
+            </br>Hier komt de gebruikerinfo';
+        return $userinfo;
     }
 
     function login($id, $password) {

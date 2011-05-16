@@ -22,6 +22,21 @@ body {
     outline:hidden;
 }
 
+/* image */
+#avatar
+{
+    width: 100px;
+    height: 100px;
+    padding: 25px 50px 25px 50px;
+    position: relative;
+}
+
+#avatar img {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+}
+
 /* links */
 a {
     color:#60131d;
@@ -110,6 +125,7 @@ span#logo, img#logo {
 /* main body setup */
 div#middle {
     width:auto;
+    height:100%;
     margin:0px 0px 0px 0px;
     clear:both;
     background:#FFF url(../images/middle-bg.png) 0 100% no-repeat;
@@ -152,14 +168,18 @@ div#middle .layoutright div#left {
 /* right column */
 div#right {
     width:250px;
+    height: 100%;
     padding:0px 0px 0px 0px;
     float:right;
     margin:0 0 0 0;
     color:black;
+    border-left: 2px;
 }
 
 div#right_container {
     padding:0 10px 0 10px;
+    height: 100%;
+    border-left:#000 3px solid;
 }
 
 /* content column */

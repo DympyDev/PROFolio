@@ -53,16 +53,18 @@
                 <div class="background layoutleft">    
                     <div id="main">
                         <div id="main_container" class="clearingfix">
-                            <div id="mainmiddle" class="floatbox withright" >          
+                            <div id="mainmiddle" class="floatbox withright" >       
                                 <!-- right column -->
-                                <div id="right_container" class="clearingfix">
-                                    <?php
-                                    echo $website->getUserInfo();
-                                    ?>
+                                <div id="right">
+                                    <div id="right_container" class="clearingfix">
+                                        <?php
+                                        echo $website->getUserInfo();
+                                        ?>
+                                    </div>
                                 </div>
-                                <!-- / right column -->            
+                                <!-- / right column -->         
                                 <!-- content column -->
-                                <div id="content">            
+                                <div id="content">      
                                     <!-- intro -->
                                     <div class="intro">
                                         <?php
@@ -75,7 +77,7 @@
                                         }
                                         ?>
                                     </div>
-                                    <!-- / intro -->
+                                    <!-- / intro -->      
                                 </div>
                                 <!-- / content column -->          
                             </div>
