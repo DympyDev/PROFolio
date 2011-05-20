@@ -374,7 +374,7 @@ div.loginform input.login-field {
     padding:1px;
     margin:0 6px 0 0;
     font-size:10px;
-    color:black;
+    color:#13138B;
 }
 
 div.loginform input.login-submit {
@@ -382,7 +382,7 @@ div.loginform input.login-submit {
     padding:0 1px;
     font-size:10px;
     color:#f6eed0;
-    background:#090909;
+    background:#13138B;
     cursor:pointer;
 }
 
