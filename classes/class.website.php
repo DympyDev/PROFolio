@@ -162,10 +162,17 @@ class website {
     }
 
     function getUserInfo() {
+        $image;
+        $path = '../profolio/images/'.$this->getCurrentUser()->id.'_img.png';
+        if(file_exists($path) == true){
+            $image = $this->getCurrentUser()->id.'_img.png';
+        } else {
+            $image = 'no-pic.bmp';
+        }
         if($this->getCurrentUser() == true){
             $userinfo = '
                 <div id="avatar">
-                    <img src="/profolio/images/no-pic.bmp"/>
+                    <img src="/profolio/images/'.$image.'"/>
                 </div>
                 </br>Naam leerling:</br>
                 <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'</b></br>
@@ -176,7 +183,7 @@ class website {
             ';
         } else {
             $userinfo = '
-                Log in of maak een account aan om gebruik te kunnen maken van onze diensten.
+                </br></br>Log in of maak een account aan om gebruik te kunnen maken van onze diensten.
             ';
         }
         return $userinfo;
