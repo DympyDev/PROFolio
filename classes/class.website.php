@@ -139,47 +139,98 @@ class website {
     }
 
     function getNavMenu() {
-        $navmenu = '
+        if($this->getCurrentUser() == true){
+            $navmenu = '
             <ul class="submenu">
+                <li><a href="index.php">Home</a></li>
                 <li><a href="index.php?showcase='.$this->getCurrentUser()->id.'">Showcase</a></li>
                 <li><a href="index.php?pop='.$this->getCurrentUser()->id.'">POP</a></li>
                 <li><a href="index.php?info='.$this->getCurrentUser()->id.'">Wie?</a></li>
             </ul>
-        ';
+            ';
+        } else {
+            $navmenu = '
+            <ul class="submenu">
+                <li><a href="index.php">Home</a></li>
+                <li><a href="index.php?showcase=none">Showcase</a></li>
+                <li><a href="index.php?pop=none">POP</a></li>
+                <li><a href="index.php?info=none">Wie?</a></li>
+            </ul>
+            ';
+        }        
         return $navmenu;
     }
 
     function getUserInfo() {
-        $userinfo = '
-            <div id="avatar">
-                <img src="/profolio/images/no-pic.bmp"/>
-            </div>
-            </br>Hier komt de gebruikerinfo';
+        if($this->getCurrentUser() == true){
+            $userinfo = '
+                <div id="avatar">
+                    <img src="/profolio/images/no-pic.bmp"/>
+                </div>
+                </br>Naam leerling:</br>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'</b></br>
+                </br>Leerling Nummer:</br>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->getCurrentUser()->id.'</b></br>
+                </br>Studie Jaar:</br>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->getCurrentUser()->year.'</b></br>
+            ';
+        } else {
+            $userinfo = '
+                Log in of maak een account aan om gebruik te kunnen maken van onze diensten.
+            ';
+        }
         return $userinfo;
     }
     
     function getShowcase() {
-        $showcase = '
-            Dit is de showcase van 
-            '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
-        ';
+        if($this->getCurrentUser() == true) {
+            $showcase = '
+                Dit is de showcase van 
+                '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
+            ';
+        } else {            
+            $showcase = '
+                U bent niet ingelogd. </br>
+                Als U een showcase wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                </br></br>
+                Als je je eigen showcase openbaar wilt maken raden wij U aan een account aan te maken.
+            ';
+        }
         return $showcase;
     }
     
     function getPOP() {
-        $showcase = '
-            Dit is het Persoonlijk Onwikkelings plan van 
-            '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
-        ';
-        return $showcase;
+        if($this->getCurrentUser() == true) {
+            $pop = '
+                Dit is het Persoonlijk Onwikkelings plan van 
+                '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
+            ';
+        } else {            
+            $pop = '
+                U bent niet ingelogd. </br>
+                Als U een Persoonlijk Ontwikkelings Plan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                </br></br>
+                Als U uw eigen Persoonlijk Ontwikkelings Plan openbaar wilt maken raden wij U aan een account aan te maken.
+            ';
+        }
+        return $pop;
     }
     
     function getInfo() {
-        $showcase = '
-            Dit is de overige informatie van 
-            '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
-        ';
-        return $showcase;
+        if($this->getCurrentUser() == true) {
+            $info = '
+                Dit is de overige informatie van 
+                '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
+            ';
+        } else {            
+            $info = '
+                U bent niet ingelogd. </br>
+                Als U een de Info van een leerling wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                </br></br>
+                Als U uw eigen Info openbaar wilt maken raden wij U aan een account aan te maken.
+            ';
+        }
+        return $info;
     }
 
     function login($id, $password) {
