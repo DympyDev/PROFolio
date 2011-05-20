@@ -160,7 +160,7 @@ div#middle .layoutleft div#left {
     padding:0px 0px 0px 0px;
 }
 
-div#middle .layoutright div#left {
+div#middle .layoutright div#right {
     float:right;
     padding:0px 0px 0px 0px;
 }
@@ -168,23 +168,21 @@ div#middle .layoutright div#left {
 /* right column */
 div#right {
     width:250px;
-    height: 100%;
     padding:0px 0px 0px 0px;
     float:right;
     margin:0 0 0 0;
     color:black;
-    border-left: 2px;
 }
 
 div#right_container {
     padding:0 10px 0 10px;
-    height: 100%;
-    border-left:#000 3px solid;
+    /*border-left:#000 3px solid;*/
 }
 
 /* content column */
 div#main {
     width:auto;
+    height: 100%;
     background:white;
 }
 
@@ -213,6 +211,7 @@ div#main .withoutright {
 div#content {
     color:black;
     width:auto;
+    border-right:#000 3px solid;
 }
 
 div#main .withright div#content {
