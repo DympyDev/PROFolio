@@ -200,7 +200,40 @@ class website {
     }
 
     function getResult($search) {
-        $result = "Als ik daadwerkelijk hier code zou neerzetten ipv text, dan zou hier je zoekresultaat komen.";
+        $result = "";
+        if (strlen($search) > 3) {
+            $result .= "Gebruikers die matchen met uw zoekterm:<br>";
+            $query = $this->db->doQuery("SELECT * FROM `studenten` WHERE `firstname` REGEXP '$search' OR `lastname` REGEXP '$search' OR `id` = '$search';");
+            if ($query != false) {
+                while ($fields = mysql_fetch_assoc($query)) {
+                    $result .= $fields['firstname'].' '.$fields['insertion'].' '.$fields['lastname'].'<br>';
+                }
+            } else {
+                $result .= "Geen<br>";
+            }
+
+            $result .= "<br><hr><br>Teams die matchen met uw zoekterm:<br>";
+            $query = $this->db->doQuery("SELECT * FROM `teams` WHERE `teamnaam` REGEXP '$search' OR `teamnr` REGEXP '$search';");
+            if ($query != false) {
+                while ($fields = mysql_fetch_assoc($query)) {
+                    $result .= $fields['teamnaam'].'<br>';
+                }
+            } else {
+                $result .= "Geen<br>";
+            }
+
+            $result .= "<br><hr><br>Projecten die matchen met uw zoekterm:<br>";
+            $query = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` REGEXP '$search' OR `id` REGEXP '$search';");
+            if ($query != false) {
+                while ($fields = mysql_fetch_assoc($query)) {
+                    $result .= $fields['teamnr'].' '.$fields['name'].'<br>';
+                }
+            } else {
+                $result .= "Geen<br>";
+            }
+        } else {
+            $result = "Die zoekterm is te kort, probeer meer dan 3 letters te gebruiken<br>";
+        }
         return $result;
     }
 
