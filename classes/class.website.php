@@ -16,14 +16,14 @@ class website {
     var $session;
     var $logger;
     var $user = "";
-    var $mainConfigFile = "configs/config.php";
+    const mainConfigFile = "configs/config.php";
 
     function __construct() {
-        require $this->mainConfigFile;
+        require website::mainConfigFile;
         require "classes/class.database.php";
         require "classes/class.logger.php";
         require "classes/class.session.php";
-        $this->logger = new logger($LogDir);
+        $this->logger = new logger();
         $this->db = new database($this->logger);
         $this->session = session::getInstance();
     }
@@ -164,7 +164,7 @@ class website {
         if ($result != false) {         // Account bestaat...
             $password = sha1($password . " : " . $id);
             if (mysql_result($result, 0) == $password) {    // Correct password
-                require $this->mainConfigFile;
+                require website::mainConfigFile;
                 setcookie($cookiename, $id . "," . $password, time() + ($cookietime * 60));
                 $this->session->id = $id;
                 $this->session->password = $password;
@@ -176,9 +176,9 @@ class website {
             return 'Onbekend leerlingnummer.';
         }
     }
-    
+
     function logout() {
-        require $this->mainConfigFile;
+        require website::mainConfigFile;
         setcookie($cookiename, "", time() - 600);
         $this->session->destroy();
         return '<script type="text/javascript">window.location="index.php";</script>';
@@ -230,7 +230,7 @@ class website {
     }
 
     function getCurrentUser() {
-        require $this->mainConfigFile;
+        require website::mainConfigFile;
         if (!class_exists('user')) {
             require "classes/class.user.php";
         }
@@ -255,6 +255,51 @@ class website {
             return $this->user;
         }
         return false;
+    }
+
+    function uploadImage($_FILES) {
+        if (isset($_FILES)) {
+            if ($_FILES["img"]["error"] > 0) {
+                echo "Bestand is corrupt.";
+            } else {
+                if ($_FILES["img"]["size"] < 1000000) {
+                    require website::mainConfigFile;
+                    if (in_array($FILES["img"]["type"], $AvatarAllowedFiletypes)) {
+                        $orimg = $_FILES["img"]["tmp_name"];
+                        $orsize = getimagesize($orimg);
+                        $orw = $orsize[0];
+                        $orh = $orsize[1];
+                        $xscale = 100 / $orw;
+                        $yscale = 150 / $orh;
+                        $scale = min($xscale, $yscale);
+                        $new = ($orw * $scale);
+                        $neh = ($orh * $scale);
+                        switch ($_FILES["img"]["type"]) {
+                            case "image/gif":
+                                $image = imagecreatefromgif($orimg);
+                                break;
+                            case "image/png":
+                                $image = imagecreatefrompng($orimg);
+                                break;
+                            default:
+                                $image = imagecreatefromjpeg($orimg);
+                                break;
+                        }
+                        $destination = imagecreatetruecolor(100, 150);
+                        imagecopyresampled($destination, $image, ((($orw * $xscale) - $new) / 2), ((($orh * $yscale) - $neh) / 2), 0, 0, $new, $neh, $orw, $orh);
+                        header('Content-Type: image/png');
+                        $testr = imagepng($destination, $this->getCurrentUser()->id . "_img.png", 100);
+                        imagedestroy($image);
+                        imagedestroy($destination);
+                        echo "<img src='" . $this->getCurrentUser()->id . "_img.png' width='100' height='150'>";
+                    } else {
+                        echo "Verkeerd bestandstype.";
+                    }
+                } else {
+                    echo "Bestand is te groot";
+                }
+            }
+        }
     }
 
 }

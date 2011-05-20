@@ -11,13 +11,12 @@
  * @author Dark
  */
 class logger {
-    
-    var $errorFile;
+
     var $logDir;
 
-    function __construct($logDir) {
-        $this->logDir = $logDir;
-        $this->errorFile = $logDir . "errors.txt";
+    function __construct() {
+        require website::mainConfigFile;
+        $this->logDir = $LogDir;
     }
 
     function writeToLog($text) {

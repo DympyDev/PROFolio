@@ -1,16 +1,20 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+    <?php
+    require "classes/class.website.php";
+    $website = new website();
+    if (isset($_POST['login'])) {
+        echo $website->login($_POST['studentnr'], $_POST['password']);
+    } else if (isset($_POST['registreer'])) {
+        $website->register($_POST);
+    } else if (isset($_POST['logout'])) {
+        echo $website->logout();
+    } else if (isset($_FILES['img'])) {
+        $website->uploadImage($_FILES);
+    }
+    ?>
     <head>
         <?php
-        require "classes/class.website.php";
-        $website = new website();
-        if (isset($_POST['login'])) {
-            echo $website->login($_POST['studentnr'], $_POST['password']);
-        } else if (isset($_POST['registreer'])) {
-            $website->register($_POST);
-        } else if (isset($_POST['logout'])) {
-            echo $website->logout();
-        }
         echo $website->getHead();
         ?>
     </head>

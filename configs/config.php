@@ -12,7 +12,7 @@ $cookietime = "60";                 // Tijd die de cookie geldig blijft in minut
 $AvatarMaxSize = "2";               // Maximum grootte van je plaatje, in MB
 $AvatarSaveDir = "./avatars/";      // Map waarin de plaatjes komen
 $AvatarMaxDimensions = "50x50";
-$AvatarAllowedFiletypes = array("image/png", "image/jpg", "image/jpeg", "image/bmp");
+$AvatarAllowedFiletypes = array("image/png", "image/jpg", "image/jpeg");
 $LanguageDir = "./languages/";
 $LogDir = "./logs/";
 ?>
