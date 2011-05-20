@@ -139,13 +139,13 @@ class website {
     }
 
     function getNavMenu() {
-        if($this->getCurrentUser() == true){
+        if ($this->getCurrentUser() == true) {
             $navmenu = '
             <ul class="submenu">
                 <li><a href="index.php">Home</a></li>
-                <li><a href="index.php?showcase='.$this->getCurrentUser()->id.'">Showcase</a></li>
-                <li><a href="index.php?pop='.$this->getCurrentUser()->id.'">POP</a></li>
-                <li><a href="index.php?info='.$this->getCurrentUser()->id.'">Wie?</a></li>
+                <li><a href="index.php?showcase=' . $this->getCurrentUser()->id . '">Showcase</a></li>
+                <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
+                <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Wie?</a></li>
             </ul>
             ';
         } else {
@@ -157,29 +157,29 @@ class website {
                 <li><a href="index.php?info=none">Wie?</a></li>
             </ul>
             ';
-        }        
+        }
         return $navmenu;
     }
 
     function getUserInfo() {
-        $image;
-        $path = '../profolio/images/'.$this->getCurrentUser()->id.'_img.png';
-        if(file_exists($path) == true){
-            $image = $this->getCurrentUser()->id.'_img.png';
-        } else {
-            $image = 'no-pic.bmp';
-        }
-        if($this->getCurrentUser() == true){
+        if ($this->getCurrentUser() == true) {
+            $image;
+            $path = '../profolio/images/' . $this->getCurrentUser()->id . '_img.png';
+            if (file_exists($path) == true) {
+                $image = $this->getCurrentUser()->id . '_img.png';
+            } else {
+                $image = 'no-pic.bmp';
+            }
             $userinfo = '
                 <div id="avatar">
-                    <img src="/profolio/images/'.$image.'"/>
+                    <img src="/profolio/images/' . $image . '"/>
                 </div>
                 </br>Naam leerling:</br>
-                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'</b></br>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '</b></br>
                 </br>Leerling Nummer:</br>
-                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->getCurrentUser()->id.'</b></br>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->id . '</b></br>
                 </br>Studie Jaar:</br>
-                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->getCurrentUser()->year.'</b></br>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->year . '</b></br>
             ';
         } else {
             $userinfo = '
@@ -188,14 +188,14 @@ class website {
         }
         return $userinfo;
     }
-    
+
     function getShowcase() {
-        if($this->getCurrentUser() == true) {
+        if ($this->getCurrentUser() == true) {
             $showcase = '
                 Dit is de showcase van 
-                '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
+                ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
             ';
-        } else {            
+        } else {
             $showcase = '
                 U bent niet ingelogd. </br>
                 Als U een showcase wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
@@ -205,14 +205,14 @@ class website {
         }
         return $showcase;
     }
-    
+
     function getPOP() {
-        if($this->getCurrentUser() == true) {
+        if ($this->getCurrentUser() == true) {
             $pop = '
                 Dit is het Persoonlijk Onwikkelings plan van 
-                '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
+                ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
             ';
-        } else {            
+        } else {
             $pop = '
                 U bent niet ingelogd. </br>
                 Als U een Persoonlijk Ontwikkelings Plan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
@@ -222,14 +222,14 @@ class website {
         }
         return $pop;
     }
-    
+
     function getInfo() {
-        if($this->getCurrentUser() == true) {
+        if ($this->getCurrentUser() == true) {
             $info = '
                 Dit is de overige informatie van 
-                '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
+                ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
             ';
-        } else {            
+        } else {
             $info = '
                 U bent niet ingelogd. </br>
                 Als U een de Info van een leerling wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
@@ -289,7 +289,7 @@ class website {
             $query = $this->db->doQuery("SELECT * FROM `studenten` WHERE `firstname` REGEXP '$search' OR `lastname` REGEXP '$search' OR `id` = '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['firstname'].' '.$fields['insertion'].' '.$fields['lastname'].'<br>';
+                    $result .= $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '<br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -299,7 +299,7 @@ class website {
             $query = $this->db->doQuery("SELECT * FROM `teams` WHERE `teamnaam` REGEXP '$search' OR `teamnr` REGEXP '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['teamnaam'].'<br>';
+                    $result .= $fields['teamnaam'] . '<br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -309,7 +309,7 @@ class website {
             $query = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` REGEXP '$search' OR `id` REGEXP '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['teamnr'].' '.$fields['name'].'<br>';
+                    $result .= $fields['teamnr'] . ' ' . $fields['name'] . '<br>';
                 }
             } else {
                 $result .= "Geen<br>";
