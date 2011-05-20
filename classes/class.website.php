@@ -200,7 +200,8 @@ class website {
     }
 
     function getResult($search) {
-        return 'Als ik daadwerkelijk hier code zou neerzetten ipv text, dan zou hier je zoekresultaat komen.';
+        $result = "Als ik daadwerkelijk hier code zou neerzetten ipv text, dan zou hier je zoekresultaat komen.";
+        return $result;
     }
 
     function getHomepage() {
@@ -264,7 +265,7 @@ class website {
             } else {
                 if ($_FILES["img"]["size"] < 1000000) {
                     require website::mainConfigFile;
-                    if (in_array($FILES["img"]["type"], $AvatarAllowedFiletypes)) {
+                    if (in_array($_FILES["img"]["type"], $AvatarAllowedFiletypes)) {
                         $orimg = $_FILES["img"]["tmp_name"];
                         $orsize = getimagesize($orimg);
                         $orw = $orsize[0];

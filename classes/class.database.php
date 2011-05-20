@@ -23,14 +23,14 @@ Class database {
                 return false;
             }
         } else {
-            $this->logger->writeToLog("Couldn't connect to mysql: $db_host - $db_username - $db_password.");
+            $this->logger->writeToLog("Couldn't connect to mysql:\nhost: $db_host\nusername:$db_username\npassword:$db_password");
             return false;
         }
     }
 
     function doQuery($sql) {
         if ($this->makeConnection(false)) {
-            $result = @mysql_query($sql);
+            $result = @mysql_query($sql) or $this->logger->writeToLog("Query failure:$sql.");
             if ($result && @mysql_num_rows($result) > 0) {
                 return $result;
             } else {
@@ -43,7 +43,7 @@ Class database {
 
     function getRowCount($sql) {
         if ($this->makeConnection(false)) {
-            $result = @mysql_query($sql);
+            $result = @mysql_query($sql) or $this->logger->writeToLog("Query failure:$sql.");
             if ($result) {
                 return @mysql_num_rows($result);
             } else {
