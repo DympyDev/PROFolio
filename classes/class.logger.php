@@ -12,26 +12,22 @@
  */
 class logger {
 
-    var $logDir;
-
-    function __construct() {
-        require website::mainConfigFile;
-        $this->logDir = $LogDir;
-    }
-
     function writeToLog($text) {
-        if (!is_dir($this->logDir)) {
-            mkdir($this->logDir);
+        require website::mainConfigFile;
+        if (!is_dir($LogDir)) {
+            mkdir($LogDir);
         }
-        if (file_exists($this->errorFile)) {
-            $file_content = file_get_contents($this->errorFile);
-            if (strpos($file_content, $text) === false) {   // Als de huidige error nog NIET in de errorlog zit...
-                $text = $file_content . "\n" . $text;
-            } else {
-                return;
+        if (file_exists($LogDir . "/errors.txt")) {
+            $file_content = file_get_contents($LogDir . "/errors.txt");
+            if ($file_content != "") {
+                if (strpos($file_content, $text) === false) {   // Als de huidige error nog NIET in de errorlog zit...
+                    $text = $file_content . "\n" . $text;
+                } else {
+                    return;
+                }
             }
         }
-        $errorWriter = fopen($this->errorFile, 'w');
+        $errorWriter = fopen($LogDir . "/errors.txt", 'w');
         fwrite($errorWriter, $text);
         fclose($errorWriter);
     }
