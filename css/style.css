@@ -167,7 +167,7 @@ div#middle .layoutright div#right {
 
 /* right column */
 div#right {
-    width:250px;
+    width:28%;
     padding:0px 0px 0px 0px;
     float:right;
     margin:0 0 0 0;
@@ -176,7 +176,6 @@ div#right {
 
 div#right_container {
     padding:0 10px 0 10px;
-    /*border-left:#000 3px solid;*/
 }
 
 /* content column */
@@ -210,7 +209,7 @@ div#main .withoutright {
 
 div#content {
     color:black;
-    width:auto;
+    width:72%;
     border-right:#000 3px solid;
 }
 
