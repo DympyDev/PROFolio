@@ -1,1 +1,1 @@
-ALTER TABLE `studenten` ALTER COLUMN `password` VARCHAR(50) NOT NULL;
+ALTER TABLE `studenten` CHANGE `password` `password` VARCHAR(50) NOT NULL;
