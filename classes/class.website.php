@@ -138,48 +138,191 @@ class website {
         return $registerform;
     }
 
-    function getNavMenu() {
-        $navmenu = '
-            <ul class="submenu">
-                <li><a href="index.php?showcase='.$this->getCurrentUser()->id.'">Showcase</a></li>
-                <li><a href="index.php?pop='.$this->getCurrentUser()->id.'">POP</a></li>
-                <li><a href="index.php?info='.$this->getCurrentUser()->id.'">Wie?</a></li>
-            </ul>
-        ';
+    function getNavMenu($id = "") {
+        if ($id == "") {
+            if ($this->getCurrentUser() != false) {
+                $navmenu = '
+                    <ul class="submenu">
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="index.php?showcase=' . $this->getCurrentUser()->id . '">Showcase</a></li>
+                        <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
+                        <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Wie?</a></li>
+                    </ul>
+                ';
+            } else {
+                $navmenu = '
+                    <ul class="submenu">
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="index.php?showcase=none">Showcase</a></li>
+                        <li><a href="index.php?pop=none">POP</a></li>
+                        <li><a href="index.php?info=none">Wie?</a></li>
+                    </ul>
+                ';
+            }
+        } else {
+            if ($this->getUser($id) != false) {
+                $navmenu = '
+                    <ul class="submenu">
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
+                        <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
+                        <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
+                    </ul>
+                ';
+            } else {
+                $navmenu = '
+                    <ul class="submenu">
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="index.php?showcase=none">Showcase</a></li>
+                        <li><a href="index.php?pop=none">POP</a></li>
+                        <li><a href="index.php?info=none">Wie?</a></li>
+                    </ul>
+                ';
+            }
+        }
         return $navmenu;
     }
 
-    function getUserInfo() {
-        $userinfo = '
-            <div id="avatar">
-                <img src="/profolio/images/no-pic.bmp"/>
-            </div>
-            </br>Hier komt de gebruikerinfo';
+    function getUserInfo($id = "") {
+        if ($id == "") {
+            if ($this->getCurrentUser() != false) {
+                $image;
+                $path = '../profolio/images/' . $this->getCurrentUser()->id . '_img.png';
+                if (file_exists($path) == true) {
+                    $image = $this->getCurrentUser()->id . '_img.png';
+                } else {
+                    $image = 'no-pic.bmp';
+                }
+                $userinfo = '
+                    <div id="avatar">
+                        <img src="/profolio/images/' . $image . '"/>
+                    </div>
+                    </br>Naam leerling:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '</b></br>
+                    </br>Leerling Nummer:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->id . '</b></br>
+                    </br>Studie Jaar:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->year . '</b></br>
+                ';
+            } else {
+                $userinfo = '
+                    </br></br>Log in of maak een account aan om gebruik te kunnen maken van onze diensten.
+                ';
+            }
+        } else {
+            if ($this->getUser($id) != false) {
+                $userinfo = '
+                    <div id="avatar">
+                        <img src="/profolio/images/' . $image . '"/>
+                    </div>
+                    </br>Naam leerling:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '</b></br>
+                    </br>Leerling Nummer:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->id . '</b></br>
+                    </br>Studie Jaar:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->year . '</b></br>
+                ';
+            } else {
+                $userinfo = '
+                    Er is geen gebruikers informatie beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
+        }
         return $userinfo;
     }
-    
-    function getShowcase() {
-        $showcase = '
-            Dit is de showcase van 
-            '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
-        ';
+
+    function getShowcase($id = "") {
+        if ($id == "") {
+            if ($this->getCurrentUser() != false) {
+                $showcase = '
+                    Dit is de showcase van 
+                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
+                ';
+            } else {
+                $showcase = '
+                    U bent niet ingelogd. </br>
+                    Als U een showcase wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                    </br></br>
+                    Als U uw eigen showcase openbaar wilt maken raden wij U aan een account aan te maken.
+                ';
+            }
+        } else {
+            if ($this->getUser($id) != false) {
+                $showcase = '
+                    Dit is de showcase van 
+                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                ';
+            } else {
+                $showcase = '
+                    Er is geen showcase beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
+        }
         return $showcase;
     }
-    
-    function getPOP() {
-        $showcase = '
-            Dit is het Persoonlijk Onwikkelings plan van 
-            '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
-        ';
-        return $showcase;
+
+    function getPOP($id = "") {
+        if ($id == "") {
+            if ($this->getCurrentUser() != false) {
+                $pop = '
+                    Dit is het Persoonlijk Onwikkelings Plan van 
+                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
+                ';
+            } else {
+                $pop = '
+                    U bent niet ingelogd. </br>
+                    Als U een Persoonlijk Ontwikkelings Plan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                    </br></br>
+                    Als U uw eigen Persoonlijk Ontwikkelings Plan openbaar wilt maken raden wij U aan een account aan te maken.
+                ';
+            }
+        } else {
+            if ($this->getUser($id) != false) {
+                $pop = '
+                    Dit is het Persoonlijk Ontwikkelings Plan van 
+                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                ';
+            } else {
+                $pop = '
+                    Er is geen Persoonlijk Ontwikkelings Plan beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
+        }
+        return $pop;
     }
-    
-    function getInfo() {
-        $showcase = '
-            Dit is de overige informatie van 
-            '.$this->getCurrentUser()->firstname.' '.$this->getCurrentUser()->insertion.' '.$this->getCurrentUser()->lastname.'.
-        ';
-        return $showcase;
+
+    function getInfo($id = "") {
+        if ($id == "") {
+            if ($this->getCurrentUser() != false) {
+                $info = '
+                    Dit is de overige informatie van 
+                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
+                ';
+            } else {
+                $info = '
+                    U bent niet ingelogd. </br>
+                    Als U een de Info van een leerling wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                    </br></br>
+                    Als U uw eigen Info openbaar wilt maken raden wij U aan een account aan te maken.
+                ';
+            }
+        } else {
+            if ($this->getUser($id) != false) {
+                $info = '
+                    Dit is de overige informatie van 
+                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                ';
+            } else {
+                $info = '
+                    Er is geen info beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
+        }
+        return $info;
     }
 
     function login($id, $password) {
@@ -231,7 +374,7 @@ class website {
             $query = $this->db->doQuery("SELECT * FROM `studenten` WHERE `firstname` REGEXP '$search' OR `lastname` REGEXP '$search' OR `id` = '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['firstname'].' '.$fields['insertion'].' '.$fields['lastname'].'<br>';
+                    $result .= $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '<br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -241,7 +384,7 @@ class website {
             $query = $this->db->doQuery("SELECT * FROM `teams` WHERE `teamnaam` REGEXP '$search' OR `teamnr` REGEXP '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['teamnaam'].'<br>';
+                    $result .= $fields['teamnaam'] . '<br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -251,7 +394,7 @@ class website {
             $query = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` REGEXP '$search' OR `id` REGEXP '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['teamnr'].' '.$fields['name'].'<br>';
+                    $result .= $fields['teamnr'] . ' ' . $fields['name'] . '<br>';
                 }
             } else {
                 $result .= "Geen<br>";
