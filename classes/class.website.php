@@ -57,7 +57,7 @@ class website {
     function getLoginForm() {
         if ($this->getCurrentUser() == false) {
             $loginform = '
-                <form action="index.php" method="POST">
+                <form action="index.php" method="POST"><br>
                     <table align="right">
                         <tr>		
                             <td>
@@ -80,7 +80,7 @@ class website {
             ';
         } else {
             $loginform = '
-                <form action="index.php" method="POST">
+                <form action="index.php" method="POST"><br>
                     <table align="right">
                         <tr>
                             <td>
