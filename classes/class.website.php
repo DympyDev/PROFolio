@@ -415,7 +415,7 @@ class website {
                 Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
             </p>
             <p>
-                Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoek functie van onze site.</br>
+                Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.</br>
                 </br>
                 Wij hopen dat U kunt vinden wat U zoekt.
             </p>
