@@ -160,14 +160,25 @@ class website {
                 ';
             }
         } else {
-            $navmenu = '
-                <ul class="submenu">
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
-                    <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
-                    <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
-                </ul>
-            ';
+            if ($this->getUser($id) != false) {
+                $navmenu = '
+                    <ul class="submenu">
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
+                        <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
+                        <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
+                    </ul>
+                ';
+            } else {
+                $navmenu = '
+                    <ul class="submenu">
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="index.php?showcase=none">Showcase</a></li>
+                        <li><a href="index.php?pop=none">POP</a></li>
+                        <li><a href="index.php?info=none">Wie?</a></li>
+                    </ul>
+                ';
+            }
         }
         return $navmenu;
     }
@@ -199,17 +210,24 @@ class website {
                 ';
             }
         } else {
-            $userinfo = '
-                <div id="avatar">
-                    <img src="/profolio/images/' . $image . '"/>
-                </div>
-                </br>Naam leerling:</br>
-                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '</b></br>
-                </br>Leerling Nummer:</br>
-                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->id . '</b></br>
-                </br>Studie Jaar:</br>
-                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->year . '</b></br>
-            ';
+            if ($this->getUser($id) != false) {
+                $userinfo = '
+                    <div id="avatar">
+                        <img src="/profolio/images/' . $image . '"/>
+                    </div>
+                    </br>Naam leerling:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '</b></br>
+                    </br>Leerling Nummer:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->id . '</b></br>
+                    </br>Studie Jaar:</br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->year . '</b></br>
+                ';
+            } else {
+                $userinfo = '
+                    Er is geen gebruikers informatie beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
         }
         return $userinfo;
     }
@@ -226,14 +244,21 @@ class website {
                     U bent niet ingelogd. </br>
                     Als U een showcase wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
                     </br></br>
-                    Als je je eigen showcase openbaar wilt maken raden wij U aan een account aan te maken.
+                    Als U uw eigen showcase openbaar wilt maken raden wij U aan een account aan te maken.
                 ';
             }
         } else {
-            $showcase = '
-                Dit is de showcase van 
-                ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
-            ';
+            if ($this->getUser($id) != false) {
+                $showcase = '
+                    Dit is de showcase van 
+                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                ';
+            } else {
+                $showcase = '
+                    Er is geen showcase beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
         }
         return $showcase;
     }
@@ -242,7 +267,7 @@ class website {
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
                 $pop = '
-                    Dit is het Persoonlijk Onwikkelings plan van 
+                    Dit is het Persoonlijk Onwikkelings Plan van 
                     ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
                 ';
             } else {
@@ -254,10 +279,17 @@ class website {
                 ';
             }
         } else {
-            $pop = '
-                Dit is het Persoonlijk Ontwikkelings plan van 
-                ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
-            ';
+            if ($this->getUser($id) != false) {
+                $pop = '
+                    Dit is het Persoonlijk Ontwikkelings Plan van 
+                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                ';
+            } else {
+                $pop = '
+                    Er is geen Persoonlijk Ontwikkelings Plan beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
         }
         return $pop;
     }
@@ -278,10 +310,17 @@ class website {
                 ';
             }
         } else {
-            $info = '
-                Dit is de overige informatie van 
-                ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
-            ';
+            if ($this->getUser($id) != false) {
+                $info = '
+                    Dit is de overige informatie van 
+                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                ';
+            } else {
+                $info = '
+                    Er is geen info beschikbaar voor de opgevraagde gebruiker. </br>
+                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
         }
         return $info;
     }
