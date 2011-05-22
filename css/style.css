@@ -85,7 +85,7 @@ h6 {
 
 /* page setup */
 body {
-    background-color:#13138B;
+    background-color:#000066;
     font-family:Arial, Helvetica, sans-serif;
     line-height:150%;
     color:#646464;
@@ -94,7 +94,7 @@ body {
 
 /* background */
 * html body {
-    background-color:#13138B;
+    background-color:#000066;
 }
 
 /* wrapper setup */
@@ -211,6 +211,7 @@ div#content {
     color:black;
     width:72%;
     border-right:#000 3px solid;
+    height:100%;
 }
 
 div#main .withright div#content {

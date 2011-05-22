@@ -273,20 +273,20 @@ class website {
             } else {
                 $pop = '
                     U bent niet ingelogd. </br>
-                    Als U een Persoonlijk Ontwikkelings Plan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                    Als U een Persoonlijk Ontwikkelingplan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
                     </br></br>
-                    Als U uw eigen Persoonlijk Ontwikkelings Plan openbaar wilt maken raden wij U aan een account aan te maken.
+                    Als U uw eigen Persoonlijk Ontwikkelingsplan openbaar wilt maken raden wij U aan een account aan te maken.
                 ';
             }
         } else {
             if ($this->getUser($id) != false) {
                 $pop = '
-                    Dit is het Persoonlijk Ontwikkelings Plan van 
+                    Dit is het Persoonlijk Ontwikkelingsplan van 
                     ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
                 ';
             } else {
                 $pop = '
-                    Er is geen Persoonlijk Ontwikkelings Plan beschikbaar voor de opgevraagde gebruiker. </br>
+                    Er is geen Persoonlijk Ontwikkelingsplan beschikbaar voor de opgevraagde gebruiker. </br>
                     Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
                 ';
             }
@@ -412,10 +412,10 @@ class website {
             <p>
                 Hallo en welkom op deze site. </br>
                 Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.</br>
-                Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkeling Plan en extra informatie over jezelf op deze site plaatsen.</br>
+                Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
             </p>
             <p>
-                Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelings Plannen wilt bekijken verwijzen wij U graag door naar de zoek functie van onze site.</br>
+                Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoek functie van onze site.</br>
                 </br>
                 Wij hopen dat U kunt vinden wat U zoekt.
             </p>
