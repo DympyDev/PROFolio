@@ -244,6 +244,7 @@ class website {
                 $showcase = '
                     Dit is de showcase van 
                     ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
+                    <br><a href="index.php?newProject=1">Nieuw project uploaden</a>
                 ';
             } else {
                 $showcase = '
@@ -516,6 +517,71 @@ class website {
                 }
             }
         }
+    }
+    
+    function getProjectPoster() {
+        $poster = "";
+        if ($this->getCurrentUser() != false) {
+            $poster = '
+                <div style="position:relative;top:0px;width:10%;height:500px;float:right;right:10px;">
+                    <div align="center">
+                        <script type="text/javascript">
+                        var element = document.createElement("script");
+                        element.setAttribute("type", "text/javascript");
+                        element.setAttribute("src", "./js/bbcode.js");
+                        document.getElementsByTagName("head")[0].appendChild(element);
+                        </script>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'div\');">Div</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'h1\');">H1</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'h2\');">H2</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'br\');">BR</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'u\');"><u>U</u></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'i\');"><i>I</i></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'b\');"><b>B</b></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'font\');"><font color="blue">Font</font></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'url\');"><u><font color="blue">URL</font></u></button>
+                    </div>
+                </div>
+                <div align="center">
+                    <script type="text/javascript">
+                    var counter = 1;
+                    function addUpload() {
+                        if (counter < 5) {
+                            var form = document.getElementById("inputs");
+
+                            var br = document.createElement("br");
+                            form.appendChild(br);
+
+                            var element = document.createElement("input");
+                            element.setAttribute("type", "file");
+                            element.setAttribute("id", "document"+counter);
+
+                            form.appendChild(element);
+                            counter++;
+                        }
+                    }
+                    </script>
+                    <form method="POST" id="projectform" action="index.php" enctype="multipart/form-data">
+                        Projectnaam:
+                        <input type="text" id="projectname" style="width:64%;">
+                        <br><br>
+                        <textarea id="project" style="width:75%;height:500px;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je project te plaatsen\')this.value = \'\';">Gebruik hier HTML om je project te plaatsen</textarea>
+                        <br>
+                        <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+                        <div id="inputs">
+                            <a href="javascript:addUpload();">[+]</a>
+                            <br>
+                            <input type="file" id="document1">
+                        </div>
+                        <br>
+                        <input type="submit" value="Opslaan">
+                    </form>
+                </div>
+            ';
+        } else {
+            $poster = "U kunt geen project toevoegen als u niet bent ingelogd!";
+        }
+        return $poster;
     }
 
 }

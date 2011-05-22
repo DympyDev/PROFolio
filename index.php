@@ -82,7 +82,9 @@
                                             echo $website->getPOP();
                                         } else if (isset($_GET['info'])) {
                                             echo $website->getInfo();
-                                        }else {
+                                        } else if (isset($_GET['newProject'])) {
+                                            echo $website->getProjectPoster();
+                                        } else {
                                             echo $website->getHomepage();
                                         }
                                         ?>
