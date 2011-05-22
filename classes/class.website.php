@@ -55,6 +55,7 @@ class website {
     }
 
     function getLoginForm() {
+        $loginform = "";
         if ($this->getCurrentUser() == false) {
             $loginform = '
                 <form action="index.php" method="POST"><br>
@@ -139,6 +140,7 @@ class website {
     }
 
     function getNavMenu($id = "") {
+        $navmenu = "";
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
                 $navmenu = '
@@ -184,14 +186,13 @@ class website {
     }
 
     function getUserInfo($id = "") {
+        $userinfo = "";
+        $image = 'no-pic.bmp';
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
-                $image;
                 $path = '../profolio/images/' . $this->getCurrentUser()->id . '_img.png';
                 if (file_exists($path) == true) {
                     $image = $this->getCurrentUser()->id . '_img.png';
-                } else {
-                    $image = 'no-pic.bmp';
                 }
                 $userinfo = '
                     <div id="avatar">
@@ -211,6 +212,10 @@ class website {
             }
         } else {
             if ($this->getUser($id) != false) {
+                $path = '../profolio/images/' . $this->getUser()->id . '_img.png';
+                if (file_exists($path) == true) {
+                    $image = $this->getUser($id)->id . '_img.png';
+                }
                 $userinfo = '
                     <div id="avatar">
                         <img src="/profolio/images/' . $image . '"/>
@@ -233,6 +238,7 @@ class website {
     }
 
     function getShowcase($id = "") {
+        $showcase = "";
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
                 $showcase = '
@@ -264,6 +270,7 @@ class website {
     }
 
     function getPOP($id = "") {
+        $pop = "";
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
                 $pop = '
@@ -295,6 +302,7 @@ class website {
     }
 
     function getInfo($id = "") {
+        $info = "";
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
                 $info = '
@@ -363,7 +371,7 @@ class website {
         $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
                 VALUES('$id', '$firstname', '$insertion', '$lastname',
                 '$password', '$email', '$year')";
-        $result = $this->db->doQuery($query);
+        $this->db->doQuery($query);
         return $this->login($id, $_POST['password']);
     }
 
@@ -481,6 +489,7 @@ class website {
                         $scale = min($xscale, $yscale);
                         $new = ($orw * $scale);
                         $neh = ($orh * $scale);
+                        $image = "";
                         switch ($_FILES["img"]["type"]) {
                             case "image/gif":
                                 $image = imagecreatefromgif($orimg);
@@ -495,7 +504,7 @@ class website {
                         $destination = imagecreatetruecolor(100, 150);
                         imagecopyresampled($destination, $image, ((($orw * $xscale) - $new) / 2), ((($orh * $yscale) - $neh) / 2), 0, 0, $new, $neh, $orw, $orh);
                         header('Content-Type: image/png');
-                        $testr = imagepng($destination, $this->getCurrentUser()->id . "_img.png", 100);
+                        imagepng($destination, $this->getCurrentUser()->id . "_img.png", 100);
                         imagedestroy($image);
                         imagedestroy($destination);
                         echo "<img src='" . $this->getCurrentUser()->id . "_img.png' width='100' height='150'>";
