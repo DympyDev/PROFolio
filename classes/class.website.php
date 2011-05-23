@@ -375,9 +375,9 @@ class website {
                     VALUES('$id', '$firstname', '$insertion', '$lastname',
                     '$password', '$email', '$year')";
         } else {
-            $query = "UPDATE `studenten` SET id='$id', firstname='$firstname', insertion='$insertion', lastname='$lastname',
-                    password='$password', email='$email', year='$year'
-                    WHERE id = '".$this->getCurrentUser()->id."'";
+            $query = "UPDATE `studenten` SET `firstname`='$firstname', `insertion`='$insertion', `lastname`='$lastname',
+                    `password`='$password', `email`='$email', `year`='$year'
+                    WHERE `id` = '".$this->getCurrentUser()->id."'";
         }
         $this->db->doQuery($query);
         return $this->login($id, $_POST['password']);
@@ -460,22 +460,22 @@ class website {
                         <tr>
                             <td>Email-adres: </td>
                             <td><input type="text" name="email" value = '.$this->getCurrentUser()->email.'></td>
-                        </tr>
-                        <tr>
-                            <td>Leerling Nummer: </td>
-                            <td><input type="text" name="llnr" value = '.$this->getCurrentUser()->id.'></td>
-                        </tr>
+                        </tr>                        
                         <tr>
                             <td>Studiejaar: </td>
                             <td><input type="text" name="year" value = '.$this->getCurrentUser()->year.'></td>
                         </tr>
                         <tr>
                             <td>Wachtwoord: </td>
-                            <td><input type="password" name="password" value = ""></td>
+                            <td><input type="password" name="password"></td>
                         </tr>
                         <tr>
                             <td> </td>
                             <td><input type="submit" name="registreer" value="Opslaan"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="hidden" name="llnr" value = '.$this->getCurrentUser()->id.'></td>
                         </tr>
                     </table>
                 </form>
