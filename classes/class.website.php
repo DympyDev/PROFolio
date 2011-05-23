@@ -83,7 +83,7 @@ class website {
                 <form action="index.php" method="POST"><br>
                     <table align="right">
                         <tr>
-                            <td>
+                            <td><br>
                                 <input type="submit" name="logout" class="login-submit" value="Logout">
                             </td>
                         </tr>
@@ -267,13 +267,13 @@ class website {
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
                 $pop = '
-                    Dit is het Persoonlijk Onwikkelings Plan van 
+                    Dit is het Persoonlijk Onwikkelingsplan van 
                     ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
                 ';
             } else {
                 $pop = '
                     U bent niet ingelogd. </br>
-                    Als U een Persoonlijk Ontwikkelingplan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                    Als U een Persoonlijk Ontwikkelingsplan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
                     </br></br>
                     Als U uw eigen Persoonlijk Ontwikkelingsplan openbaar wilt maken raden wij U aan een account aan te maken.
                 ';
