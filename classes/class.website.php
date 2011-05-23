@@ -538,8 +538,10 @@ class website {
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'u\');"><u>U</u></button>
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'i\');"><i>I</i></button>
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'b\');"><b>B</b></button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'font\');"><font color="blue">Font</font></button>
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'url\');"><u><font color="blue">URL</font></u></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'font\');"><font color="blue">Font</font></button>
+                        <select id="fontcolors">
+                        </select>
                     </div>
                 </div>
                 <div align="center">
