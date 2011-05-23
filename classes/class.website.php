@@ -147,7 +147,7 @@ class website {
         $result = $this->db->doQuery($query);
     }
 
-    function getRegisterForm() {
+    function getRegisterForm($errors = "") {
         $firstname = "";
         $insertion = "";
         $lastname = "";
@@ -162,24 +162,29 @@ class website {
         }
         $registerform = '
             <div align="center">
-                <form action="index.php" method="POST">
-                    <table>
-                        <tr>
-                            <td>Voornaam: </td> 
-                            <td><input type="text" name="firstname" value = '.$firstname.'></td>
-                        </tr>
-                        <tr>
-                            <td>Tussenvoegsel: </td>
-                            <td><input type="text" name="insertion" value = '.$insertion.'></td>
-                        </tr>
-                        <tr>
-                            <td>Achternaam: </td>
-                            <td><input type="text" name="lastname" value = '.$lastname.'></td>
-                        </tr>
-                        <tr>
-                            <td>Email-adres: </td>
-                            <td><input type="text" name="email" value = '.$email.'></td>
-                        </tr>
+        ';
+        if ($errors != "") {
+            $registerform .= $errors;
+        }
+        $registerform .= '
+            <form action="index.php" method="POST">
+                <table>
+                    <tr>
+                        <td>Voornaam: </td> 
+                        <td><input type="text" name="firstname" value = '.$firstname.'></td>
+                    </tr>
+                    <tr>
+                        <td>Tussenvoegsel: </td>
+                        <td><input type="text" name="insertion" value = '.$insertion.'></td>
+                    </tr>
+                    <tr>
+                        <td>Achternaam: </td>
+                        <td><input type="text" name="lastname" value = '.$lastname.'></td>
+                    </tr>
+                    <tr>
+                        <td>Email-adres: </td>
+                        <td><input type="text" name="email" value = '.$email.'></td>
+                    </tr>
         ';
         if ($this->getCurrentUser() == false) {
             $registerform .= '
@@ -432,6 +437,28 @@ class website {
     }
 
     function register($_POST) {
+        $errors = "";
+        if ($_POST['llnr'] == "" && $this->getCurrentUser == false) {
+            $errors .= 'Het leerlingnummer veld was leeg.<br>';
+        }
+        if ($_POST['firstname'] == "") {
+            $errors .= 'Het voornaam veld was leeg.<br>';
+        }
+        if ($_POST['lastname'] == "") {
+            $errors .= 'Het achternaam veld was leeg.<br>';
+        }
+        if ($_POST['email'] == "") {
+            $errors .= 'Het emailadres veld was leeg.<br>';
+        }
+        if ($_POST['year'] == "") {
+            $errors .= 'Het schooljaar veld was leeg.<br>';
+        }
+        if ($_POST['password'] == "") {
+            $errors .= 'Het wachtwoord veld was leeg.<br>';
+        }
+        if ($errors != "") {
+            return $this->getRegisterForm($errors);
+        }
         $id = stripslashes(mysql_real_escape_string($_POST['llnr']));
         $firstname = stripslashes(mysql_real_escape_string($_POST['firstname']));
         $insertion = stripslashes(mysql_real_escape_string($_POST['insertion']));
