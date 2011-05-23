@@ -508,7 +508,7 @@ class website {
                         imagepng($destination, $this->getCurrentUser()->id . "_img.png", 100);
                         imagedestroy($image);
                         imagedestroy($destination);
-                        echo "<img src='" . $this->getCurrentUser()->id . "_img.png' width='100' height='150'>";
+                        header('Content-Type: text.html');
                     } else {
                         echo "Verkeerd bestandstype.";
                     }
