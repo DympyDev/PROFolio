@@ -121,11 +121,12 @@ div#left {
 
 /* right column */
 div#right {
+    width:23%;
+    height:100%;
     padding:0 10px 0 10px;
     float:right;
     color:black;
     border-left:3px #000066 solid;
-    height:100%;
     background-color:white;
     min-height:500px;
 }
@@ -280,10 +281,11 @@ div.loginform input.login-field {
 }
 
 div.loginform input.login-submit {
-    border:#8c8a72 1px solid;
-    padding:0 1px;
-    font-size:10px;
-    color:#f6eed0;
-    background:#13138B;
+    border:0;
+    padding:0;
+    margin:0;
+    background:url(../images/search-submit.png) 0 0 no-repeat;
     cursor:pointer;
-}
+    color:#FFF;
+    font-size:10px;
+} 
