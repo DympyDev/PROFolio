@@ -92,6 +92,7 @@ body {
 div.rapidxwpr {
     margin:auto;
     width:980px;
+    min-height:500px;
     background:url(../images/header-bg.png) 5px 0 no-repeat;
 }
 
@@ -120,50 +121,23 @@ div#left {
 
 /* right column */
 div#right {
-    width:28%;
-    height:100%;
-    padding:0px 0px 0px 0px;
-    float:right;
-    margin:0 0 0 0;
-    color:black;  
-    border-left:1px black solid;
-}
-
-div#right_container {
     padding:0 10px 0 10px;
     float:right;
     color:black;
-    border:1px black solid;
+    border-left:1px black solid;
     height:100%;
-}
-
-/* content column */
-div#main {
-    width:auto;
-    height: 100%;
-    background:white;
-}
-
-div#main .withoutright {
-    background:transparent;
+    background-color:white;
+    min-height:500px;
 }
 
 div#content {
     color:black;
-    width:72%;
+    width:100%;
     height:100%;
-    border:1px black solid;
+    min-height:500px;
+    border-top:1px black solid;
     background:white;
-}
-
-div#main .withright div#content {
-    margin:0px 317px 0px 0px;
-    padding:0px 0px 0px 0px;
-}
-
-div#main .withoutright div#content {
-    margin:0px 0px 0px 0px;
-    padding:0px 0px 0px 0px;
+    
 }
 
 /* footer */
@@ -313,83 +287,4 @@ div.loginform input.login-submit {
     color:#f6eed0;
     background:#13138B;
     cursor:pointer;
-}
-
-/* intro */
-.intro {
-    margin:28px 0 0 0;
-    background:url(../images/line.png) 0 100% no-repeat;
-    padding:0 0 10px 0;
-    overflow:hidden;
-}
-
-.intro h3 {
-    margin:0px;
-    font-size:22px;
-    color:black;
-    font-weight:bold;
-}
-
-.intro p {
-    font-size:15px;
-    color:black;
-    margin:10px 0 10px 0;
-}
-
-.intro ul {
-    padding:0 0 0 35px;
-    font-family:Georgia, "Times New Roman", Times, serif;
-    float:left;
-}
-
-.intro ul li {
-    font-size:15px;
-    color:#534741;
-    font-style:italic;
-}
-
-/* just recommended */
-.just_recommended {
-    margin:15px 0 0 0;
-    background:url(../images/line_right.png) 0 100% no-repeat;
-    padding:0 0 20px 0;
-}
-
-.just_recommended ul {
-    list-style:none;
-    margin:15px 10px 0 12px;
-}
-
-.just_recommended ul li {
-    margin:7px 0;
-    background:url(../images/list_icon.png) 0 5px no-repeat;
-    padding:0 0 0 15px;
-}
-
-.just_recommended ul li a {
-    color:#534741;
-    text-decoration:underline;
-}
-
-.just_recommended ul li a:hover {
-    text-decoration:none;
-}
-
-/* footermenu */
-.footermenu {
-    float:left;
-}
-
-.footermenu ul {
-    list-style:none;
-}
-
-.footermenu ul li {
-    float:left;
-    margin:0 10px 0 0;
-    font-size:12px;
-}
-
-.footer-logo {
-    float:right;
 }

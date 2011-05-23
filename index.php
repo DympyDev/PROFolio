@@ -53,14 +53,15 @@
             </div>
             <!-- / menu -->  
             <!-- right column -->
-            <div id="right_container">
-                <?php
-                echo $website->getUserInfo();
-                ?>
-            </div>
+
             <!-- / right column -->         
             <!-- content column -->
-            <div id="content">
+            <div id="content">  
+                <div id="right">
+                    <?php
+                    echo $website->getUserInfo();
+                    ?>
+                </div>
                 <?php
                 if (isset($_GET['search'])) {
                     echo $website->getResult($_GET['search']);
