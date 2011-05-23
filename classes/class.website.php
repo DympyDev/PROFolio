@@ -86,7 +86,7 @@ class website {
                         <tr>
                             <td><br>
                                 <input type="submit" name="logout" class="login-submit" value="Logout"><br>
-                                <input type="submit" name="edit" class="login-submit" value="Edit">
+                                <input type="submit" name="profileEdit" class="login-submit" value="Edit">
                             </td>
                         </tr>
                     </table>
