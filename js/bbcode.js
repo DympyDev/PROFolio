@@ -46,12 +46,24 @@ function bbcode_ins(fieldId, tag) {
             field.setSelectionRange(endpos+ins.length, endpos+ins.length-selected.length);
         }
     } else if (tag == 'font') {
-        var colors = array("Blue", "Red", "Green", "White", "Black");
-        var i = 0;
-        for (i < colors.length; i++;) {
-            var option = document.createElement("option");
-            option.setAttribute("value", colors[i]);
-            document.getElementById("fontcolors").appendChild(option);
+        var selectedColor = document.getElementById("fontcolors").value;
+        if (document.selection) {
+            field.focus();
+            selected = document.selection.createRange().text;
+            ins = '<' + tag +' color="'+ selectedColor +'">' + selected + '</font>';
+            selected2 = document.selection.createRange();
+            sel = document.selection.createRange();
+            selected2.moveStart ('character', -field.value.length);
+            sel.text = ins;
+            sel.moveStart('character', selected2.text.length + ins.length - selected.length);
+        } else if (field.selectionStart || field.selectionStart == 0) {
+            startpos = field.selectionStart;
+            endpos = field.selectionEnd;
+            selected = field.value.substring(startpos, endpos);
+            ins = '<' + tag +' color='+ selectedColor +'>' + selected + '</font>';
+            field.focus();
+            field.value = field.value.substring(0, startpos) + ins + field.value.substring(endpos, field.value.length);
+            field.setSelectionRange(endpos+ins.length, endpos+ins.length-selected.length);
         }
     } else if (tag == 'url') {
         var url = prompt('Voer de URL in');

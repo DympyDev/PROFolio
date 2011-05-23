@@ -539,9 +539,16 @@ class website {
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'i\');"><i>I</i></button>
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'b\');"><b>B</b></button>
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'url\');"><u><font color="blue">URL</font></u></button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'font\');"><font color="blue">Font</font></button>
-                        <select id="fontcolors">
+                        <select id="fontcolors" style="width:100%;">
+                            <option value="red">red</option>
+                            <option value="blue">blue</option>
+                            <option value="green">green</option>
+                            <option value="black">black</option>
+                            <option value="white">white</option>
+                            <option value="gray">gray</option>
+                            <option value="yellow">yellow</option>
                         </select>
+                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'font\');"><font color="blue">Font</font></button>
                     </div>
                 </div>
                 <div align="center">
@@ -565,18 +572,18 @@ class website {
                     </script>
                     <form method="POST" id="projectform" action="index.php" enctype="multipart/form-data">
                         Projectnaam:
-                        <input type="text" id="projectname" style="width:64%;">
+                        <input type="text" id="projectname" style="width:40%;">
                         <br><br>
-                        <textarea id="project" style="width:75%;height:500px;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je project te plaatsen\')this.value = \'\';">Gebruik hier HTML om je project te plaatsen</textarea>
+                        <textarea id="project" style="width:50%;height:500px;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je project te plaatsen\')this.value = \'\';">Gebruik hier HTML om je project te plaatsen</textarea>
                         <br>
                         <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
-                        <div id="inputs">
+                        <div style="position:relative;right:20%;">
                             <a href="javascript:addUpload();">[+]</a>
-                            <br>
-                            <input type="file" id="document1">
+                            <div id="inputs" style="">
+                                <input type="file" id="document1">
+                            </div>
+                            <input type="submit" value="Opslaan">
                         </div>
-                        <br>
-                        <input type="submit" value="Opslaan">
                     </form>
                 </div>
             ';
