@@ -85,7 +85,8 @@ class website {
                     <table align="right">
                         <tr>
                             <td><br>
-                                <input type="submit" name="logout" class="login-submit" value="Logout">
+                                <input type="submit" name="logout" class="login-submit" value="Logout"><br>
+                                <input type="submit" name="edit" class="login-submit" value="Edit">
                             </td>
                         </tr>
                     </table>
@@ -369,9 +370,15 @@ class website {
         $email = stripslashes(mysql_real_escape_string($_POST['email']));
         $year = stripslashes(mysql_real_escape_string($_POST['year']));
         $password = sha1($_POST['password'] . " : " . $id);
-        $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
-                VALUES('$id', '$firstname', '$insertion', '$lastname',
-                '$password', '$email', '$year')";
+        if($this->getCurrentUser() == false){
+            $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
+                    VALUES('$id', '$firstname', '$insertion', '$lastname',
+                    '$password', '$email', '$year')";
+        } else {
+            $query = "UPDATE `studenten` SET id='$id', firstname='$firstname', insertion='$insertion', lastname='$lastname',
+                    password='$password', email='$email', year='$year'
+                    WHERE id = '".$this->getCurrentUser()->id."'";
+        }
         $this->db->doQuery($query);
         return $this->login($id, $_POST['password']);
     }
@@ -430,6 +437,51 @@ class website {
             </p>
         ';
         return $homepage;
+    }
+    
+    function getEditForm() {
+        $editform = '
+            <div align="center">
+                Pas hier de waardes aan en klik op opslaan om de wijzigingen toe te passen.
+                <form action="index.php" method="POST">
+                    <table>
+                        <tr>
+                            <td>Voornaam: </td> 
+                            <td><input type="text" name="firstname" value = '.$this->getCurrentUser()->firstname.'></td>
+                        </tr>
+                        <tr>
+                            <td>Tussenvoegsel: </td>
+                            <td><input type="text" name="insertion" value = '.$this->getCurrentUser()->insertion.'></td>
+                        </tr>
+                        <tr>
+                            <td>Achternaam: </td>
+                            <td><input type="text" name="lastname" value = '.$this->getCurrentUser()->lastname.'></td>
+                        </tr>
+                        <tr>
+                            <td>Email-adres: </td>
+                            <td><input type="text" name="email" value = '.$this->getCurrentUser()->email.'></td>
+                        </tr>
+                        <tr>
+                            <td>Leerling Nummer: </td>
+                            <td><input type="text" name="llnr" value = '.$this->getCurrentUser()->id.'></td>
+                        </tr>
+                        <tr>
+                            <td>Studiejaar: </td>
+                            <td><input type="text" name="year" value = '.$this->getCurrentUser()->year.'></td>
+                        </tr>
+                        <tr>
+                            <td>Wachtwoord: </td>
+                            <td><input type="password" name="password" value = ""></td>
+                        </tr>
+                        <tr>
+                            <td> </td>
+                            <td><input type="submit" name="registreer" value="Opslaan"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        ';
+        return $editform;
     }
 
     function getUser($id) {
