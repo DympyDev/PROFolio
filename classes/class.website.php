@@ -539,7 +539,7 @@ class website {
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'i\');"><i>I</i></button>
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'b\');"><b>B</b></button>
                         <button style="width:100%;" onClick="bbcode_ins(\'project\', \'url\');"><u><font color="blue">URL</font></u></button>
-                        <select id="fontcolors" onchange="this.style.backgroundColor = this.options[this.selectedIndex].style.backgroundColor;" style="width:40%; background-color:red">
+                        <select id="fontcolors" onchange="this.style.backgroundColor = this.options[this.selectedIndex].style.backgroundColor;" style="width:40%;height:23px;background-color:red">
                             <option value="red" style="background-color:red"></option>
                             <option value="blue" style="background-color:blue"></option>
                             <option value="green" style="background-color:green"></option>
@@ -547,7 +547,7 @@ class website {
                             <option value="white" style="background-color:white"></option>
                             <option value="gray" style="background-color:gray"></option>
                             <option value="yellow" style="background-color:yellow"></option>
-                        </select><button style="width:60%;" onClick="bbcode_ins(\'project\', \'font\');"><font color="blue">Font</font></button>
+                        </select><button style="width:60%;" onClick="bbcode_ins(\'project\', \'font\');">Font</button>
                     </div>
                 </div>
                 <div align="center">
