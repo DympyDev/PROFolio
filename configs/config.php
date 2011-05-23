@@ -4,9 +4,9 @@ if (!@Darkrulerz) {
     define("PROFolio", 1);
 }
 $db_name = "profolio";
-$db_host = "localhost";
-$db_username = "root";
-$db_password = "";
+$db_host = "88.198.43.24";
+$db_username = "profolio";
+$db_password = "koffiekan";
 $cookiename = "profolio_login";
 $cookietime = "60";                 // Tijd die de cookie geldig blijft in minuten
 $AvatarMaxSize = "2";               // Maximum grootte van je plaatje, in MB
