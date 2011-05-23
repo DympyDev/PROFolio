@@ -52,52 +52,34 @@
                 <!-- / navigation -->  
             </div>
             <!-- / menu -->  
-            <!-- main body -->
-            <div id="middle">
-                <div class="background layoutleft">    
-                    <div id="main">
-                        <div id="main_container" class="clearingfix">
-                            <div id="mainmiddle" class="floatbox withright" >       
-                                <!-- right column -->
-                                <div id="right">
-                                    <div id="right_container" class="clearingfix">
-                                        <?php
-                                        echo $website->getUserInfo();
-                                        ?>
-                                    </div>
-                                </div>
-                                <!-- / right column -->         
-                                <!-- content column -->
-                                <div id="content">      
-                                    <!-- intro -->
-                                    <div class="intro">
-                                        <?php
-                                        if (isset($_GET['search'])) {
-                                            echo $website->getResult($_GET['search']);
-                                        } else if (isset($_POST['register'])) {
-                                            echo $website->getRegisterForm();
-                                        } else if (isset($_GET['showcase'])) {
-                                            echo $website->getShowcase();
-                                        } else if (isset($_GET['pop'])) {
-                                            echo $website->getPOP();
-                                        } else if (isset($_GET['info'])) {
-                                            echo $website->getInfo();
-                                        } else if (isset($_GET['newProject'])) {
-                                            echo $website->getProjectPoster();
-                                        } else {
-                                            echo $website->getHomepage();
-                                        }
-                                        ?>
-                                    </div>
-                                    <!-- / intro -->      
-                                </div>
-                                <!-- / content column -->          
-                            </div>
-                        </div>
-                    </div>    
-                </div>
+            <!-- right column -->
+            <div id="right_container">
+                <?php
+                echo $website->getUserInfo();
+                ?>
             </div>
-            <!-- / main body -->
+            <!-- / right column -->         
+            <!-- content column -->
+            <div id="content">
+                <?php
+                if (isset($_GET['search'])) {
+                    echo $website->getResult($_GET['search']);
+                } else if (isset($_POST['register'])) {
+                    echo $website->getRegisterForm();
+                } else if (isset($_GET['showcase'])) {
+                    echo $website->getShowcase();
+                } else if (isset($_GET['pop'])) {
+                    echo $website->getPOP();
+                } else if (isset($_GET['info'])) {
+                    echo $website->getInfo();
+                } else if (isset($_GET['newProject'])) {
+                    echo $website->getProjectPoster();
+                } else {
+                    echo $website->getHomepage();
+                }
+                ?>
+            </div>
+            <!-- content column -->
         </div>
         <!-- / wrapper -->
         <!-- footer -->

@@ -14,10 +14,6 @@ html {
     margin-bottom:1px;
 }
 
-body {
-    position:relative;
-}
-
 :focus {
     outline:hidden;
 }
@@ -92,11 +88,6 @@ body {
     font-size:12px;
 }
 
-/* background */
-* html body {
-    background-color:#000066;
-}
-
 /* wrapper setup */
 div.rapidxwpr {
     margin:auto;
@@ -122,47 +113,9 @@ span#logo, img#logo {
     border:0;
 }
 
-/* main body setup */
-div#middle {
-    width:auto;
-    height:100%;
-    margin:0px 0px 0px 0px;
-    clear:both;
-    background:#FFF url(../images/middle-bg.png) 0 100% no-repeat;
-    padding:0 0 25px 0;
-}
-
-/*\*/* html div#middle {
-    margin:-28px 0px 0px 0px;
-}/*end*/
-
-div#middle .background {
-    min-height:500px;
-    border-top:#000066 3px solid;
-    padding:0 19px 0 24px;
-}
-
-div#middle .layoutleft {
-    background:none;
-}
-
-div#middle .layoutright {
-    background:none;
-}
-
 /* left column */
 div#left {
     width:200px;
-}
-
-div#middle .layoutleft div#left {
-    float:left;
-    padding:0px 0px 0px 0px;
-}
-
-div#middle .layoutright div#right {
-    float:right;
-    padding:0px 0px 0px 0px;
 }
 
 /* right column */
@@ -178,6 +131,10 @@ div#right {
 
 div#right_container {
     padding:0 10px 0 10px;
+    float:right;
+    color:black;
+    border:1px black solid;
+    height:100%;
 }
 
 /* content column */
@@ -187,24 +144,6 @@ div#main {
     background:white;
 }
 
-div#middle .layoutleft div#main {
-    margin:0px 0px 0px 0px;
-    padding:0px 0px 0px 0px;
-}
-
-div#middle .layoutright div#main {
-    margin:0px 200px 0px 0px;
-    padding:0px 0px 0px 0px;
-}
-
-div#middle .withoutleft div#main {
-    margin:0px 0px 0px 0px;
-}
-
-div#mainmiddle {
-    margin:0px 0px 0px 0px;
-}
-
 div#main .withoutright {
     background:transparent;
 }
@@ -212,6 +151,9 @@ div#main .withoutright {
 div#content {
     color:black;
     width:72%;
+    height:100%;
+    border:1px black solid;
+    background:white;
 }
 
 div#main .withright div#content {
@@ -233,19 +175,6 @@ div#footer {
     clear:both;
     color:black;
     background:white;
-}
-
-/* clearing & floating */
-.clearingfix:after {
-    content:".";
-    display:block;
-    line-height:0px;
-    clear:both;
-    visibility:hidden;
-}
-
-.clearingfix {
-    display:block;
 }
 
 .floatbox {
