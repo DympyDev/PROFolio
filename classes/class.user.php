@@ -11,7 +11,7 @@
  * @author Dark
  */
 class user {
-    var $db, $id, $firstname, $insertion, $lastname, $password, $email, $year;
+    var $db, $id, $firstname, $insertion, $lastname, $password, $email, $year, $admin;
     var $exists;
     
     function __construct($db, $id, $password = "") {
@@ -33,6 +33,7 @@ class user {
             $this->password = $fields['password'];
             $this->email = $fields['email'];
             $this->year = $fields['year'];
+            $this->admin = $fields['admin'];
             $this->exists = true;
         } else {
             $this->exists = false;

@@ -55,7 +55,12 @@ class website {
     }
 
     function getLoginForm() {
+        $admin = "";
         $loginform = "";
+        
+        if($this->getCurrentUser() != false && $this->getCurrentUser()->admin == 1) {
+            $admin = '<br><input type="submit" name="admin" class="login-submit" value="Admin">';
+        }
         if ($this->getCurrentUser() == false) {
             $loginform = '
                 <form action="index.php" method="POST"><br>
@@ -84,9 +89,10 @@ class website {
                 <form action="index.php" method="POST"><br>
                     <table align="right">
                         <tr>
-                            <td><br>
+                            <td>
                                 <input type="submit" name="logout" class="login-submit" value="Logout"><br>
                                 <input type="submit" name="profileEdit" class="login-submit" value="Edit">
+                                '.$admin.'
                             </td>
                         </tr>
                     </table>
@@ -94,6 +100,51 @@ class website {
             ';
         }
         return $loginform;
+    }
+    
+    function getAdminForm() {
+        $adminform = '
+            <div align="left">
+            Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
+            Kies hieronder een optie om verder te gaan.
+                <form action="index.php" method="POST">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="submit" name="addProjectForm" class="login-submit" value="Projecten toevoegen">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            ';
+        return $adminform;
+    }
+    
+    function getAddProjectForm() {
+        $addProject = '
+            <div align="left">
+            Voer hier de naam van een project in.<br>
+            Op het moment dat U op de Toevoegen knop klikt, zit deze in de database.<br>
+                <form action="index.php" method="POST">
+                    <table>
+                        <tr>
+                            <td>
+                                <br><input type="text" name="projectName"><br>
+                                <input type="submit" name="addProject" class="login-submit" value="Toevoegen">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            ';
+        return $addProject;
+    }
+    
+    function addProject($_POST) {
+        $project = stripslashes(mysql_real_escape_string($_POST['projectName']));        
+        $query = "INSERT INTO `projecten` (project_naam) VALUES('$project');";
+        $result = $this->db->doQuery($query);
     }
 
     function getRegisterForm() {

@@ -9,6 +9,8 @@
         $website->register($_POST);
     } else if (isset($_POST['logout'])) {
         echo $website->logout();
+    } else if (isset($_POST['addProject'])) {
+        echo $website->addProject($_POST);
     } else if (isset($_FILES['img'])) {
         $website->uploadImage($_FILES);
     }
@@ -71,6 +73,10 @@
                     echo $website->getShowcase();
                 } else if (isset($_GET['pop'])) {
                     echo $website->getPOP();
+                }  else if (isset($_POST['admin'])) {
+                    echo $website->getAdminForm();
+                }  else if (isset($_POST['addProjectForm'])) {
+                    echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
                     echo $website->getInfo();
                 } else if (isset($_GET['newProject'])) {
