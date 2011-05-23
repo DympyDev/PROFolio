@@ -97,33 +97,51 @@ class website {
     }
 
     function getRegisterForm() {
+        $firstname = "";
+        $insertion = "";
+        $lastname = "";
+        $email = "";
+        $year = "";
+        if ($this->getCurrentUser() != false) {
+            $firstname = $this->getCurrentUser()->firstname;
+            $insertion = $this->getCurrentUser()->insertion;
+            $lastname = $this->getCurrentUser()->lastname;
+            $email = $this->getCurrentUser()->email;
+            $year = $this->getCurrentUser()->year;
+        }
         $registerform = '
             <div align="center">
                 <form action="index.php" method="POST">
                     <table>
                         <tr>
                             <td>Voornaam: </td> 
-                            <td><input type="text" name="firstname"></td>
+                            <td><input type="text" name="firstname" value = '.$firstname.'></td>
                         </tr>
                         <tr>
                             <td>Tussenvoegsel: </td>
-                            <td><input type="text" name="insertion"></td>
+                            <td><input type="text" name="insertion" value = '.$insertion.'></td>
                         </tr>
                         <tr>
                             <td>Achternaam: </td>
-                            <td><input type="text" name="lastname"></td>
+                            <td><input type="text" name="lastname" value = '.$lastname.'></td>
                         </tr>
                         <tr>
                             <td>Email-adres: </td>
-                            <td><input type="text" name="email"></td>
+                            <td><input type="text" name="email" value = '.$email.'></td>
                         </tr>
-                        <tr>
-                            <td>Leerling Nummer: </td>
-                            <td><input type="text" name="llnr"></td>
-                        </tr>
+        ';
+        if ($this->getCurrentUser() == false) {
+            $registerform .= '
+                <tr>
+                    <td>Leerling Nummer: </td>
+                    <td><input type="text" name="llnr"></td>
+                </tr>
+            ';
+        }
+        $registerform .= '
                         <tr>
                             <td>Studiejaar: </td>
-                            <td><input type="text" name="year"></td>
+                            <td><input type="text" name="year" value = '.$year.'></td>
                         </tr>
                         <tr>
                             <td>Wachtwoord: </td>
@@ -370,6 +388,7 @@ class website {
         $email = stripslashes(mysql_real_escape_string($_POST['email']));
         $year = stripslashes(mysql_real_escape_string($_POST['year']));
         $password = sha1($_POST['password'] . " : " . $id);
+        $query = "";
         if($this->getCurrentUser() == false){
             $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
                     VALUES('$id', '$firstname', '$insertion', '$lastname',
@@ -437,51 +456,6 @@ class website {
             </p>
         ';
         return $homepage;
-    }
-    
-    function getEditForm() {
-        $editform = '
-            <div align="center">
-                Pas hier de waardes aan en klik op opslaan om de wijzigingen toe te passen.
-                <form action="index.php" method="POST">
-                    <table>
-                        <tr>
-                            <td>Voornaam: </td> 
-                            <td><input type="text" name="firstname" value = '.$this->getCurrentUser()->firstname.'></td>
-                        </tr>
-                        <tr>
-                            <td>Tussenvoegsel: </td>
-                            <td><input type="text" name="insertion" value = '.$this->getCurrentUser()->insertion.'></td>
-                        </tr>
-                        <tr>
-                            <td>Achternaam: </td>
-                            <td><input type="text" name="lastname" value = '.$this->getCurrentUser()->lastname.'></td>
-                        </tr>
-                        <tr>
-                            <td>Email-adres: </td>
-                            <td><input type="text" name="email" value = '.$this->getCurrentUser()->email.'></td>
-                        </tr>                        
-                        <tr>
-                            <td>Studiejaar: </td>
-                            <td><input type="text" name="year" value = '.$this->getCurrentUser()->year.'></td>
-                        </tr>
-                        <tr>
-                            <td>Wachtwoord: </td>
-                            <td><input type="password" name="password"></td>
-                        </tr>
-                        <tr>
-                            <td> </td>
-                            <td><input type="submit" name="registreer" value="Opslaan"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="hidden" name="llnr" value = '.$this->getCurrentUser()->id.'></td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
-        ';
-        return $editform;
     }
 
     function getUser($id) {
