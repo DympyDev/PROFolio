@@ -68,7 +68,7 @@
                 if (isset($_GET['search'])) {
                     echo $website->getResult($_GET['search']);
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
-                    echo $website->getRegisterForm();
+                    echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
                     echo $website->getShowcase();
                 } else if (isset($_GET['pop'])) {
