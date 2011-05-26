@@ -56,12 +56,7 @@ class website {
     }
 
     function getLoginForm() {
-        $admin = "";
         $loginform = "";
-        
-        if($this->getCurrentUser() != false && $this->getCurrentUser()->admin == 1) {
-            $admin = '<br><input type="submit" name="admin" class="login-submit" value="Admin">';
-        }
         if ($this->getCurrentUser() == false) {
             $loginform = '
                 <form action="index.php" method="POST"><br>
@@ -91,9 +86,13 @@ class website {
                     <table align="right">
                         <tr>
                             <td>
-                                <input type="submit" name="logout" class="login-submit" value="Logout"><br>
-                                <input type="submit" name="profileEdit" class="login-submit" value="Edit">
-                                '.$admin.'
+                                <input type="submit" name="logout" class="login-submit" value="Logout">
+                                <br><input type="submit" name="profileEdit" class="login-submit" value="Edit">
+            ';
+            if ($this->getCurrentUser()->admin == 1) {
+                $loginform .= '<br><input type="submit" name="admin" class="login-submit" value="Admin">';
+            }
+            $loginform .= '
                             </td>
                         </tr>
                     </table>
@@ -105,9 +104,11 @@ class website {
     
     function getAdminForm() {
         $adminform = '
-            <div align="left">
-            Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
-            Kies hieronder een optie om verder te gaan.
+            <div align="center">
+                Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
+                Kies hieronder een optie om verder te gaan.
+                <a href="index.php?addProjectForm=1"><button class="login-submit">Projecten toevoegen</button></a>
+                <!--
                 <form action="index.php" method="POST">
                     <table>
                         <tr>
@@ -117,6 +118,7 @@ class website {
                         </tr>
                     </table>
                 </form>
+                -->
             </div>
             ';
         return $adminform;
@@ -124,14 +126,14 @@ class website {
     
     function getAddProjectForm() {
         $addProject = '
-            <div align="left">
-            Voer hier de naam van een project in.<br>
-            Op het moment dat U op de Toevoegen knop klikt, zit deze in de database.<br>
+            <div align="center">
+                Voer hier de naam van een project in.<br>
+                Op het moment dat U op de Toevoegen knop klikt, zit deze in de database.<br>
                 <form action="index.php" method="POST">
                     <table>
                         <tr>
                             <td>
-                                <br><input type="text" name="projectName"><br>
+                                <br><input type="text" name="projectName">
                                 <input type="submit" name="addProject" class="login-submit" value="Toevoegen">
                             </td>
                         </tr>
@@ -144,7 +146,7 @@ class website {
     
     function addProject($_POST) {
         $project = stripslashes(mysql_real_escape_string($_POST['projectName']));        
-        $query = "INSERT INTO `projecten` (project_naam) VALUES('$project');";
+        $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
         $result = $this->db->doQuery($query);
     }
 

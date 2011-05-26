@@ -75,7 +75,7 @@
                     echo $website->getPOP();
                 }  else if (isset($_POST['admin'])) {
                     echo $website->getAdminForm();
-                }  else if (isset($_POST['addProjectForm'])) {
+                }  else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
                     echo $website->getInfo();
