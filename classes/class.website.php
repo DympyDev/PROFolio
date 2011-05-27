@@ -572,20 +572,39 @@ class website {
     }
 
     function getHomepage() {
-        $homepage = '
-            <h1>Profolio</h1>
-            <h3>Een online portfolio voor informatica studenten</h3>
-            <p>
-                Hallo en welkom op deze site. </br>
-                Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.</br>
-                Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
-            </p>
-            <p>
-                Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.</br>
-                </br>
-                Wij hopen dat U kunt vinden wat U zoekt.
-            </p>
-        ';
+        $homepage = "";
+        if ($this->getCurrentUser() == false) {
+            $homepage = '
+                <h1>Profolio</h1>
+                <h3>Een online portfolio voor informatica studenten</h3>
+                <p>
+                    Hallo en welkom op deze site. </br>
+                    Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.</br>
+                    Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
+                </p>
+                <p>
+                    Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.</br>
+                    </br>
+                    Wij hopen dat U kunt vinden wat U zoekt.
+                </p>
+            ';
+        } else {
+            $result = $this->db->doQuery(
+                "SELECT `projecten`.project_naam as `naam`
+                FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
+                WHERE `projecten`.project_id = `projects`.project_id
+                AND `projects`.teamnr = `teams`.teamnr
+                AND `teams`.teamnr = `teamleden`.teamnr
+                AND `teamleden`.leerlingnr = `studenten`.id
+                AND `studenten`.id = '".$this->getCurrentUser()->id."';
+            ");
+            if ($result != false) {
+                echo 'Projecten waar je lid van bent:<br>';
+                while ($fields = mysql_fetch_assoc($result)) {
+                    echo $fields['naam'].'<br>';
+                }
+            }
+        }
         return $homepage;
     }
 
