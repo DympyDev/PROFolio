@@ -101,7 +101,7 @@ class website {
         }
         return $loginform;
     }
-    
+
     function getAdminForm() {
         $adminform = '
             <div align="center">
@@ -123,7 +123,7 @@ class website {
             ';
         return $adminform;
     }
-    
+
     function getAddProjectForm() {
         $addProject = '
             <div align="center">
@@ -143,9 +143,9 @@ class website {
             ';
         return $addProject;
     }
-    
+
     function addProject($_POST) {
-        $project = stripslashes(mysql_real_escape_string($_POST['projectName']));        
+        $project = stripslashes(mysql_real_escape_string($_POST['projectName']));
         $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
         $result = $this->db->doQuery($query);
     }
@@ -183,33 +183,33 @@ class website {
                 <table>
                     <tr>
                         <td>Voornaam: </td> 
-                        <td><input type="text" name="firstname" value="'.$firstname.'"></td>
+                        <td><input type="text" name="firstname" value="' . $firstname . '"></td>
                     </tr>
                     <tr>
                         <td>Tussenvoegsel: </td>
-                        <td><input type="text" name="insertion" value="'.$insertion.'"></td>
+                        <td><input type="text" name="insertion" value="' . $insertion . '"></td>
                     </tr>
                     <tr>
                         <td>Achternaam: </td>
-                        <td><input type="text" name="lastname" value="'.$lastname.'"></td>
+                        <td><input type="text" name="lastname" value="' . $lastname . '"></td>
                     </tr>
                     <tr>
                         <td>Email-adres: </td>
-                        <td><input type="text" name="email" value="'.$email.'"></td>
+                        <td><input type="text" name="email" value="' . $email . '"></td>
                     </tr>
         ';
         if ($this->getCurrentUser() == false) {
             $registerform .= '
                 <tr>
                     <td>Leerling Nummer: </td>
-                    <td><input type="text" name="llnr" value="'.$id.'"></td>
+                    <td><input type="text" name="llnr" value="' . $id . '"></td>
                 </tr>
             ';
         }
         $registerform .= '
                         <tr>
                             <td>Studiejaar: </td>
-                            <td><input type="text" name="year" value="'.$year.'"></td>
+                            <td><input type="text" name="year" value="' . $year . '"></td>
                         </tr>
                         <tr>
                             <td>Wachtwoord: </td>
@@ -236,6 +236,7 @@ class website {
                         <li><a href="index.php?showcase=' . $this->getCurrentUser()->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
                         <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Wie?</a></li>
+                        <li><a href="index.php?projects=' . $this->getCurrentUser()->id . '">Projecten</a></li>    
                     </ul>
                 ';
             } else {
@@ -245,6 +246,7 @@ class website {
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
+                        <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
                 ';
             }
@@ -256,6 +258,7 @@ class website {
                         <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
                         <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
+                        li><a href="index.php?projects=' . $this->getUser($id)->id . '">Projecten</a></li>    
                     </ul>
                 ';
             } else {
@@ -265,6 +268,7 @@ class website {
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
+                        <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
                 ';
             }
@@ -495,14 +499,14 @@ class website {
         }
         $password = sha1($_POST['password'] . " : " . $id);
         $query = "";
-        if($this->getCurrentUser() == false){
+        if ($this->getCurrentUser() == false) {
             $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
                     VALUES('$id', '$firstname', '$insertion', '$lastname',
                     '$password', '$email', '$year')";
         } else {
             $query = "UPDATE `studenten` SET `firstname`='$firstname', `insertion`='$insertion', `lastname`='$lastname',
                     `password`='$password', `email`='$email', `year`='$year'
-                    WHERE `id` = '".$this->getCurrentUser()->id."'";
+                    WHERE `id` = '" . $this->getCurrentUser()->id . "'";
         }
         $this->db->doQuery($query);
         return $this->login($id, $_POST['password']);
@@ -650,7 +654,26 @@ class website {
             }
         }
     }
-    
+
+    function getAvailableProjects() {
+        require website::mainConfigFile;
+        $project = "";
+        $query = "SELECT * FROM `projecten`;";
+        $result = $this->db->doQuery($query);
+       if ($this->getCurrentUser() != false) {
+            while ($record = mysql_fetch_assoc($result)) { 
+                $project = '               
+                        <select id="projects">
+                             <option>Select Project</option>
+                            <option value="'.$record['project_id'].'">'.$record['project_naam'].'</option>
+                         </select>
+                ';}
+        } else {
+            $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
+        }
+        return $project;
+    }
+
     function getProjectPoster() {
         $poster = "";
         if ($this->getCurrentUser() != false) {
@@ -723,5 +746,4 @@ class website {
         }
         return $poster;
     }
-
 }

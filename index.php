@@ -73,6 +73,8 @@
                     echo $website->getShowcase();
                 } else if (isset($_GET['pop'])) {
                     echo $website->getPOP();
+                } else if (isset($_GET['projects'])) {
+                    echo $website->getAvailableProjects();
                 }  else if (isset($_POST['admin'])) {
                     echo $website->getAdminForm();
                 }  else if (isset($_GET['addProjectForm'])) {
