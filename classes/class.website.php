@@ -145,7 +145,7 @@ class website {
         if ($result != false) {
             $addProject .= 'Er bestaan al een paar projecten. Dat zijn:<br>';
             while ($fields = mysql_fetch_assoc($result)) {
-                $addProject .= $fields['project_naam'].'<br>';
+                $addProject .= $fields['project_naam'] . '<br>';
             }
         }
         $addProject .= '</div>';
@@ -157,7 +157,7 @@ class website {
         $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
         $result = $this->db->doQuery($query);
     }
-    
+
     function getProjects() {
         $query = "SELECT `project_naam` FROM `projecten`;";
         return $this->db->doQuery($query);
@@ -682,24 +682,21 @@ class website {
     }
 
     function getAvailableProjects() {
-        require website::mainConfigFile;
         $project = "";
         $query = "SELECT * FROM `projecten`;";
         $result = $this->db->doQuery($query);
-       if ($this->getCurrentUser() != false) {
-            while ($record = mysql_fetch_assoc($result)) { 
-                $project = '               
-                        <select id="projects">
-                             <option>Select Project</option>
-                            <option value="'.$record['project_id'].'">'.$record['project_naam'].'</option>
-                         </select>
-                ';}
+        if ($this->getCurrentUser() != false) {
+            $project = '<select id="projects">
+                            <option>Select Project</option>';
+            while ($record = mysql_fetch_assoc($result)) {
+                $project .= '<option value="' . $record['project_id'] . '">' . $record['project_naam'] . '</option>';
+            }
+            $project .= '</select>';
         } else {
             $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
         }
         return $project;
     }
-
 
     function getProjectPoster() {
         $poster = "";
@@ -773,4 +770,5 @@ class website {
         }
         return $poster;
     }
+
 }
