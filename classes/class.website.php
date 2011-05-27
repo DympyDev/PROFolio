@@ -705,8 +705,11 @@ class website {
         $query = "SELECT * FROM `projecten`;";
         $result = $this->db->doQuery($query);
         if ($this->getCurrentUser() != false) {
-            $project = '<select id="projects">
-                            <option>Select Project</option>';
+            $project = '
+                <form action="index.php?projects=' . $this->getCurrentUser()->id . '">
+
+                <select id="projects" onChange="this.form.submit();">
+                            <option>Select Project</option> </form>';
             while ($record = mysql_fetch_assoc($result)) {
                 $project .= '<option value="' . $record['project_id'] . '">' . $record['project_naam'] . '</option>';
             }
@@ -719,8 +722,7 @@ class website {
     
     function getTeamsProjects() {
         $team = "";
-        $query = "SELECT * FROM `projects`;";
-        $result = $this->db->doQuery($query);
+        $query = "SELECT * FROM `projects` WHERE `project_id` = '".$_POST['project_id']."';";        $result = $this->db->doQuery($query);
         if ($this->getCurrentUser() != false) {
             $team = '<select id="teams">
                             <option>Select Team</option>';
