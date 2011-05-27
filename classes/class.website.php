@@ -718,20 +718,20 @@ class website {
     }
     
     function getTeamsProjects() {
-        $project = "";
+        $team = "";
         $query = "SELECT * FROM `projects`;";
         $result = $this->db->doQuery($query);
         if ($this->getCurrentUser() != false) {
-            $project = '<select id="teams">
+            $team = '<select id="teams">
                             <option>Select Team</option>';
             while ($record = mysql_fetch_assoc($result)) {
-                $project .= '<option value="' . $record['project_id'] . '">' . $record['teamnr'] . '</option>';
+                $team .= '<option value="' . $record['project_id'] . '">' . $record['teamnr'] . '</option>';
             }
-            $project .= '</select>';
+            $team .= '</select>';
         } else {
-            $project = "U kunt geen Team toevoegen als u niet bent ingelogd!";
+            $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
         }
-        return $project;
+        return $team;
     }
 
     function getProjectPoster() {
