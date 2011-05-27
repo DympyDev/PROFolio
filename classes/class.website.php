@@ -129,7 +129,7 @@ class website {
             <div align="center">
                 Voer hier de naam van een project in.<br>
                 Op het moment dat U op de Toevoegen knop klikt, zit deze in de database.<br>
-                <form action="index.php" method="POST">
+                <form action="index.php?addProjectForm=1" method="POST">
                     <table>
                         <tr>
                             <td>
@@ -139,8 +139,16 @@ class website {
                         </tr>
                     </table>
                 </form>
-            </div>
-            ';
+               <br>
+        ';
+        $result = $this->getProjects();
+        if ($result != false) {
+            $addProject .= 'Er bestaan al een paar projecten. Dat zijn:<br>';
+            while ($fields = mysql_fetch_assoc($result)) {
+                $addProject .= $fields['project_naam'].'<br>';
+            }
+        }
+        $addProject .= '</div>';
         return $addProject;
     }
 
@@ -148,6 +156,11 @@ class website {
         $project = stripslashes(mysql_real_escape_string($_POST['projectName']));
         $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
         $result = $this->db->doQuery($query);
+    }
+    
+    function getProjects() {
+        $query = "SELECT `project_naam` FROM `projecten`;";
+        return $this->db->doQuery($query);
     }
 
     function getRegisterForm($_POST = "") {
