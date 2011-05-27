@@ -68,14 +68,14 @@
                 if (isset($_GET['search'])) {
                     echo $website->getResult($_GET['search']);
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
-                    echo $website->getRegisterForm();
+                    echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
                     echo $website->getShowcase();
                 } else if (isset($_GET['pop'])) {
                     echo $website->getPOP();
                 }  else if (isset($_POST['admin'])) {
                     echo $website->getAdminForm();
-                }  else if (isset($_POST['addProjectForm'])) {
+                }  else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
                     echo $website->getInfo();

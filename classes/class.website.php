@@ -16,6 +16,7 @@ class website {
     var $session;
     var $logger;
     var $user = "";
+    var $errors = "";
     const mainConfigFile = "configs/config.php";
 
     function __construct() {
@@ -55,12 +56,7 @@ class website {
     }
 
     function getLoginForm() {
-        $admin = "";
         $loginform = "";
-        
-        if($this->getCurrentUser() != false && $this->getCurrentUser()->admin == 1) {
-            $admin = '<br><input type="submit" name="admin" class="login-submit" value="Admin">';
-        }
         if ($this->getCurrentUser() == false) {
             $loginform = '
                 <form action="index.php" method="POST"><br>
@@ -90,9 +86,13 @@ class website {
                     <table align="right">
                         <tr>
                             <td>
-                                <input type="submit" name="logout" class="login-submit" value="Logout"><br>
-                                <input type="submit" name="profileEdit" class="login-submit" value="Edit">
-                                '.$admin.'
+                                <input type="submit" name="logout" class="login-submit" value="Logout">
+                                <br><input type="submit" name="profileEdit" class="login-submit" value="Edit">
+            ';
+            if ($this->getCurrentUser()->admin == 1) {
+                $loginform .= '<br><input type="submit" name="admin" class="login-submit" value="Admin">';
+            }
+            $loginform .= '
                             </td>
                         </tr>
                     </table>
@@ -104,9 +104,11 @@ class website {
     
     function getAdminForm() {
         $adminform = '
-            <div align="left">
-            Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
-            Kies hieronder een optie om verder te gaan.
+            <div align="center">
+                Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
+                Kies hieronder een optie om verder te gaan.
+                <a href="index.php?addProjectForm=1"><button class="login-submit">Projecten toevoegen</button></a>
+                <!--
                 <form action="index.php" method="POST">
                     <table>
                         <tr>
@@ -116,6 +118,7 @@ class website {
                         </tr>
                     </table>
                 </form>
+                -->
             </div>
             ';
         return $adminform;
@@ -123,14 +126,14 @@ class website {
     
     function getAddProjectForm() {
         $addProject = '
-            <div align="left">
-            Voer hier de naam van een project in.<br>
-            Op het moment dat U op de Toevoegen knop klikt, zit deze in de database.<br>
+            <div align="center">
+                Voer hier de naam van een project in.<br>
+                Op het moment dat U op de Toevoegen knop klikt, zit deze in de database.<br>
                 <form action="index.php" method="POST">
                     <table>
                         <tr>
                             <td>
-                                <br><input type="text" name="projectName"><br>
+                                <br><input type="text" name="projectName">
                                 <input type="submit" name="addProject" class="login-submit" value="Toevoegen">
                             </td>
                         </tr>
@@ -143,61 +146,70 @@ class website {
     
     function addProject($_POST) {
         $project = stripslashes(mysql_real_escape_string($_POST['projectName']));        
-        $query = "INSERT INTO `projecten` (project_naam) VALUES('$project');";
+        $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
         $result = $this->db->doQuery($query);
     }
 
-    function getRegisterForm($errors = "") {
+    function getRegisterForm($_POST = "") {
         $firstname = "";
         $insertion = "";
         $lastname = "";
         $email = "";
         $year = "";
+        $id = "";
         if ($this->getCurrentUser() != false) {
             $firstname = $this->getCurrentUser()->firstname;
             $insertion = $this->getCurrentUser()->insertion;
             $lastname = $this->getCurrentUser()->lastname;
             $email = $this->getCurrentUser()->email;
             $year = $this->getCurrentUser()->year;
+        } else if (isset($_POST['firstname'])) {
+            $firstname = $_POST['firstname'];
+            $insertion = $_POST['insertion'];
+            $lastname = $_POST['lastname'];
+            $email = $_POST['email'];
+            $year = $_POST['year'];
+            $id = $_POST['llnr'];
         }
         $registerform = '
             <div align="center">
         ';
-        if ($errors != "") {
-            $registerform .= $errors;
+        if ($this->errors != "") {
+            $registerform .= '<font color="red"><b>' . $this->errors . '</b></font>';
+            $this->errors = "";
         }
         $registerform .= '
             <form action="index.php" method="POST">
                 <table>
                     <tr>
                         <td>Voornaam: </td> 
-                        <td><input type="text" name="firstname" value = '.$firstname.'></td>
+                        <td><input type="text" name="firstname" value="'.$firstname.'"></td>
                     </tr>
                     <tr>
                         <td>Tussenvoegsel: </td>
-                        <td><input type="text" name="insertion" value = '.$insertion.'></td>
+                        <td><input type="text" name="insertion" value="'.$insertion.'"></td>
                     </tr>
                     <tr>
                         <td>Achternaam: </td>
-                        <td><input type="text" name="lastname" value = '.$lastname.'></td>
+                        <td><input type="text" name="lastname" value="'.$lastname.'"></td>
                     </tr>
                     <tr>
                         <td>Email-adres: </td>
-                        <td><input type="text" name="email" value = '.$email.'></td>
+                        <td><input type="text" name="email" value="'.$email.'"></td>
                     </tr>
         ';
         if ($this->getCurrentUser() == false) {
             $registerform .= '
                 <tr>
                     <td>Leerling Nummer: </td>
-                    <td><input type="text" name="llnr"></td>
+                    <td><input type="text" name="llnr" value="'.$id.'"></td>
                 </tr>
             ';
         }
         $registerform .= '
                         <tr>
                             <td>Studiejaar: </td>
-                            <td><input type="text" name="year" value = '.$year.'></td>
+                            <td><input type="text" name="year" value="'.$year.'"></td>
                         </tr>
                         <tr>
                             <td>Wachtwoord: </td>
@@ -437,34 +449,50 @@ class website {
     }
 
     function register($_POST) {
-        $errors = "";
-        if ($_POST['llnr'] == "" && $this->getCurrentUser == false) {
-            $errors .= 'Het leerlingnummer veld was leeg.<br>';
-        }
-        if ($_POST['firstname'] == "") {
-            $errors .= 'Het voornaam veld was leeg.<br>';
-        }
-        if ($_POST['lastname'] == "") {
-            $errors .= 'Het achternaam veld was leeg.<br>';
-        }
-        if ($_POST['email'] == "") {
-            $errors .= 'Het emailadres veld was leeg.<br>';
-        }
-        if ($_POST['year'] == "") {
-            $errors .= 'Het schooljaar veld was leeg.<br>';
-        }
-        if ($_POST['password'] == "") {
-            $errors .= 'Het wachtwoord veld was leeg.<br>';
-        }
-        if ($errors != "") {
-            return $this->getRegisterForm($errors);
-        }
         $id = stripslashes(mysql_real_escape_string($_POST['llnr']));
         $firstname = stripslashes(mysql_real_escape_string($_POST['firstname']));
         $insertion = stripslashes(mysql_real_escape_string($_POST['insertion']));
         $lastname = stripslashes(mysql_real_escape_string($_POST['lastname']));
         $email = stripslashes(mysql_real_escape_string($_POST['email']));
         $year = stripslashes(mysql_real_escape_string($_POST['year']));
+        $password = stripslashes(mysql_real_escape_string($_POST['password']));
+        $errors = "";
+        if ($this->getCurrentUser() == false) {
+            if ($id == "") {
+                $errors .= 'Het leerlingnummer veld was leeg.<br>';
+            } else if ($this->getUser($id) != false) {
+                $errors .= 'Het ingevulde leerlingnummer is al geregistreerd.<br>';
+            }
+        }
+        if ($firstname == "") {
+            $errors .= 'Het voornaam veld was leeg.<br>';
+        }
+        if ($lastname == "") {
+            $errors .= 'Het achternaam veld was leeg.<br>';
+        }
+        if ($email == "") {
+            $errors .= 'Het emailadres veld was leeg.<br>';
+        } else if (!preg_match('/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/', $email)) {
+            $errors .= 'Het veld voor het emailadres bevat geen geldig emailadres.<br>';
+        }
+        if ($year == "") {
+            $errors .= 'Het schooljaar veld was leeg.<br>';
+        }
+        if ($password == "") {
+            $errors .= 'Het wachtwoord veld was leeg.<br>';
+        } else if (!preg_match('/^(?=.*\d)(?=.*[A-Z]*[a-z]).{6,}$/', $password)) {
+            $errors .= 'Het ingevulde wachtwoord voldoet niet aan de eisen.<br>';
+        }
+        if (strlen($year) != 4) {
+            $errors .= 'Dat is geen geldig jaartal, een jaar heeft vier cijfers.<br>';
+        } else if ($year < (Date("Y") - 100) || $year > Date("Y")) {
+            $errors .= 'U kunt niet op ' . $year . ' op school gezeten hebben.<br>';
+        }
+        if ($errors != "") {
+            $this->errors = $errors;
+            $_POST['register'] = 1;
+            return;
+        }
         $password = sha1($_POST['password'] . " : " . $id);
         $query = "";
         if($this->getCurrentUser() == false){
@@ -540,10 +568,10 @@ class website {
         if (!class_exists('user')) {
             require "classes/class.user.php";
         }
-        $query = "SELECT * FROM `studenten WHERE `id` = '$id';";
+        $query = "SELECT * FROM `studenten` WHERE `id` = '$id';";
         $result = $this->db->doQuery($query);
         if ($result != false) {
-            return new user($this->db, $id);
+            return (new user($this->db, $id));
         } else {
             return false;
         }
