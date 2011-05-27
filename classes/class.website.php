@@ -101,7 +101,7 @@ class website {
         }
         return $loginform;
     }
-    
+
     function getAdminForm() {
         $adminform = '
             <div align="center">
@@ -123,7 +123,7 @@ class website {
             ';
         return $adminform;
     }
-    
+
     function getAddProjectForm() {
         $addProject = '
             <div align="center">
@@ -143,9 +143,9 @@ class website {
             ';
         return $addProject;
     }
-    
+
     function addProject($_POST) {
-        $project = stripslashes(mysql_real_escape_string($_POST['projectName']));        
+        $project = stripslashes(mysql_real_escape_string($_POST['projectName']));
         $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
         $result = $this->db->doQuery($query);
     }
@@ -183,33 +183,33 @@ class website {
                 <table>
                     <tr>
                         <td>Voornaam: </td> 
-                        <td><input type="text" name="firstname" value="'.$firstname.'"></td>
+                        <td><input type="text" name="firstname" value="' . $firstname . '"></td>
                     </tr>
                     <tr>
                         <td>Tussenvoegsel: </td>
-                        <td><input type="text" name="insertion" value="'.$insertion.'"></td>
+                        <td><input type="text" name="insertion" value="' . $insertion . '"></td>
                     </tr>
                     <tr>
                         <td>Achternaam: </td>
-                        <td><input type="text" name="lastname" value="'.$lastname.'"></td>
+                        <td><input type="text" name="lastname" value="' . $lastname . '"></td>
                     </tr>
                     <tr>
                         <td>Email-adres: </td>
-                        <td><input type="text" name="email" value="'.$email.'"></td>
+                        <td><input type="text" name="email" value="' . $email . '"></td>
                     </tr>
         ';
         if ($this->getCurrentUser() == false) {
             $registerform .= '
                 <tr>
                     <td>Leerling Nummer: </td>
-                    <td><input type="text" name="llnr" value="'.$id.'"></td>
+                    <td><input type="text" name="llnr" value="' . $id . '"></td>
                 </tr>
             ';
         }
         $registerform .= '
                         <tr>
                             <td>Studiejaar: </td>
-                            <td><input type="text" name="year" value="'.$year.'"></td>
+                            <td><input type="text" name="year" value="' . $year . '"></td>
                         </tr>
                         <tr>
                             <td>Wachtwoord: </td>
@@ -279,7 +279,7 @@ class website {
             if ($this->getCurrentUser() != false) {
                 $path = 'avatars/' . $this->getCurrentUser()->id . '_img.png';
                 if (file_exists($path) == true) {
-                    $image = $path ;
+                    $image = $path;
                 }
                 $userinfo = '
                     <div id="avatar">
@@ -290,8 +290,15 @@ class website {
                     </br>Leerling Nummer:</br>
                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->id . '</b></br>
                     </br>Studie Jaar:</br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->year . '</b></br>
-                ';
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->year . '</b></br>';
+                if ($image != $path) {
+                    $userinfo .= '
+                    <form action="index.php" method="POST" enctype="multipart/form-data">
+                        Afbeelding:<input type="file" name="img">
+                        <input type="submit" value="Verzenden">
+                    </form>
+                    ';
+                }
             } else {
                 $userinfo = '
                     </br></br>Log in of maak een account aan om gebruik te kunnen maken van onze diensten.
@@ -313,6 +320,7 @@ class website {
                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->id . '</b></br>
                     </br>Studie Jaar:</br>
                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->year . '</b></br>
+                        
                 ';
             } else {
                 $userinfo = '
@@ -495,14 +503,14 @@ class website {
         }
         $password = sha1($_POST['password'] . " : " . $id);
         $query = "";
-        if($this->getCurrentUser() == false){
+        if ($this->getCurrentUser() == false) {
             $query = "INSERT INTO `studenten` (id, firstname, insertion, lastname, password, email, year)
                     VALUES('$id', '$firstname', '$insertion', '$lastname',
                     '$password', '$email', '$year')";
         } else {
             $query = "UPDATE `studenten` SET `firstname`='$firstname', `insertion`='$insertion', `lastname`='$lastname',
                     `password`='$password', `email`='$email', `year`='$year'
-                    WHERE `id` = '".$this->getCurrentUser()->id."'";
+                    WHERE `id` = '" . $this->getCurrentUser()->id . "'";
         }
         $this->db->doQuery($query);
         return $this->login($id, $_POST['password']);
@@ -637,10 +645,11 @@ class website {
                         $destination = imagecreatetruecolor(100, 150);
                         imagecopyresampled($destination, $image, ((($orw * $xscale) - $new) / 2), ((($orh * $yscale) - $neh) / 2), 0, 0, $new, $neh, $orw, $orh);
                         header('Content-Type: image/png');
-                        if(!is_dir($AvatarSaveDir)){
-                        mkdir($AvatarSaveDir);
+                        if (!is_dir($AvatarSaveDir)) {
+                            mkdir($AvatarSaveDir);
                         }
-                        if(imagepng($destination,'avatars/' .$this->getCurrentUser()->id . "_img.png")){
+                        if (imagepng($destination, 'avatars/' . $this->getCurrentUser()->id . "_img.png")) {
+                            
                         }
                         imagedestroy($image);
                         imagedestroy($destination);
@@ -654,7 +663,7 @@ class website {
             }
         }
     }
-    
+
     function getProjectPoster() {
         $poster = "";
         if ($this->getCurrentUser() != false) {
