@@ -106,7 +106,7 @@ class website {
         $adminform = '
             <div align="center">
                 Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
-                Kies hieronder een optie om verder te gaan.
+                Kies hieronder een optie om verder te gaan.<br>
                 <a href="index.php?addProjectForm=1"><button class="login-submit">Projecten toevoegen</button></a>
                 <!--
                 <form action="index.php" method="POST">
