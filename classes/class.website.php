@@ -106,7 +106,7 @@ class website {
         $adminform = '
             <div align="center">
                 Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
-                Kies hieronder een optie om verder te gaan.
+                Kies hieronder een optie om verder te gaan.<br>
                 <a href="index.php?addProjectForm=1"><button class="login-submit">Projecten toevoegen</button></a>
                 <!--
                 <form action="index.php" method="POST">
@@ -249,6 +249,7 @@ class website {
                         <li><a href="index.php?showcase=' . $this->getCurrentUser()->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
                         <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Wie?</a></li>
+                        <li><a href="index.php?projects=' . $this->getCurrentUser()->id . '">Projecten</a></li>    
                     </ul>
                 ';
             } else {
@@ -258,6 +259,7 @@ class website {
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
+                        <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
                 ';
             }
@@ -269,6 +271,7 @@ class website {
                         <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
                         <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
+                        li><a href="index.php?projects=' . $this->getUser($id)->id . '">Projecten</a></li>    
                     </ul>
                 ';
             } else {
@@ -278,6 +281,7 @@ class website {
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
+                        <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
                 ';
             }
@@ -677,6 +681,26 @@ class website {
         }
     }
 
+    function getAvailableProjects() {
+        require website::mainConfigFile;
+        $project = "";
+        $query = "SELECT * FROM `projecten`;";
+        $result = $this->db->doQuery($query);
+       if ($this->getCurrentUser() != false) {
+            while ($record = mysql_fetch_assoc($result)) { 
+                $project = '               
+                        <select id="projects">
+                             <option>Select Project</option>
+                            <option value="'.$record['project_id'].'">'.$record['project_naam'].'</option>
+                         </select>
+                ';}
+        } else {
+            $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
+        }
+        return $project;
+    }
+
+
     function getProjectPoster() {
         $poster = "";
         if ($this->getCurrentUser() != false) {
@@ -749,5 +773,4 @@ class website {
         }
         return $poster;
     }
-
 }
