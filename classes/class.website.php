@@ -262,16 +262,16 @@ class website {
 
     function getUserInfo($id = "") {
         $userinfo = "";
-        $image = 'no-pic.bmp';
+        $image = 'images/no-pic.bmp';
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
-                $path = '../profolio/images/' . $this->getCurrentUser()->id . '_img.png';
+                $path = 'avatars/' . $this->getCurrentUser()->id . '_img.png';
                 if (file_exists($path) == true) {
-                    $image = $this->getCurrentUser()->id . '_img.png';
+                    $image = $path ;
                 }
                 $userinfo = '
                     <div id="avatar">
-                        <img src="/profolio/images/' . $image . '"/>
+                        <img src="' . $image . '"/>
                     </div>
                     </br>Naam leerling:</br>
                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '</b></br>
@@ -609,10 +609,14 @@ class website {
                         $destination = imagecreatetruecolor(100, 150);
                         imagecopyresampled($destination, $image, ((($orw * $xscale) - $new) / 2), ((($orh * $yscale) - $neh) / 2), 0, 0, $new, $neh, $orw, $orh);
                         header('Content-Type: image/png');
-                        imagepng($destination, $this->getCurrentUser()->id . "_img.png", 100);
+                        if(!is_dir($AvatarSaveDir)){
+                        mkdir($AvatarSaveDir);
+                        }
+                        if(imagepng($destination,'avatars/' .$this->getCurrentUser()->id . "_img.png")){
+                        }
                         imagedestroy($image);
                         imagedestroy($destination);
-                        header('Content-Type: text.html');
+                        header('Content-Type: text/html');
                     } else {
                         echo "Verkeerd bestandstype.";
                     }
