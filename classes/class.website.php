@@ -742,10 +742,13 @@ class website {
             } else {
                 $team = '
                     <form action="index.php" method="POST">
-                        <input type="text" name="projectname">
+                        <input type="text" name="teamnaam">
                         <input type="submit" value="Maak aan">
-                    </form>
                 ';
+                $sql = "INSERT INTO `teams` (`teamnaam`) VALUES('" . $_POST['teamnaam'] . "');";
+                $this->db->doQuery($sql);
+                
+                $team .= '</form>';
             }
         } else {
             $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
