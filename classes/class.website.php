@@ -721,7 +721,13 @@ class website {
         }
         return $project;
     }
-
+    
+    function makeTeam($_POST) {
+        $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
+        $sql = "INSERT INTO `teams` (`teamnaam`) VALUES('$team');";
+        $this->db->doQuery($sql);
+    }
+    
     function getTeamsProjects($id) {
         $team = "";
         if ($this->getCurrentUser() != false) {
@@ -744,10 +750,7 @@ class website {
                     <form action="index.php" method="POST">
                         <input type="text" name="teamnaam">
                         <input type="submit" value="Maak aan">
-                ';
-                $sql = "INSERT INTO `teams` (`teamnaam`) VALUES('" . $_POST['teamnaam'] . "');";
-                $this->db->doQuery($sql);
-                
+                ';                
                 $team .= '</form>';
             }
         } else {
