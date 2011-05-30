@@ -603,6 +603,8 @@ class website {
                 while ($fields = mysql_fetch_assoc($result)) {
                     echo $fields['naam'] . '<br>';
                 }
+            }else{
+                echo 'U bent nog geen lid van een project';
             }
         }
         return $homepage;
