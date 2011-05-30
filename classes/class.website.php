@@ -598,7 +598,7 @@ class website {
                 while ($fields = mysql_fetch_assoc($result)) {
                     echo $fields['naam'] . '<br>';
                 }
-            }else{
+            } else {
                 echo 'U bent nog geen lid van een project';
             }
         }
@@ -697,65 +697,65 @@ class website {
         }
     }
 
-    function getAvailableProjects() {
-        $project = "";
-        $query = "SELECT * FROM `projecten`;";
-        $result = $this->db->doQuery($query);
-        if ($this->getCurrentUser() != false) {
-            $project = '
+    function getAvailableProjects($id = "") {
+        if ($id == "") {
+            $project = "";
+            $query = "SELECT * FROM `projecten`;";
+            $result = $this->db->doQuery($query);
+            if ($this->getCurrentUser() != false) {
+                $project = '
                 <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
                     <select name="projectid" onChange="this.form.submit();">
                         <option>Select Project</option>';
-            while ($fields = mysql_fetch_assoc($result)) {
-                $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
-            }
-            $project .= '
+                while ($fields = mysql_fetch_assoc($result)) {
+                    $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
+                }
+                $project .= '
                     </select>
                 </form>
             ';
+            } else {
+                $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
+            }
+            return $project;
         } else {
-            $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
+            $team = "";
+            if ($this->getCurrentUser() != false) {
+                $query = "SELECT * FROM `projects` WHERE `project_id` = '" . $id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $team = '
+                    <form action="index.php" method="POST">
+                        <select id="teams">
+                            <option>Select Team</option>';
+                    while ($record = mysql_fetch_assoc($result)) {
+                        $team .= '<option value="' . $record['project_id'] . '">' . $record['teamnr'] . '</option>';
+                    }
+                    $team .= '
+                        </select>
+                    </form>
+                ';
+                } else {
+                    $team = '
+                    <form action="index.php" method="POST">
+                        <input type="text" name="teamnaam">
+                        <input type="submit" value="Maak aan">
+                ';
+                    $team .= '</form>';
+                }
+            } else {
+                $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
+            }
+            return $team;
         }
-        return $project;
     }
-    
+
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
         $sql = "INSERT INTO `teams` (`teamnaam`) VALUES('$team');";
         $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES('5', '$project');";
         $this->db->doQuery($sql);
-    }
-    
-    function getTeamsProjects($id) {
-        $team = "";
-        if ($this->getCurrentUser() != false) {
-            $query = "SELECT * FROM `projects` WHERE `project_id` = '" . $id . "';";
-            $result = $this->db->doQuery($query);
-            if ($result != false) {
-                $team = '
-                    <form action="index.php" method="POST">
-                        <select id="teams">
-                            <option>Select Team</option>';
-                while ($record = mysql_fetch_assoc($result)) {
-                    $team .= '<option value="' . $record['project_id'] . '">' . $record['teamnr'] . '</option>';
-                }
-                $team .= '
-                        </select>
-                    </form>
-                ';
-            } else {
-                $team = '
-                    <form action="index.php" method="POST">
-                        <input type="text" name="teamnaam">
-                        <input type="submit" value="Maak aan">
-                ';                
-                $team .= '</form>';
-            }
-        } else {
-            $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
-        }
-        return $team;
     }
 
     function getProjectPoster() {
@@ -830,5 +830,4 @@ class website {
         }
         return $poster;
     }
-
 }
