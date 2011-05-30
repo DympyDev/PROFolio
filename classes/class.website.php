@@ -697,12 +697,12 @@ class website {
     }
 
     function getAvailableProjects($id = "") {
-        echo "Kies een project en een team waar je in hebt gezeten";
         if ($id == "") {
             $project = "";
             $query = "SELECT * FROM `projecten`;";
             $result = $this->db->doQuery($query);
             if ($this->getCurrentUser() != false) {
+                echo "Kies een project en een team waar je in hebt gezeten";
                 $project = '
                 <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
                     <select name="projectid" onChange="this.form.submit();">
