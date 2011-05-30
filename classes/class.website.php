@@ -697,6 +697,7 @@ class website {
     }
 
     function getAvailableProjects($id = "") {
+        echo "Kies een project en een team waar je in hebt gezeten";
         if ($id == "") {
             $project = "";
             $query = "SELECT * FROM `projecten`;";
