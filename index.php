@@ -52,7 +52,11 @@
                 <!-- navigation -->
                 <div class="nav">
                     <?php
-                    echo $website->getNavMenu();
+                    if (isset($_GET['id'])) {
+                        echo $website->getNavMenu($_GET['id']);
+                    } else {
+                        echo $website->getNavMenu();
+                    }
                     ?>
                 </div>
                 <!-- / navigation -->  
@@ -79,7 +83,7 @@
                     echo $website->getPOP();
                 } else if (isset($_GET['projects'])) {
                     if (isset($_POST['projectid'])) {
-                        echo $website->getAvailableProjects($_POST);
+                        echo $website->getAvailableProjects($_POST['projectid']);
                     } else {
                         echo $website->getAvailableProjects();
                     }
@@ -96,7 +100,11 @@
                 } else if (isset($_GET['editCV'])) {
                     echo $website->editCV();
                 } else {
-                    echo $website->getHomepage();
+                    if (isset($_GET['homepage'])) {
+                        echo $website->getHomepage($_GET['homepage']);
+                    } else {
+                        echo $website->getHomepage();
+                    }
                 }
                 ?>
             </div>
