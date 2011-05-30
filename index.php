@@ -69,7 +69,7 @@
                 </div>
                 <?php
                 if (isset($_GET['search'])) {
-                    echo $website->getResult($_GET['search']);
+                    echo $website->getSearchResult($_GET['search']);
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
