@@ -262,11 +262,11 @@ class website {
             if ($this->getUser($id) != false) {
                 $navmenu = '
                     <ul class="submenu">
-                        <li><a href="index.php">Home</a></li>
+                        <li><a href="index.php?homepage=' . $this->getUser($id)->id . '">Home</a></li>
                         <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
                         <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
-                        li><a href="index.php?projects=' . $this->getUser($id)->id . '">Projecten</a></li>    
+                        <li><a href="index.php?projects=' . $this->getUser($id)->id . '">Projecten</a></li>    
                     </ul>
                 ';
             } else {
@@ -566,40 +566,67 @@ class website {
         return $result;
     }
 
-    function getHomepage() {
+    function getHomepage($id = "") {
         $homepage = "";
-        if ($this->getCurrentUser() == false) {
-            $homepage = '
-                <h1>Profolio</h1>
-                <h3>Een online portfolio voor informatica studenten</h3>
-                <p>
-                    Hallo en welkom op deze site. </br>
-                    Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.</br>
-                    Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
-                </p>
-                <p>
-                    Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.</br>
-                    </br>
-                    Wij hopen dat U kunt vinden wat U zoekt.
-                </p>
-            ';
-        } else {
-            $result = $this->db->doQuery("
-                SELECT `projecten`.projectnaam as `naam`
-                FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
-                WHERE `projecten`.projectid = `teams`.projectid
-                AND `projects`.teamnr = `teams`.teamnr
-                AND `teams`.teamnr = `teamleden`.teamnr
-                AND `teamleden`.leerlingnr = `studenten`.id
-                AND `studenten`.id = '" . $this->getCurrentUser()->id . "';
-            ");
-            if ($result != false) {
-                echo 'Projecten waar je lid van bent:<br>';
-                while ($fields = mysql_fetch_assoc($result)) {
-                    echo $fields['naam'] . '<br>';
+        if ($id == "") {
+            if ($this->getCurrentUser() == false) {
+                $homepage = '
+                    <h1>Profolio</h1>
+                    <h3>Een online portfolio voor informatica studenten</h3>
+                    <p>
+                        Hallo en welkom op deze site. </br>
+                        Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.</br>
+                        Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
+                    </p>
+                    <p>
+                        Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.</br>
+                        </br>
+                        Wij hopen dat U kunt vinden wat U zoekt.
+                    </p>
+                ';
+            } else {
+                $result = $this->db->doQuery("
+                    SELECT `projecten`.projectnaam as `naam`
+                    FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
+                    WHERE `projecten`.projectid = `teams`.projectid
+                    AND `projects`.teamnr = `teams`.teamnr
+                    AND `teams`.teamnr = `teamleden`.teamnr
+                    AND `teamleden`.leerlingnr = `studenten`.id
+                    AND `studenten`.id = '" . $this->getCurrentUser()->id . "';
+                ");
+                if ($result != false) {
+                    $homepage = 'Projecten waar je lid van bent:<br>';
+                    while ($fields = mysql_fetch_assoc($result)) {
+                        $homepage .= $fields['naam'] . '<br>';
+                    }
+                } else {
+                    $homepage = 'U bent nog geen lid van een project.<br>
+                        Ga naar de showcase om zelf projecten toe te voegen of voeg jezelf toe aan een al bestaand team.';
                 }
-            }else{
-                echo 'U bent nog geen lid van een project';
+            }
+        } else {
+            if ($this->getUser($id) != false) {
+                $result = $this->db->doQuery("
+                    SELECT `projecten`.projectnaam as `naam`
+                    FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
+                    WHERE `projecten`.projectid = `teams`.projectid
+                    AND `projects`.teamnr = `teams`.teamnr
+                    AND `teams`.teamnr = `teamleden`.teamnr
+                    AND `teamleden`.leerlingnr = `studenten`.id
+                    AND `studenten`.id = '" . $this->getUser($id)->id . "';
+                ");
+                if ($result != false) {
+                    $homepage = 'Projecten waar je lid van bent:<br>';
+                    while ($fields = mysql_fetch_assoc($result)) {
+                        $homepage .= $fields['naam'] . '<br>';
+                    }
+                } else {
+                    $homepage = $this->getUser($id)->firstname.' '.$this->getUser($id)->insertion. ' '. $this->getUser($id)->lastname. 
+                            ' heeft nog geen projecten aangemaakt.';
+                }
+            } else {
+                $homepage = 'De gebruiker kan niet in de database gevonden worden. <br>
+                    Controleer of de ingevoerde informatie klopt en probeer het op nieuw.';
             }
         }
         return $homepage;
@@ -718,7 +745,7 @@ class website {
         }
         return $project;
     }
-    
+
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
@@ -726,7 +753,7 @@ class website {
         $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES('5', '$project');";
         $this->db->doQuery($sql);
     }
-    
+
     function getTeamsProjects($id) {
         $team = "";
         if ($this->getCurrentUser() != false) {
@@ -749,7 +776,7 @@ class website {
                     <form action="index.php" method="POST">
                         <input type="text" name="teamnaam">
                         <input type="submit" value="Maak aan">
-                ';                
+                ';
                 $team .= '</form>';
             }
         } else {

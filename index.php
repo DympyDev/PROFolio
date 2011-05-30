@@ -13,10 +13,9 @@
         echo $website->addProject($_POST);
     } else if (isset($_FILES['img'])) {
         $website->uploadImage($_FILES);
-    } else if (isset($_POST['teamnaam'])){
+    } else if (isset($_POST['teamnaam'])) {
         $website->makeTeam($_POST);
     }
-    
     ?>
     <head>
         <?php
@@ -51,7 +50,11 @@
                 <!-- navigation -->
                 <div class="nav">
                     <?php
-                    echo $website->getNavMenu();
+                    if (isset($_GET['id'])) {
+                        echo $website->getNavMenu($_GET['id']);
+                    } else {
+                        echo $website->getNavMenu();
+                    }
                     ?>
                 </div>
                 <!-- / navigation -->  
@@ -82,16 +85,20 @@
                     } else {
                         echo $website->getAvailableProjects();
                     }
-                }  else if (isset($_POST['admin'])) {
+                } else if (isset($_POST['admin'])) {
                     echo $website->getAdminForm();
-                }  else if (isset($_GET['addProjectForm'])) {
+                } else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
                     echo $website->getInfo();
                 } else if (isset($_GET['newProject'])) {
                     echo $website->getProjectPoster();
                 } else {
-                    echo $website->getHomepage();
+                    if (isset($_GET['homepage'])) {
+                        echo $website->getHomepage($_GET['homepage']);
+                    } else {
+                        echo $website->getHomepage();
+                    }
                 }
                 ?>
             </div>
