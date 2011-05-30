@@ -588,7 +588,6 @@ class website {
                 SELECT `projecten`.projectnaam as `naam`
                 FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
                 WHERE `projecten`.projectid = `teams`.projectid
-                AND `projects`.teamnr = `teams`.teamnr
                 AND `teams`.teamnr = `teamleden`.teamnr
                 AND `teamleden`.leerlingnr = `studenten`.id
                 AND `studenten`.id = '" . $this->getCurrentUser()->id . "';
