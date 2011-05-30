@@ -41,7 +41,7 @@ class website {
                 var fileref = document.createElement("script"); //  Maak een nieuw script object
                 fileref.setAttribute("type","text/javascript"); //  Definieer het als een javascript file
                 fileref.setAttribute("src", "./js/jquery.js");  //  Laad de lokale versie in de src attribuut
-                if (typeof fileref != "undefined") {            //  Als ons net aangemaakte script object nog correc is
+                if (typeof fileref != "undefined") {            //  Als ons net aangemaakte script object nog correct is
                     document.getElementsByTagName("head")[0].appendChild(fileref);  // Stop het in de head (laad de file)
                 }
             }
@@ -528,40 +528,30 @@ class website {
         return $this->login($id, $_POST['password']);
     }
 
-    function getResult($search) {
+    function getSearchResult($search) {
         $result = "";
         if (strlen($search) > 3) {
             $result .= "Gebruikers die matchen met uw zoekterm:<br>";
             $query = $this->db->doQuery("SELECT * FROM `studenten` WHERE `firstname` REGEXP '$search' OR `lastname` REGEXP '$search' OR `id` = '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '<br>';
-                }
-            } else {
-                $result .= "Geen<br>";
-            }
-
-            $result .= "<br><hr><br>Teams die matchen met uw zoekterm:<br>";
-            $query = $this->db->doQuery("SELECT * FROM `teams` WHERE `teamnaam` REGEXP '$search' OR `teamnr` REGEXP '$search';");
-            if ($query != false) {
-                while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['teamnaam'] . '<br>';
+                    $result .= '<a href="index.php?homepage=' . $fields['id'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
             }
 
             $result .= "<br><hr><br>Projecten die matchen met uw zoekterm:<br>";
-            $query = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` REGEXP '$search' OR `teamnr` REGEXP '$search';");
+            $query = $this->db->doQuery("SELECT `projects`.name as `projectnaam`, `teams`.teamnaam as `teamnaam`, `teams`.teamnr as `teamnr` FROM `projects`, `teams` WHERE `teams`.teamnr = `projects`.teamnr AND (`name` REGEXP '$search' OR `teamnr` REGEXP '$search');");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= $fields['teamnr'] . ' ' . $fields['name'] . '<br>';
+                    $result .= '<a href="index.php?project=' . $fields['teamnr'] . '">' . $fields['teamnaam'] . ' - ' . $fields['name'] . '</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
             }
         } else {
-            $result = "Die zoekterm is te kort, probeer meer dan 3 letters te gebruiken<br>";
+            $result = "Die zoekterm is te kort, probeer meer dan 3 tekens te gebruiken<br>";
         }
         return $result;
     }
@@ -622,11 +612,13 @@ class website {
                     }
                 } else {
                     $homepage = $this->getUser($id)->firstname.' '.$this->getUser($id)->insertion. ' '. $this->getUser($id)->lastname. 
-                            ' heeft nog geen projecten aangemaakt.';
+                            ' heeft nog geen projecten aangemaakt.
+                    ';
                 }
             } else {
                 $homepage = 'De gebruiker kan niet in de database gevonden worden. <br>
-                    Controleer of de ingevoerde informatie klopt en probeer het op nieuw.';
+                    Controleer of de ingevoerde informatie klopt en probeer het op nieuw.
+                ';
             }
         }
         return $homepage;
@@ -724,65 +716,68 @@ class website {
         }
     }
 
-    function getAvailableProjects() {
-        $project = "";
-        $query = "SELECT * FROM `projecten`;";
-        $result = $this->db->doQuery($query);
-        if ($this->getCurrentUser() != false) {
-            $project = '
-                <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
+    function getAvailableProjects($id = "") {
+        if ($id == "") {
+            $project = "";
+            $query = "SELECT * FROM `projecten`;";
+            $result = $this->db->doQuery($query);
+            if ($this->getCurrentUser() != false) {
+                echo "Kies een project en een team waar je in hebt gezeten";
+                $project = '
+                    <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
                     <select name="projectid" onChange="this.form.submit();">
-                        <option>Select Project</option>';
-            while ($fields = mysql_fetch_assoc($result)) {
-                $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
-            }
-            $project .= '
+                    <option>Select Project</option>
+                ';
+                while ($fields = mysql_fetch_assoc($result)) {
+                    $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
+                }
+                $project .= '
                     </select>
-                </form>
-            ';
+                    </form>
+                ';
+            } else {
+                $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
+            }
+            return $project;
         } else {
-            $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
+            $team = "";
+            if ($this->getCurrentUser() != false) {
+                $query = "SELECT * FROM `projects` WHERE `projectid` = '" . $id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $team = '
+                        <form action="index.php" method="POST">
+                        <select id="teams">
+                        <option>Select Team</option>
+                    ';
+                    while ($record = mysql_fetch_assoc($result)) {
+                        $team .= '<option value="' . $record['projectid'] . '">' . $record['teamnr'] . '</option>';
+                    }
+                    $team .= '
+                        </select>
+                        </form>
+                    ';
+                } else {
+                    $team = '
+                        <form action="index.php" method="POST">
+                        <input type="text" name="teamnaam">
+                        <input type="submit" value="Maak aan">
+                        </form>
+                    ';
+                }
+            } else {
+                $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
+            }
+            return $team;
         }
-        return $project;
     }
 
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
-        $sql = "INSERT INTO `teams` (`teamnaam`) VALUES('$team');";
+        $sql = "INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES('$team', '$project');";
         $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES('5', '$project');";
         $this->db->doQuery($sql);
-    }
-
-    function getTeamsProjects($id) {
-        $team = "";
-        if ($this->getCurrentUser() != false) {
-            $query = "SELECT * FROM `projects` WHERE `project_id` = '" . $id . "';";
-            $result = $this->db->doQuery($query);
-            if ($result != false) {
-                $team = '
-                    <form action="index.php" method="POST">
-                        <select id="teams">
-                            <option>Select Team</option>';
-                while ($record = mysql_fetch_assoc($result)) {
-                    $team .= '<option value="' . $record['project_id'] . '">' . $record['teamnr'] . '</option>';
-                }
-                $team .= '
-                        </select>
-                    </form>
-                ';
-            } else {
-                $team = '
-                    <form action="index.php" method="POST">
-                        <input type="text" name="teamnaam">
-                        <input type="submit" value="Maak aan">
-                ';
-                $team .= '</form>';
-            }
-        } else {
-            $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
-        }
-        return $team;
     }
 
     function getProjectPoster() {
@@ -857,5 +852,4 @@ class website {
         }
         return $poster;
     }
-
 }
