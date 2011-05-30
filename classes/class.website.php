@@ -141,11 +141,11 @@ class website {
                 </form>
                <br>
         ';
-        $result = $this->getProjects();
+        $result = $this->db->doQuery("SELECT `projectnaam` FROM `projecten`;");
         if ($result != false) {
             $addProject .= 'Er bestaan al een paar projecten. Dat zijn:<br>';
             while ($fields = mysql_fetch_assoc($result)) {
-                $addProject .= $fields['project_naam'] . '<br>';
+                $addProject .= $fields['projectnaam'] . '<br>';
             }
         }
         $addProject .= '</div>';
@@ -154,13 +154,8 @@ class website {
 
     function addProject($_POST) {
         $project = stripslashes(mysql_real_escape_string($_POST['projectName']));
-        $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
+        $query = "INSERT INTO `projecten` (`projectnaam`) VALUES ('$project');";
         $result = $this->db->doQuery($query);
-    }
-
-    function getProjects() {
-        $query = "SELECT `project_naam` FROM `projecten`;";
-        return $this->db->doQuery($query);
     }
 
     function getRegisterForm($_POST = "") {
@@ -557,7 +552,7 @@ class website {
             }
 
             $result .= "<br><hr><br>Projecten die matchen met uw zoekterm:<br>";
-            $query = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` REGEXP '$search' OR `id` REGEXP '$search';");
+            $query = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` REGEXP '$search' OR `teamnr` REGEXP '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
                     $result .= $fields['teamnr'] . ' ' . $fields['name'] . '<br>';
@@ -590,9 +585,9 @@ class website {
             ';
         } else {
             $result = $this->db->doQuery(
-                "SELECT `projecten`.project_naam as `naam`
+                "SELECT `projecten`.projectnaam as `naam`
                 FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
-                WHERE `projecten`.project_id = `projects`.project_id
+                WHERE `projecten`.projectid = `teams`.projectid
                 AND `projects`.teamnr = `teams`.teamnr
                 AND `teams`.teamnr = `teamleden`.teamnr
                 AND `teamleden`.leerlingnr = `studenten`.id
@@ -707,8 +702,8 @@ class website {
         if ($this->getCurrentUser() != false) {
             $project = '<select id="projects">
                             <option>Select Project</option>';
-            while ($record = mysql_fetch_assoc($result)) {
-                $project .= '<option value="' . $record['project_id'] . '">' . $record['project_naam'] . '</option>';
+            while ($fields = mysql_fetch_assoc($result)) {
+                $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
             }
             $project .= '</select>';
         } else {
