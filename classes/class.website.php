@@ -724,9 +724,10 @@ class website {
     
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
+        $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
         $sql = "INSERT INTO `teams` (`teamnaam`) VALUES('$team');";
+        $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES('5', '$project');";
         $this->db->doQuery($sql);
-        echo "Team is toegevoegd";
     }
     
     function getTeamsProjects($id) {
