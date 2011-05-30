@@ -712,7 +712,7 @@ class website {
         } else {
             $team = "";
             if ($this->getCurrentUser() != false) {
-                $query = "SELECT * FROM `projects` WHERE `projectid` = '" . $id . "';";
+                $query = "SELECT * FROM `teams` WHERE `projectid` = '" . $id . "';";
                 $result = $this->db->doQuery($query);
                 if ($result != false) {
                     $team = '
@@ -731,6 +731,8 @@ class website {
                     $team = '
                         <form action="index.php" method="POST">
                         <input type="text" name="teamnaam">
+                        <input type="text" name="bijdrage">
+                        <input type="hidden" name="projectid" value="' . $id . '">
                         <input type="submit" value="Maak aan">
                         </form>
                     ';
@@ -745,10 +747,16 @@ class website {
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
-        $sql = "INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES('$team', '$project');";
-        $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES('5', '$project');";
-        $this->db->doQuery($sql);
-        $this->db->doQuery($query);
+        $bijdrage= stripslashes(mysql_real_escape_string($_POST['bijdrage']));
+        $this->db->doQuery("INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES ('$team', '$project');");
+        $result = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `teamnaam` = '$team';");
+        if($result != false){
+            $teamnummer = mysql_result($result, 0);
+            $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES ('$teamnummer', '$bijdrage');";
+            $this->db->doQuery($query);
+        }else{
+            echo "Teamnaam niet gevonden";
+        }
     }
 
     function getProjectPoster() {
@@ -823,4 +831,5 @@ class website {
         }
         return $poster;
     }
+
 }
