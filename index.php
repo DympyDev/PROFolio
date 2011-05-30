@@ -15,6 +15,8 @@
         $website->uploadImage($_FILES);
     } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
         $website->makeTeam($_POST);
+    } else if (isset($_POST['CV'])) {
+        echo $website->saveCV($_POST['CV']);
     }
     ?>
     <head>
@@ -100,7 +102,11 @@
                 } else if (isset($_GET['info'])) {
                     echo $website->getInfo();
                 } else if (isset($_GET['newProject'])) {
-                    echo $website->getProjectPoster();
+                    echo $website->getPoster("", "", true);
+                } else if (isset($_GET['CV'])) {
+                    echo $website->getCV($_GET['CV']);
+                } else if (isset($_GET['editCV'])) {
+                    echo $website->editCV();
                 } else {
                     if (isset($_GET['homepage'])) {
                         echo $website->getHomepage($_GET['homepage']);
