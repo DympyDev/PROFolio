@@ -51,7 +51,7 @@ class website {
     }
 
     function getFooter() {
-        return 'Profolio is onderdeel van een groep HvA Informatica studenten.</br>
+        return 'Profolio is onderdeel van een groep HvA Informatica studenten.<br>
             Onder deze groep vallen Dymion Fritz, Giedo Terol, Ramon Vloon, Wouter Kievit en Tom Hoogeveen.';
     }
 
@@ -297,12 +297,12 @@ class website {
                     <div id="avatar">
                         <img src="' . $image . '"/>
                     </div>
-                    </br>Naam leerling:</br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '</b></br>
-                    </br>Leerling Nummer:</br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->id . '</b></br>
-                    </br>Studie Jaar:</br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->year . '</b></br>';
+                    <br>Naam leerling:<br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '</b><br>
+                    <br>Leerling Nummer:<br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->id . '</b><br>
+                    <br>Studie Jaar:<br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->year . '</b><br>';
                 if ($image != $path) {
                     $userinfo .= '
                     <form action="index.php" method="POST" enctype="multipart/form-data">
@@ -313,7 +313,7 @@ class website {
                 }
             } else {
                 $userinfo = '
-                    </br></br>Log in of maak een account aan om gebruik te kunnen maken van onze diensten.
+                    <br><br>Log in of maak een account aan om gebruik te kunnen maken van onze diensten.
                 ';
             }
         } else {
@@ -326,17 +326,17 @@ class website {
                     <div id="avatar">
                         <img src="/profolio/images/' . $image . '"/>
                     </div>
-                    </br>Naam leerling:</br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '</b></br>
-                    </br>Leerling Nummer:</br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->id . '</b></br>
-                    </br>Studie Jaar:</br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->year . '</b></br>
+                    <br>Naam leerling:<br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '</b><br>
+                    <br>Leerling Nummer:<br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->id . '</b><br>
+                    <br>Studie Jaar:<br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->year . '</b><br>
                         
                 ';
             } else {
                 $userinfo = '
-                    Er is geen gebruikers informatie beschikbaar voor de opgevraagde gebruiker. </br>
+                    Er is geen gebruikers informatie beschikbaar voor de opgevraagde gebruiker. <br>
                     Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
                 ';
             }
@@ -355,9 +355,9 @@ class website {
                 ';
             } else {
                 $showcase = '
-                    U bent niet ingelogd. </br>
+                    U bent niet ingelogd. <br>
                     Als U een showcase wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
-                    </br></br>
+                    <br><br>
                     Als U uw eigen showcase openbaar wilt maken raden wij U aan een account aan te maken.
                 ';
             }
@@ -369,7 +369,7 @@ class website {
                 ';
             } else {
                 $showcase = '
-                    Er is geen showcase beschikbaar voor de opgevraagde gebruiker. </br>
+                    Er is geen showcase beschikbaar voor de opgevraagde gebruiker. <br>
                     Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
                 ';
             }
@@ -387,9 +387,9 @@ class website {
                 ';
             } else {
                 $pop = '
-                    U bent niet ingelogd. </br>
+                    U bent niet ingelogd. <br>
                     Als U een Persoonlijk Ontwikkelingsplan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
-                    </br></br>
+                    <br><br>
                     Als U uw eigen Persoonlijk Ontwikkelingsplan openbaar wilt maken raden wij U aan een account aan te maken.
                 ';
             }
@@ -401,7 +401,7 @@ class website {
                 ';
             } else {
                 $pop = '
-                    Er is geen Persoonlijk Ontwikkelingsplan beschikbaar voor de opgevraagde gebruiker. </br>
+                    Er is geen Persoonlijk Ontwikkelingsplan beschikbaar voor de opgevraagde gebruiker. <br>
                     Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
                 ';
             }
@@ -419,9 +419,9 @@ class website {
                 ';
             } else {
                 $info = '
-                    U bent niet ingelogd. </br>
+                    U bent niet ingelogd. <br>
                     Als U een de Info van een leerling wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
-                    </br></br>
+                    <br><br>
                     Als U uw eigen Info openbaar wilt maken raden wij U aan een account aan te maken.
                 ';
             }
@@ -433,7 +433,7 @@ class website {
                 ';
             } else {
                 $info = '
-                    Er is geen info beschikbaar voor de opgevraagde gebruiker. </br>
+                    Er is geen info beschikbaar voor de opgevraagde gebruiker. <br>
                     Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
                 ';
             }
@@ -563,13 +563,13 @@ class website {
                 <h1>Profolio</h1>
                 <h3>Een online portfolio voor informatica studenten</h3>
                 <p>
-                    Hallo en welkom op deze site. </br>
-                    Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.</br>
-                    Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
+                    Hallo en welkom op deze site. <br>
+                    Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.<br>
+                    Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.<br>
                 </p>
                 <p>
-                    Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.</br>
-                    </br>
+                    Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.<br>
+                    <br>
                     Wij hopen dat U kunt vinden wat U zoekt.
                 </p>
             ';
@@ -751,26 +751,27 @@ class website {
         $this->db->doQuery($query);
     }
 
-    function getProjectPoster() {
+    function getPoster($link = "", $content = "", $upload = false) {
         $poster = "";
         if ($this->getCurrentUser() != false) {
+            $content = ($content == "" ? "Gebruik hier HTML om je project te plaatsen" : $content);
             $poster = '
                 <div style="position:relative;top:0px;width:10%;height:500px;float:right;right:10px;">
                     <div align="center">
                         <script type="text/javascript">
-                        var element = document.createElement("script");
-                        element.setAttribute("type", "text/javascript");
-                        element.setAttribute("src", "./js/bbcode.js");
-                        document.getElementsByTagName("head")[0].appendChild(element);
+                            var element = document.createElement("script");
+                            element.setAttribute("type", "text/javascript");
+                            element.setAttribute("src", "./js/bbcode.js");
+                            document.getElementsByTagName("head")[0].appendChild(element);
                         </script>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'div\');">Div</button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'h1\');">H1</button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'h2\');">H2</button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'br\');">BR</button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'u\');"><u>U</u></button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'i\');"><i>I</i></button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'b\');"><b>B</b></button>
-                        <button style="width:100%;" onClick="bbcode_ins(\'project\', \'url\');"><u><font color="blue">URL</font></u></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'div\');">Div</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'h1\');">H1</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'h2\');">H2</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'br\');">BR</button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'u\');"><u>U</u></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'i\');"><i>I</i></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'b\');"><b>B</b></button>
+                        <button style="width:100%;" onClick="bbcode_ins(\'url\');"><u><font color="blue">URL</font></u></button>
                         <select id="fontcolors" onchange="this.style.backgroundColor = this.options[this.selectedIndex].style.backgroundColor;" style="width:40%;height:23px;background-color:red">
                             <option value="red" style="background-color:red"></option>
                             <option value="blue" style="background-color:blue"></option>
@@ -801,26 +802,107 @@ class website {
                         }
                     }
                     </script>
-                    <form method="POST" id="projectform" action="index.php" enctype="multipart/form-data">
+                    <form method="POST" id="projectform" action="index.php' . $link . '" enctype="multipart/form-data">
                         Projectnaam:
                         <input type="text" id="projectname" style="width:40%;">
                         <br><br>
-                        <textarea id="project" style="width:50%;height:500px;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je project te plaatsen\')this.value = \'\';">Gebruik hier HTML om je project te plaatsen</textarea>
-                        <br>
-                        <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
-                        <div style="position:relative;right:20%;">
-                            <a href="javascript:addUpload();">[+]</a>
-                            <div id="inputs" style="">
-                                <input type="file" id="document1">
-                            </div>
-                            <input type="submit" value="Opslaan">
+            ';
+            $extra = '
+                style="width:50%;min-height:400px;height:80%;resize:none;"
+                onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\')this.value = \'\';"
+            ';
+            $poster .= '<textarea id="content" ' . $extra . '>' . $content . '</textarea>';
+            if ($upload) {
+                $poster .= '
+                    <a href="javascript:addUpload();">[+]</a>
+                    <br>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+                    <div style="position:relative;right:20%;">
+                        <div id="inputs" style="">
+                            <input type="file" id="document1">
                         </div>
+                        <input type="submit" value="Opslaan">
+                    </div>
+                ';
+            }
+            $poster .= '
                     </form>
                 </div>
             ';
         } else {
-            $poster = "U kunt geen project toevoegen als u niet bent ingelogd!";
+            $poster = "U kunt niets plaatsen als u niet bent ingelogd!";
         }
         return $poster;
     }
+
+    function getCV($id = "") {
+        $cv = "";
+        if ($id != "" && $id != $this->getCurrentUser()->id) {
+            $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $id . "';";
+            $result = $this->db->doQuery($query);
+            if ($result != false) {
+                $fields = mysql_fetch_assoc($result);
+                $cv = $fields['description'];
+            } else {
+                $cv = '
+                   Er is geen CV beschikbaar voor de opgevraagde gebruiker. <br>
+                   Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                ';
+            }
+        } else {
+            if ($this->getCurrentUser() == false) {
+                $cv = '
+                   U bent niet ingelogd. <br>
+                   Als U de CV wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                   <br><br>
+                   Als U uw eigen CV openbaar wilt maken raden wij U aan een account aan te maken.
+               ';
+            } else {
+                $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $fields = mysql_fetch_assoc($result);
+                    $cv = $fields['description'];
+                    $cv.= '
+                        <form method="POST" id="CVform" action="index.php?editCV=' . $this->getCurrentUser()->id . '">
+                            <input type="submit" value="Bewerk">
+                        </form>
+                    ';
+                } else {
+                    $cv = $this->getPoster("?CV=" . $this->getCurrentUser()->id, "", false);
+                }
+            }
+        }
+        return $cv;
+    }
+
+    function saveCV($cv = "") {
+        if ($cv != "") {
+            if ($this->getCurrentUser() != false) {
+                $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $query = "UPDATE `CV` SET `description`= '$cv' WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+                    $this->db->doQuery($query);
+                } else {
+                    $query = "INSERT INTO `CV` (`llnr`,`description`) VALUES('" . $this->getCurrentUser()->id . "','$cv');";
+                    $this->db->doQuery($query);
+                }
+            }
+        }
+    }
+
+    function editCV() {
+        $cv = "";
+        if ($this->getCurrentUser() != false) {
+            $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+            $result = $this->db->doQuery($query);
+            if ($result != false) {
+                $record = mysql_fetch_assoc($result);
+                $cv = $this->getPoster("?CV=" . $this->getCurrentUser()->id, $record['description'], false);
+            }
+        }
+        return $cv;
+    }
+
 }
