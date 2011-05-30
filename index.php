@@ -50,8 +50,8 @@
                 <!-- navigation -->
                 <div class="nav">
                     <?php
-                    if (isset($_GET['id'])) {
-                        echo $website->getNavMenu($_GET['id']);
+                    if (isset($_GET['homepage'])) {
+                        echo $website->getNavMenu($_GET['homepage']);
                     } else {
                         echo $website->getNavMenu();
                     }
@@ -67,7 +67,11 @@
             <div id="content">  
                 <div id="right">
                     <?php
-                    echo $website->getUserInfo();
+                    if (isset($_GET['homepage'])) {
+                        echo $website->getUserInfo($_GET['homepage']);
+                    } else {
+                        echo $website->getUserInfo();
+                    }
                     ?>
                 </div>
                 <?php
@@ -76,7 +80,11 @@
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
-                    echo $website->getShowcase();
+                    if (isset($_GET['showcase']) && $_GET['showcase'] != $website->getCurrentUser()->id) {
+                        echo $website->getShowcase($_GET['showcase']);
+                    } else {
+                        echo $website->getShowcase();
+                    }
                 } else if (isset($_GET['pop'])) {
                     echo $website->getPOP();
                 } else if (isset($_GET['projects'])) {

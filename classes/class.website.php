@@ -52,7 +52,7 @@ class website {
 
     function getFooter() {
         return 'Profolio is onderdeel van een groep HvA Informatica studenten.</br>
-            Onder deze groep vallen Dymion Fritz, Giedo Terol, Ramon Vloon, Wouter Kievit en Tom Hoogeveen.';
+            Onder deze groep vallen Dymion Fritz, Giedo Terol, Ramon Vloon en Wouter Kievit.';
     }
 
     function getLoginForm() {
@@ -263,10 +263,10 @@ class website {
                 $navmenu = '
                     <ul class="submenu">
                         <li><a href="index.php?homepage=' . $this->getUser($id)->id . '">Home</a></li>
-                        <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
-                        <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
-                        <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
-                        <li><a href="index.php?projects=' . $this->getUser($id)->id . '">Projecten</a></li>    
+                        <li><a href="index.php?showcase=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">Showcase</a></li>
+                        <li><a href="index.php?pop=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">POP</a></li>
+                        <li><a href="index.php?info=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">Wie?</a></li>
+                        <li><a href="index.php?projects=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">Projecten</a></li>    
                     </ul>
                 ';
             } else {
@@ -318,13 +318,13 @@ class website {
             }
         } else {
             if ($this->getUser($id) != false) {
-                $path = '../profolio/images/' . $this->getUser()->id . '_img.png';
+                $path = 'avatars/' . $this->getUser($id)->id . '_img.png';
                 if (file_exists($path) == true) {
-                    $image = $this->getUser($id)->id . '_img.png';
+                    $image = $path;
                 }
                 $userinfo = '
                     <div id="avatar">
-                        <img src="/profolio/images/' . $image . '"/>
+                        <img src="' . $image . '"/>
                     </div>
                     </br>Naam leerling:</br>
                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '</b></br>
