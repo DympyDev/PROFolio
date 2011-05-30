@@ -13,10 +13,9 @@
         echo $website->addProject($_POST);
     } else if (isset($_FILES['img'])) {
         $website->uploadImage($_FILES);
-    } else if (isset($_POST['teamnaam'])){
+    } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
         $website->makeTeam($_POST);
     }
-    
     ?>
     <head>
         <?php
@@ -78,13 +77,13 @@
                     echo $website->getPOP();
                 } else if (isset($_GET['projects'])) {
                     if (isset($_POST['projectid'])) {
-                        echo $website->getTeamsProjects($_POST['projectid']);
+                        echo $website->getAvailableProjects($_POST);
                     } else {
                         echo $website->getAvailableProjects();
                     }
-                }  else if (isset($_POST['admin'])) {
+                } else if (isset($_POST['admin'])) {
                     echo $website->getAdminForm();
-                }  else if (isset($_GET['addProjectForm'])) {
+                } else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
                     echo $website->getInfo();
