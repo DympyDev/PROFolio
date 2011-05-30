@@ -243,6 +243,7 @@ class website {
                         <li><a href="index.php">Home</a></li>
                         <li><a href="index.php?showcase=' . $this->getCurrentUser()->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
+                        <li><a href="index.php?CV=' . $this->getCurrentUser()->id . '">CV</a></li>
                         <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Wie?</a></li>
                         <li><a href="index.php?projects=' . $this->getCurrentUser()->id . '">Projecten</a></li>    
                     </ul>
@@ -253,6 +254,7 @@ class website {
                         <li><a href="index.php">Home</a></li>
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
+                        <li><a href="index.php?CV=none">CV</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
                         <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
@@ -265,6 +267,7 @@ class website {
                         <li><a href="index.php?homepage=' . $this->getUser($id)->id . '">Home</a></li>
                         <li><a href="index.php?showcase=' . $this->getUser($id)->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getUser($id)->id . '">POP</a></li>
+                            <li><a href="index.php?CV=' . $this->getUser($id)->id . '">CV</a></li>
                         <li><a href="index.php?info=' . $this->getUser($id)->id . '">Wie?</a></li>
                         <li><a href="index.php?projects=' . $this->getUser($id)->id . '">Projecten</a></li>
                     </ul>
@@ -275,6 +278,7 @@ class website {
                         <li><a href="index.php">Home</a></li>
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
+                        <li><a href="index.php?CV=none">CV</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
                         <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
@@ -792,7 +796,7 @@ class website {
     function getPoster($link = "", $content = "", $upload = false) {
         $poster = "";
         if ($this->getCurrentUser() != false) {
-            $content = ($content == "" ? "Gebruik hier HTML om je project te plaatsen" : $content);
+            $content = ($content == "" ? "Gebruik hier HTML om je tekst te plaatsen" : $content);
             $poster = '
                 <div style="position:relative;top:0px;width:10%;height:500px;float:right;right:10px;">
                     <div align="center">
@@ -818,7 +822,7 @@ class website {
                             <option value="white" style="background-color:white"></option>
                             <option value="gray" style="background-color:gray"></option>
                             <option value="yellow" style="background-color:yellow"></option>
-                        </select><button style="width:60%;" onClick="bbcode_ins(\'project\', \'font\');">Font</button>
+                        </select><button style="width:60%;" onClick="bbcode_ins(\'font\');">Font</button>
                     </div>
                 </div>
                 <div align="center">
@@ -839,31 +843,35 @@ class website {
                             counter++;
                         }
                     }
+                    function insertTab(textarea, event){
+                        var key = event.keyCode ? event.keyCode : event.charCode ? event.charCode : event.which;
+                        if (key == 9 && !event.shiftKey && !event.ctrlKey && !event.altKey) {
+                            textarea.value += "\t";
+                        }
+                    }
                     </script>
-                    <form method="POST" id="projectform" action="index.php' . $link . '" enctype="multipart/form-data">
+                    <form method="POST" id="projectform" onKeyDown="insertTab(this, event);" action="index.php' . $link . '" enctype="multipart/form-data">
                         Projectnaam:
                         <input type="text" id="projectname" style="width:40%;">
                         <br><br>
             ';
             $extra = '
-                style="width:50%;min-height:400px;height:80%;resize:none;"
-                onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\')this.value = \'\';"
+                id="contentarea" style="width:50%;min-height:400px;height:80%;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\'){this.value = \'\';}"
             ';
-            $poster .= '<textarea id="content" ' . $extra . '>' . $content . '</textarea>';
+            $poster .= '<textarea ' . $extra . '>' . $content . '</textarea>';
             if ($upload) {
                 $poster .= '
+                    <br>
                     <a href="javascript:addUpload();">[+]</a>
                     <br>
                     <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
-                    <div style="position:relative;right:20%;">
-                        <div id="inputs" style="">
-                            <input type="file" id="document1">
-                        </div>
-                        <input type="submit" value="Opslaan">
+                    <div id="inputs">
+                        <input type="file" id="document1">
                     </div>
                 ';
             }
             $poster .= '
+                        <input type="submit" value="Opslaan">
                     </form>
                 </div>
             ';
