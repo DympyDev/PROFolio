@@ -13,7 +13,7 @@
         echo $website->addProject($_POST);
     } else if (isset($_FILES['img'])) {
         $website->uploadImage($_FILES);
-    } else if (isset($_POST['teamnaam'])) {
+    } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
         $website->makeTeam($_POST);
     }
     ?>

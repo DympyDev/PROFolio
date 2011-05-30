@@ -752,9 +752,10 @@ class website {
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
-        $sql = "INSERT INTO `teams` (`teamnaam`) VALUES('$team');";
+        $sql = "INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES('$team', '$project');";
         $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES('5', '$project');";
         $this->db->doQuery($sql);
+        $this->db->doQuery($query);
     }
 
     function getProjectPoster() {
