@@ -77,7 +77,7 @@
                     echo $website->getPOP();
                 } else if (isset($_GET['projects'])) {
                     if (isset($_POST['projectid'])) {
-                        echo $website->getAvailableProjects($_POST['projectid']);
+                        echo $website->getAvailableProjects($_POST);
                     } else {
                         echo $website->getAvailableProjects();
                     }

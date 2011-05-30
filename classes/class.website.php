@@ -720,7 +720,7 @@ class website {
         } else {
             $team = "";
             if ($this->getCurrentUser() != false) {
-                $query = "SELECT * FROM `projects` WHERE `project_id` = '" . $id . "';";
+                $query = "SELECT * FROM `projects` WHERE `projectid` = '" . $id . "';";
                 $result = $this->db->doQuery($query);
                 if ($result != false) {
                     $team = '
@@ -728,7 +728,7 @@ class website {
                         <select id="teams">
                             <option>Select Team</option>';
                     while ($record = mysql_fetch_assoc($result)) {
-                        $team .= '<option value="' . $record['project_id'] . '">' . $record['teamnr'] . '</option>';
+                        $team .= '<option value="' . $record['projectid'] . '">' . $record['teamnr'] . '</option>';
                     }
                     $team .= '
                         </select>
