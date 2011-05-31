@@ -753,7 +753,7 @@ class website {
                     $team = '
                         Selecteer een bestaand project uit de dropdown indien beschikbaar.
                         <form action="index.php" method="POST">
-                            <select id="teams">
+                            <select name="teams">
                                 <option>Select Team</option>
                     ';
                     while ($record = mysql_fetch_assoc($result)) {
