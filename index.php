@@ -112,12 +112,12 @@
                     if ($result != false) {
                         $teams = '<select name="teamnr">';
                         while ($fields = mysql_fetch_assoc($result)) {
-                            $teams .= '<option value="'.$fields['teamnr'].'">'.$fields['name'].'</option>';
+                            $teams .= '<option value="' . $fields['teamnr'] . '">' . $fields['name'] . '</option>';
                         }
                         $teams .= '</select>';
                         echo $website->getPoster(true, "", "", $teams);
                     } else {
-                        echo $website->getAvailableProjects();
+                        echo 'U zit nog niet in een team. <a href="index.php?projects=' . $website->getCurrentUser()->id . '">Maak een nieuw team aan!</a>';
                     }
                 } else if (isset($_GET['CV'])) {
                     echo $website->getCV($_GET['CV']);
