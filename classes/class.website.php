@@ -355,7 +355,7 @@ class website {
                 $showcase = '
                     Dit is de showcase van 
                     ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
-                    <br><a href="index.php?newProject=1">Nieuw project uploaden</a>
+                    <br><a href="index.php?newProject=1">Voeg content aan een project toe</a>
                 ';
             } else {
                 $showcase = '
