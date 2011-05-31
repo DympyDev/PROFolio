@@ -788,18 +788,21 @@ class website {
         }
     }
 
+    function createTeam($_POST) {
+        $teams = stripslashes(mysql_real_escape_string($_POST['teams']));
+        $resultteam = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `teamnaam` = '$teams';");             
+        if ($resultteam != false){
+            $teamnummer1 = mysql_result($resultteam, 0);
+            $this->db->doQuery("INSERT INTO `teamleden` (`teamnr`, `leerlingnr`) VALUES ('$teamnummer1', '$this->getCurrentUser()->id');");    
+        }
+    }
+    
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
         $projectname = stripslashes(mysql_real_escape_string($_POST['projectname']));
-        $teams = stripslashes(mysql_real_escape_string($_POST['teams']));
         $this->db->doQuery("INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES ('$team', '$project');");      
         $result = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `teamnaam` = '$team';");
-        $resultteam = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `teamnaam` = '$teams';");
-        if($resultteam != false){
-            $teamnummer1 = mysql_result($resultteam, 0);
-            $this->db->doQuery("INSERT INTO `teamleden` (`teamnr`, `leerlingnr`) VALUES ('$teamnummer1', '$this->getCurrentUser()->id');");    
-        }
         if ($result != false) {
             $teamnummer = mysql_result($result, 0);
             $this->db->doQuery("INSERT INTO `projects` (`teamnr`, `name`) VALUES ('$teamnummer', '$projectname');");
