@@ -757,7 +757,7 @@ class website {
                                 <option>Select Team</option>
                     ';
                     while ($record = mysql_fetch_assoc($result)) {
-                        $team .= '<option value="' . $record['projectid'] . '">' . $record['teamnr'] . '</option>';
+                        $team .= '<option value="' . $record['projectid'] . '">' . $record['teamnaam'] . '</option>';
                     }
                     $team .= '
                             </select>
