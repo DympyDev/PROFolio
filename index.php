@@ -15,6 +15,8 @@
         $website->uploadImage($_FILES);
     } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
         $website->makeTeam($_POST);
+    } else if (isset($_POST['teams'])){
+        $website->createTeam($_POST);
     } else if (isset($_POST['content'])) {
         if (isset($_GET['CV'])) {
             echo $website->saveCV($_POST['CV']);
