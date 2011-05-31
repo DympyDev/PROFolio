@@ -15,8 +15,12 @@
         $website->uploadImage($_FILES);
     } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
         $website->makeTeam($_POST);
-    } else if (isset($_POST['CV'])) {
-        echo $website->saveCV($_POST['CV']);
+    } else if (isset($_POST['content'])) {
+        if (isset($_GET['CV'])) {
+            echo $website->saveCV($_POST['CV']);
+        } else {
+            echo $website->saveProject($_POST);
+        }
     }
     ?>
     <head>
@@ -94,7 +98,19 @@
                 } else if (isset($_GET['info'])) {
                     echo $website->getInfo();
                 } else if (isset($_GET['newProject'])) {
-                    echo $website->getPoster("", "", true);
+                    $query = "SELECT `projects`.name FROM `teamleden`, `projects` WHERE `teamleden`.teamnr = `projects`.teamnr AND `teamleden`.leerlingnr = '" . $website->getCurrentUser()->id . "';";
+                    $result = $website->db->doQuery($query);
+                    $teams = "";
+                    if ($result != false) {
+                        $teams = '<select name="teamnr">';
+                        while ($fields = mysql_fetch_assoc($result)) {
+                            $teams .= '<option value="'.$fields['teamnr'].'">'.$fields['name'].'</option>';
+                        }
+                        $teams .= '</select>';
+                        echo $website->getPoster(true, "", "", $teams);
+                    } else {
+                        echo $website->getAvailableProjects();
+                    }
                 } else if (isset($_GET['CV'])) {
                     echo $website->getCV($_GET['CV']);
                 } else if (isset($_GET['editCV'])) {

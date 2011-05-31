@@ -746,31 +746,40 @@ class website {
         } else {
             $team = "";
             if ($this->getCurrentUser() != false) {
+                $team = '';
                 $query = "SELECT * FROM `teams` WHERE `projectid` = '" . $id . "';";
                 $result = $this->db->doQuery($query);
                 if ($result != false) {
                     $team = '
+                        Selecteer een bestaand project uit de dropdown indien beschikbaar.
                         <form action="index.php" method="POST">
-                        <select id="teams">
-                        <option>Select Team</option>
+                            <select id="teams">
+                                <option>Select Team</option>
                     ';
                     while ($record = mysql_fetch_assoc($result)) {
                         $team .= '<option value="' . $record['projectid'] . '">' . $record['teamnr'] . '</option>';
                     }
                     $team .= '
-                        </select>
-                        </form>
-                    ';
-                } else {
-                    $team = '
-                        <form action="index.php" method="POST">
-                        <input type="text" name="teamnaam">
-                        <input type="text" name="bijdrage">
-                        <input type="hidden" name="projectid" value="' . $id . '">
-                        <input type="submit" value="Maak aan">
+                            </select>
                         </form>
                     ';
                 }
+                $team .= '
+                        Of vul deze textbox in om een nieuw projectteam te registreren
+                        <form action="index.php" method="POST">
+                            <table>
+                                <tr>
+                                    <td>Teamnaam</td><td><input type="text" name="teamnaam"></td>
+                                </tr>
+                                <tr>
+                                    <td>Projectnaam</td><td><input type="text" name="projectname"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="hidden" name="projectid" value="' . $id . '"></td><td><input type="submit" value="Maak aan"></td>
+                                </tr>
+                            </table>
+                        </form>
+                ';
             } else {
                 $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
             }
@@ -781,19 +790,19 @@ class website {
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
-        $bijdrage = stripslashes(mysql_real_escape_string($_POST['bijdrage']));
+        $projectname = stripslashes(mysql_real_escape_string($_POST['projectname']));
         $this->db->doQuery("INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES ('$team', '$project');");
         $result = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `teamnaam` = '$team';");
         if ($result != false) {
             $teamnummer = mysql_result($result, 0);
-            $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES ('$teamnummer', '$bijdrage');";
+            $query = "INSERT INTO `projects` (`teamnr`, `name`) VALUES ('$teamnummer', '$projectname');";
             $this->db->doQuery($query);
         } else {
             echo "Teamnaam niet gevonden";
         }
     }
 
-    function getPoster($link = "", $content = "", $upload = false) {
+    function getPoster($upload = false, $link = "", $content = "", $prefix = "") {
         $poster = "";
         if ($this->getCurrentUser() != false) {
             $content = ($content == "" ? "Gebruik hier HTML om je tekst te plaatsen" : $content);
@@ -850,9 +859,8 @@ class website {
                         }
                     }
                     </script>
-                    <form method="POST" id="projectform" onKeyDown="insertTab(this, event);" action="index.php' . $link . '" enctype="multipart/form-data">
-                        Projectnaam:
-                        <input type="text" id="projectname" style="width:40%;">
+                    <form method="POST" onKeyDown="insertTab(this, event);" action="index.php' . $link . '" enctype="multipart/form-data">
+                        '.$prefix.'
                         <br><br>
             ';
             $extra = '
@@ -915,11 +923,21 @@ class website {
                         </form>
                     ';
                 } else {
-                    $cv = $this->getPoster("?CV=" . $this->getCurrentUser()->id, "", false);
+                    $cv = $this->getPoster(false, "?CV=" . $this->getCurrentUser()->id);
                 }
             }
         }
         return $cv;
+    }
+    
+    function saveProject($_POST) {
+        if (isset($_POST['content'])) {
+            if (strlen($_POST['content']) < 2500) {
+                $_POST['content'] = stripslashes(mysql_real_escape_string($_POST['content']));
+                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `teamnr` = '". $_POST['teamnr'] ."';";
+                $this->db->doQuery($query);
+            }
+        }
     }
 
     function saveCV($cv = "") {
@@ -945,7 +963,7 @@ class website {
             $result = $this->db->doQuery($query);
             if ($result != false) {
                 $record = mysql_fetch_assoc($result);
-                $cv = $this->getPoster("?CV=" . $this->getCurrentUser()->id, $record['description'], false);
+                $cv = $this->getPoster(false, "?CV=" . $this->getCurrentUser()->id, $record['description']);
             }
         }
         return $cv;
