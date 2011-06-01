@@ -250,7 +250,6 @@ class website {
                         <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
                         <li><a href="index.php?CV=' . $this->getCurrentUser()->id . '">CV</a></li>
                         <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Wie?</a></li>
-                        <li><a href="index.php?projects=' . $this->getCurrentUser()->id . '">Projecten</a></li>    
                     </ul>
                 ';
             } else {
@@ -261,7 +260,6 @@ class website {
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?CV=none">CV</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
-                        <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
                 ';
             }
@@ -274,7 +272,6 @@ class website {
                         <li><a href="index.php?pop=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">POP</a></li>
                         <li><a href="index.php?CV=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">CV</a></li>
                         <li><a href="index.php?info=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Wie?</a></li>
-                        <li><a href="index.php?projects=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Projecten</a></li>
                     </ul>
                 ';
             } else {
@@ -285,7 +282,6 @@ class website {
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?CV=none">CV</a></li>
                         <li><a href="index.php?info=none">Wie?</a></li>
-                        <li><a href="index.php?projects=none">Projecten</a></li>
                     </ul>
                 ';
             }
@@ -756,7 +752,7 @@ class website {
             $team = "";
             if ($this->getCurrentUser() != false) {
                 $team = '';
-                $query = "SELECT * FROM `teams` WHERE `projectid` = '" . $id . "';";
+                $query = "SELECT * FROM `teams` WHERE `teamnr` = (SELECT `teamnr` FROM `teamleden` WHERE `llnr` = '" . $this->getCurrentUser()->id . "');";
                 $result = $this->db->doQuery($query);
                 if ($result != false) {
                     $team = '
