@@ -414,38 +414,6 @@ class website {
         return $pop;
     }
 
-//    function getInfo($id = "") {
-//        $info = "";
-//        if ($id == "") {
-//            if ($this->getCurrentUser() != false) {
-//                $info = '
-//                    Dit is de overige informatie van 
-//                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
-//                ';
-//            } else {
-//                $info = '
-//                    U bent niet ingelogd. <br>
-//                    Als U een de Info van een leerling wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
-//                    <br><br>
-//                    Als U uw eigen Info openbaar wilt maken raden wij U aan een account aan te maken.
-//                ';
-//            }
-//        } else {
-//            if ($this->getUser($id) != false) {
-//                $info = '
-//                    Dit is de overige informatie van 
-//                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
-//                ';
-//            } else {
-//                $info = '
-//                    Er is geen info beschikbaar voor de opgevraagde gebruiker. <br>
-//                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
-//                ';
-//            }
-//        }
-//        return $info;
-//    }
-
     function login($id, $password) {
         $id = stripslashes(mysql_real_escape_string($id));
         $query = "SELECT `password` FROM `studenten` WHERE `id` = '$id';";

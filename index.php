@@ -121,6 +121,8 @@
                     }
                 } else if (isset($_GET['editCV'])) {
                     echo $website->editCV();
+                }  else if (isset($_GET['editinfo'])) {
+                    echo $website->editinfo();
                 } else {
                     if (isset($_GET['user'])) {
                         echo $website->getHomepage($_GET['user']);
