@@ -110,19 +110,7 @@
                         echo $website->getInfo();
                     }
                 } else if (isset($_GET['newProject'])) {
-                    $query = "SELECT `projects`.name FROM `teamleden`, `projects` WHERE `teamleden`.teamnr = `projects`.teamnr AND `teamleden`.leerlingnr = '" . $website->getCurrentUser()->id . "';";
-                    $result = $website->db->doQuery($query);
-                    $teams = "";
-                    if ($result != false) {
-                        $teams = '<select name="teamnr">';
-                        while ($fields = mysql_fetch_assoc($result)) {
-                            $teams .= '<option value="' . $fields['teamnr'] . '">' . $fields['name'] . '</option>';
-                        }
-                        $teams .= '</select>';
-                        echo $website->getPoster(true, "", "", $teams);
-                    } else {
-                        echo 'U zit nog niet in een team. <a href="index.php?projects=' . $website->getCurrentUser()->id . '">Maak een nieuw team aan!</a>';
-                    }
+                    echo $website->getPoster(true, "", "", $website->getAvailableProjects());
                 } else if (isset($_GET['CV'])) {
                     if (isset($_GET['CV']) && $_GET['CV'] != $website->getCurrentUser()->id) {
                         echo $website->getCV($_GET['user']);

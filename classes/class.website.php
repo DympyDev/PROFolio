@@ -756,7 +756,7 @@ class website {
             $team = "";
             if ($this->getCurrentUser() != false) {
                 $team = '';
-                $query = "SELECT * FROM `teams` WHERE `projectid` = '" . $id . "';";
+                $query = "SELECT * FROM `teams` WHERE `teamnr` = (SELECT `teamnr` FROM `teamleden` WHERE `llnr` = '" . $this->getCurrentUser()->id . "');";
                 $result = $this->db->doQuery($query);
                 if ($result != false) {
                     $team = '
