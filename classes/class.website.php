@@ -882,7 +882,7 @@ class website {
                         <br><br>
             ';
             $extra = '
-                id="contentarea" style="width:50%;min-height:400px;height:80%;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\'){this.value = \'\';}"
+                id="contentarea" name="contentarea" style="width:50%;min-height:400px;height:80%;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\'){this.value = \'\';}"
             ';
             $poster .= '<textarea ' . $extra . '>' . $content . '</textarea>';
             if ($upload) {
