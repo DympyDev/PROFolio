@@ -60,7 +60,7 @@ class website {
         if ($this->getCurrentUser() == false) {
             if ($this->errors != "") {
                 $loginform .= '<font color="red">The following error occured:</font><br>
-                    '.$this->errors.'
+                    ' . $this->errors . '
                 ';
                 $this->errors = "";
             }
@@ -414,37 +414,37 @@ class website {
         return $pop;
     }
 
-    function getInfo($id = "") {
-        $info = "";
-        if ($id == "") {
-            if ($this->getCurrentUser() != false) {
-                $info = '
-                    Dit is de overige informatie van 
-                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
-                ';
-            } else {
-                $info = '
-                    U bent niet ingelogd. <br>
-                    Als U een de Info van een leerling wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
-                    <br><br>
-                    Als U uw eigen Info openbaar wilt maken raden wij U aan een account aan te maken.
-                ';
-            }
-        } else {
-            if ($this->getUser($id) != false) {
-                $info = '
-                    Dit is de overige informatie van 
-                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
-                ';
-            } else {
-                $info = '
-                    Er is geen info beschikbaar voor de opgevraagde gebruiker. <br>
-                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
-                ';
-            }
-        }
-        return $info;
-    }
+//    function getInfo($id = "") {
+//        $info = "";
+//        if ($id == "") {
+//            if ($this->getCurrentUser() != false) {
+//                $info = '
+//                    Dit is de overige informatie van 
+//                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
+//                ';
+//            } else {
+//                $info = '
+//                    U bent niet ingelogd. <br>
+//                    Als U een de Info van een leerling wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+//                    <br><br>
+//                    Als U uw eigen Info openbaar wilt maken raden wij U aan een account aan te maken.
+//                ';
+//            }
+//        } else {
+//            if ($this->getUser($id) != false) {
+//                $info = '
+//                    Dit is de overige informatie van 
+//                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+//                ';
+//            } else {
+//                $info = '
+//                    Er is geen info beschikbaar voor de opgevraagde gebruiker. <br>
+//                    Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+//                ';
+//            }
+//        }
+//        return $info;
+//    }
 
     function login($id, $password) {
         $id = stripslashes(mysql_real_escape_string($id));
@@ -795,22 +795,22 @@ class website {
     }
 
     function createTeam($_POST) {
-       if ($this->getCurrentUser() != false) {
-        $teams = stripslashes(mysql_real_escape_string($_POST['teams']));
-        $resultteam = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `projectid` = '$teams';");
-        $gebruiker = $this->getCurrentUser()->id;
-        if ($resultteam != false){
-            $teamnummer1 = mysql_result($resultteam, 0);
-            $this->db->doQuery("INSERT INTO `teamleden` (`teamnr`, `llnr`) VALUES ('$teamnummer1', '$gebruiker');");
+        if ($this->getCurrentUser() != false) {
+            $teams = stripslashes(mysql_real_escape_string($_POST['teams']));
+            $resultteam = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `projectid` = '$teams';");
+            $gebruiker = $this->getCurrentUser()->id;
+            if ($resultteam != false) {
+                $teamnummer1 = mysql_result($resultteam, 0);
+                $this->db->doQuery("INSERT INTO `teamleden` (`teamnr`, `llnr`) VALUES ('$teamnummer1', '$gebruiker');");
+            }
         }
-      }
     }
-    
+
     function makeTeam($_POST) {
         $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
         $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
         $projectname = stripslashes(mysql_real_escape_string($_POST['projectname']));
-        $this->db->doQuery("INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES ('$team', '$project');");      
+        $this->db->doQuery("INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES ('$team', '$project');");
         $result = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `teamnaam` = '$team';");
         if ($result != false) {
             $teamnummer = mysql_result($result, 0);
@@ -878,7 +878,7 @@ class website {
                     }
                     </script>
                     <form method="POST" onKeyDown="insertTab(this, event);" action="index.php' . $link . '" enctype="multipart/form-data">
-                        '.$prefix.'
+                        ' . $prefix . '
                         <br><br>
             ';
             $extra = '
@@ -907,6 +907,76 @@ class website {
         return $poster;
     }
 
+    function saveinfo($info = "") {
+        if ($info != "") {
+            if ($this->getCurrentUser() != false) {
+                $query = "SELECT * FROM `info` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $query = "UPDATE `info` SET `info`= '$info' WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+                    $this->db->doQuery($query);
+                } else {
+                    $query = "INSERT INTO `info` (`llnr`,`info`) VALUES('" . $this->getCurrentUser()->id . "','$info');";
+                    $this->db->doQuery($query);
+                }
+            }
+        }
+    }
+
+    function editinfo() {
+        $info = "";
+        if ($this->getCurrentUser() != false) {
+            $query = "SELECT * FROM `info` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+            $result = $this->db->doQuery($query);
+            if ($result != false) {
+                $record = mysql_fetch_assoc($result);
+                $info = $this->getPoster(false, "?info=" . $this->getCurrentUser()->id, $record['info']);
+            }
+        }
+        return $info;
+    }
+
+    function getInfo($id = "") {
+        $info = "";
+        if ($id != "" && $id != $this->getCurrentUser()->id) {
+            $query = "SELECT * FROM `info` WHERE `llnr` = '" . $id . "';";
+            $result = $this->db->doQuery($query);
+            if ($result != false) {
+                $fields = mysql_fetch_assoc($result);
+                $info = $fields['info'];
+            } else {
+                $info = '
+                   Er is geen overige info beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
+                   Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel zijn of haar info heeft geupload.
+                ';
+            }
+        } else {
+            if ($this->getCurrentUser() == false) {
+                $info = '
+                   U bent niet ingelogd. <br>
+                   Als U de info van anderen wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                   <br><br>
+                   Als U uw eigen info openbaar wilt maken raden wij U aan een account aan te maken.
+               ';
+            } else {
+                $query = "SELECT * FROM `info` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $fields = mysql_fetch_assoc($result);
+                    $info = $fields['info'];
+                    $info.= '
+                        <form method="POST" id="infoform" action="index.php?editinfo=' . $this->getCurrentUser()->id . '">
+                            <input type="submit" value="Bewerk">
+                        </form>
+                    ';
+                } else {
+                    $info = $this->getPoster(false, "?info=" . $this->getCurrentUser()->id);
+                }
+            }
+        }
+        return $info;
+    }
+
     function getCV($id = "") {
         $cv = "";
         if ($id != "" && $id != $this->getCurrentUser()->id) {
@@ -917,7 +987,7 @@ class website {
                 $cv = $fields['description'];
             } else {
                 $cv = '
-                   Er is geen CV beschikbaar voor '.$this->getUser($id)->firstname.' '.$this->getUser($id)->insertion.' '.$this->getUser($id)->lastname.'. <br>
+                   Er is geen CV beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
                    Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel een CV heeft geupload.
                 ';
             }
@@ -947,12 +1017,12 @@ class website {
         }
         return $cv;
     }
-    
+
     function saveProject($_POST) {
         if (isset($_POST['content'])) {
             if (strlen($_POST['content']) < 2500) {
                 $_POST['content'] = stripslashes(mysql_real_escape_string($_POST['content']));
-                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `llnr` = '". $_POST['llnr'] ."';";
+                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `llnr` = '" . $_POST['llnr'] . "';";
                 $this->db->doQuery($query);
             }
         }
@@ -986,4 +1056,5 @@ class website {
         }
         return $cv;
     }
+
 }
