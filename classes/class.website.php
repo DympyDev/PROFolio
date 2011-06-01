@@ -854,26 +854,14 @@ class website {
 
     function getInfo($id = "") {
         $info = "";
-        if ($id != "" && $id != $this->getCurrentUser()->id) {
-            $query = "SELECT * FROM `info` WHERE `llnr` = '" . $id . "';";
-            $result = $this->db->doQuery($query);
-            if ($result != false) {
-                $fields = mysql_fetch_assoc($result);
-                $info = $fields['info'];
-            } else {
-                $info = '
-                   Er is geen overige info beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
-                   Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel zijn of haar info heeft geupload.
-                ';
-            }
-        } else {
+        if ($id == "") {
             if ($this->getCurrentUser() == false) {
                 $info = '
                    U bent niet ingelogd. <br>
                    Als U de info van anderen wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
                    <br><br>
                    Als U uw eigen info openbaar wilt maken raden wij U aan een account aan te maken.
-               ';
+                ';
             } else {
                 $query = "SELECT * FROM `info` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
                 $result = $this->db->doQuery($query);
@@ -889,25 +877,32 @@ class website {
                     $info = $this->getPoster(false, "?info=" . $this->getCurrentUser()->id);
                 }
             }
+        } else {
+            if ($this->getUser($id) != false) {
+                $query = "SELECT * FROM `info` WHERE `llnr` = '" . $id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $fields = mysql_fetch_assoc($result);
+                    $info = $fields['info'];
+                } else {
+                    $info = '
+                       Er is geen overige info beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
+                       Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel zijn of haar info heeft geupload.
+                    ';
+                }
+            } else {
+                $info = '
+                    De gebruiker kan niet in de database gevonden worden. <br>
+                    Controleer of de ingevoerde informatie klopt en probeer het op nieuw.
+                ';
+            }
         }
         return $info;
     }
 
     function getCV($id = "") {
         $cv = "";
-        if ($id != "" && $id != $this->getCurrentUser()->id) {
-            $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $id . "';";
-            $result = $this->db->doQuery($query);
-            if ($result != false) {
-                $fields = mysql_fetch_assoc($result);
-                $cv = $fields['description'];
-            } else {
-                $cv = '
-                   Er is geen CV beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
-                   Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel een CV heeft geupload.
-                ';
-            }
-        } else {
+        if ($id == "") {
             if ($this->getCurrentUser() == false) {
                 $cv = '
                    U bent niet ingelogd. <br>
@@ -929,6 +924,25 @@ class website {
                 } else {
                     $cv = $this->getPoster(false, "?CV=" . $this->getCurrentUser()->id);
                 }
+            }
+        } else {
+            if ($this->getUser($id) != false) {
+                $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $id . "';";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $fields = mysql_fetch_assoc($result);
+                    $cv = $fields['description'];
+                } else {
+                    $cv = '
+                        Er is geen CV beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
+                        Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel een CV heeft geupload.
+                    ';
+                }
+            } else {
+                $cv = '
+                    De gebruiker kan niet in de database gevonden worden. <br>
+                    Controleer of de ingevoerde informatie klopt en probeer het op nieuw.
+                ';
             }
         }
         return $cv;

@@ -15,12 +15,12 @@
         $website->uploadImage($_FILES);
     } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
         $website->makeTeam($_POST);
-    } else if (isset($_POST['teams'])){
+    } else if (isset($_POST['teams'])) {
         $website->createTeam($_POST);
     } else if (isset($_POST['contentarea'])) {
         if (isset($_GET['CV'])) {
             echo $website->saveCV($_POST['contentarea']);
-        } else if(isset($_GET['info'])) {
+        } else if (isset($_GET['info'])) {
             echo $website->saveinfo($_POST['contentarea']);
         } else {
             echo $website->saveProject($_POST);
@@ -91,13 +91,21 @@
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
                     if ($website->getCurrentUser() == false || $_GET['showcase'] != $website->getCurrentUser()->id) {
-                        echo $website->getShowcase($_GET['user']);
+                        if (isset($_GET['user'])) {
+                            echo $website->getShowcase($_GET['user']);
+                        } else {
+                            echo $website->getShowcase();
+                        }
                     } else {
                         echo $website->getShowcase();
                     }
                 } else if (isset($_GET['pop'])) {
                     if ($website->getCurrentUser() == false || $_GET['pop'] != $website->getCurrentUser()->id) {
-                        echo $website->getPOP($_GET['user']);
+                        if (isset($_GET['user'])) {
+                            echo $website->getPOP($_GET['user']);
+                        } else {
+                            echo $website->getPOP();
+                        }
                     } else {
                         echo $website->getPOP();
                     }
@@ -107,7 +115,11 @@
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
                     if ($website->getCurrentUser() == false || $_GET['info'] != $website->getCurrentUser()->id) {
-                        echo $website->getInfo($_GET['user']);
+                        if (isset($_GET['user'])) {
+                            echo $website->getInfo($_GET['user']);
+                        } else {
+                            echo $website->getInfo();
+                        }
                     } else {
                         echo $website->getInfo();
                     }
@@ -115,13 +127,17 @@
                     echo $website->getPoster(true, "", "");
                 } else if (isset($_GET['CV'])) {
                     if ($website->getCurrentUser() == false || $_GET['CV'] != $website->getCurrentUser()->id) {
-                        echo $website->getCV($_GET['user']);
+                        if (isset($_GET['user'])) {
+                            echo $website->getCV($_GET['user']);
+                        } else {
+                            echo $website->getCV();
+                        }
                     } else {
                         echo $website->getCV();
                     }
                 } else if (isset($_GET['editCV'])) {
                     echo $website->editCV();
-                }  else if (isset($_GET['editinfo'])) {
+                } else if (isset($_GET['editinfo'])) {
                     echo $website->editinfo();
                 } else {
                     if (isset($_GET['user'])) {
