@@ -99,12 +99,6 @@
                     } else {
                         echo $website->getPOP();
                     }
-                } else if (isset($_GET['projects'])) {
-                    if (isset($_POST['projectid'])) {
-                        echo $website->getAvailableProjects($_POST['projectid']);
-                    } else {
-                        echo $website->getAvailableProjects();
-                    }
                 } else if (isset($_POST['admin'])) {
                     echo $website->getAdminForm();
                 } else if (isset($_GET['addProjectForm'])) {

@@ -554,10 +554,15 @@ class website {
             }
 
             $result .= "<br><hr><br>Projecten die matchen met uw zoekterm:<br>";
-            $query = $this->db->doQuery("SELECT `projects`.name as `projectnaam`, `teams`.teamnaam as `teamnaam`, `teams`.teamnr as `teamnr` FROM `projects`, `teams` WHERE `teams`.teamnr = `projects`.teamnr AND (`name` REGEXP '$search' OR `teamnr` REGEXP '$search');");
+            $query = $this->db->doQuery("
+                SELECT `projects`.name as `projectnaam`, `studenten`.firstname as `firstname`, `studenten`.insertion as `insertion`, `studenten`.lastname as `lastname`
+                FROM `projects`, `teams`
+                WHERE `studenten`.id = `projects`.llnr
+                AND (`projects`.name REGEXP '$search' OR `studenten`.id REGEXP '$search');
+            ");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= '<a href="index.php?project=' . $fields['teamnr'] . '">' . $fields['teamnaam'] . ' - ' . $fields['name'] . '</a><br>';
+                    $result .= '<a href="index.php?project=' . $fields['projectnaam'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . ' - ' . $fields['projectname'] . '</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -591,9 +596,7 @@ class website {
                     SELECT `projecten`.projectnaam as `naam`
                     FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
                     WHERE `projecten`.projectid = `teams`.projectid
-                    AND `projects`.teamnr = `teams`.teamnr
-                    AND `teams`.teamnr = `teamleden`.teamnr
-                    AND `teamleden`.leerlingnr = `studenten`.id
+                    AND `projects`.llnr = `studenten`.id
                     AND `studenten`.id = '" . $this->getCurrentUser()->id . "';
                 ");
                 if ($result != false) {
@@ -612,9 +615,7 @@ class website {
                     SELECT `projecten`.projectnaam as `naam`
                     FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
                     WHERE `projecten`.projectid = `teams`.projectid
-                    AND `projects`.teamnr = `teams`.teamnr
-                    AND `teams`.teamnr = `teamleden`.teamnr
-                    AND `teamleden`.leerlingnr = `studenten`.id
+                    AND `projects`.llnr = `studenten`.id
                     AND `studenten`.id = '" . $this->getUser($id)->id . "';
                 ");
                 if ($result != false) {
@@ -803,7 +804,7 @@ class website {
         $gebruiker = $this->getCurrentUser()->id;
         if ($resultteam != false){
             $teamnummer1 = mysql_result($resultteam, 0);
-            $this->db->doQuery("INSERT INTO `teamleden` (`teamnr`, `leerlingnr`) VALUES ('$teamnummer1', '$gebruiker');");    
+            $this->db->doQuery("INSERT INTO `teamleden` (`teamnr`, `llnr`) VALUES ('$teamnummer1', '$gebruiker');");
         }
       }
     }
