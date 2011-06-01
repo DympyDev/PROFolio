@@ -110,7 +110,7 @@
                         echo $website->getInfo();
                     }
                 } else if (isset($_GET['newProject'])) {
-                    echo $website->getPoster(true, "", "", $website->getAvailableProjects());
+                    echo $website->getPoster(true, "", "");
                 } else if (isset($_GET['CV'])) {
                     if ($website->getCurrentUser() != false && $_GET['CV'] != $website->getCurrentUser()->id) {
                         echo $website->getCV($_GET['user']);

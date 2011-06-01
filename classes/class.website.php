@@ -60,7 +60,7 @@ class website {
         if ($this->getCurrentUser() == false) {
             if ($this->errors != "") {
                 $loginform .= '<font color="red">The following error occured:</font><br>
-                    '.$this->errors.'
+                    ' . $this->errors . '
                 ';
                 $this->errors = "";
             }
@@ -725,102 +725,52 @@ class website {
         }
     }
 
-    function getAvailableProjects($id = "") {
-        if ($id == "") {
-            $project = "";
-            if ($this->getCurrentUser() != false) {
-                $result = $this->db->doQuery("SELECT * FROM `projecten`;");
-                if ($result != false) {
-                    echo "Kies een project en een team waar je in hebt gezeten";
-                    $project = '
-                        <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
-                        <select name="projectid" onChange="this.form.submit();">
-                        <option>Select Project</option>
-                    ';
-                    while ($fields = mysql_fetch_assoc($result)) {
-                        $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
-                    }
-                    $project .= '
-                        </select>
-                        </form>
-                    ';
+    function getMakeTeamForm() {
+        $project = "";
+        if ($this->getCurrentUser() != false) {
+            $js = '';
+//                <script type="text/javascript">
+//                var teams = new array();
+//                var projects = new array();
+//                function addTeam(teamnr, projectid) {
+//                    teams
+//                }
+//                </script>
+//            ';
+            $project = '
+                <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
+                    <select name="projectid">
+                        <option value="0">Anders</option>
+            ';
+            $result = $this->db->doQuery("SELECT * FROM `projecten`;");
+            if ($result != false) {
+                while ($fields = mysql_fetch_assoc($result)) {
+                    $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
                 }
-            } else {
-                $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
             }
-            return $project;
-        } else {
-            $team = "";
-            if ($this->getCurrentUser() != false) {
-                $team = '';
-                $query = "SELECT * FROM `teams` WHERE `teamnr` = (SELECT `teamnr` FROM `teamleden` WHERE `llnr` = '" . $this->getCurrentUser()->id . "');";
-                $result = $this->db->doQuery($query);
-                if ($result != false) {
-                    $team = '
-                        Selecteer een bestaand project uit de dropdown indien beschikbaar.
-                        <form action="index.php" method="POST">
-                            <select name="teams">
-                                <option>Select Team</option>
-                    ';
-                    while ($record = mysql_fetch_assoc($result)) {
-                        $team .= '<option value="' . $record['projectid'] . '">' . $record['teamnaam'] . '</option>';
-                    }
-                    $team .= '
-                            </select>
-                            <input type="submit" value="Submit">
-                        </form>
-                    ';
+            $project .= '
+                </select>
+                <select name="team">
+            ';
+            $result = $this->db->doQuery("SELECT * FROM `teams`;");
+            if ($result != false) {
+                while ($fields = mysql_fetch_assoc($result)) {
+//                    $js = "addTeam('" . $fields['teamnr'] . "', '" . $fields['projectid'] . "');";
+                    $project .= '<option value="' . $fields['teamnr'] . '">' . $fields['teamnaam'] . '</option>';
                 }
-                $team .= '
-                        Of vul deze textbox in om een nieuw projectteam te registreren
-                        <form action="index.php" method="POST">
-                            <table>
-                                <tr>
-                                    <td>Teamnaam</td><td><input type="text" name="teamnaam"></td>
-                                </tr>
-                                <tr>
-                                    <td>Projectnaam</td><td><input type="text" name="projectname"></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="hidden" name="projectid" value="' . $id . '"></td><td><input type="submit" value="Maak aan"></td>
-                                </tr>
-                            </table>
-                        </form>
-                ';
-            } else {
-                $team = "U kunt geen Team toevoegen als u niet bent ingelogd!";
             }
-            return $team;
+            $project .= '
+                </select>
+            ';
+            $project .= "
+                </form>
+                $js
+            ";
         }
+        return $project;
     }
 
-    function createTeam($_POST) {
-       if ($this->getCurrentUser() != false) {
-        $teams = stripslashes(mysql_real_escape_string($_POST['teams']));
-        $resultteam = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `projectid` = '$teams';");
-        $gebruiker = $this->getCurrentUser()->id;
-        if ($resultteam != false){
-            $teamnummer1 = mysql_result($resultteam, 0);
-            $this->db->doQuery("INSERT INTO `teamleden` (`teamnr`, `llnr`) VALUES ('$teamnummer1', '$gebruiker');");
-        }
-      }
-    }
-    
-    function makeTeam($_POST) {
-        $team = stripslashes(mysql_real_escape_string($_POST['teamnaam']));
-        $project = stripslashes(mysql_real_escape_string($_POST['projectid']));
-        $projectname = stripslashes(mysql_real_escape_string($_POST['projectname']));
-        $this->db->doQuery("INSERT INTO `teams` (`teamnaam`, `projectid`) VALUES ('$team', '$project');");      
-        $result = $this->db->doQuery("SELECT `teamnr` FROM `teams` WHERE `teamnaam` = '$team';");
-        if ($result != false) {
-            $teamnummer = mysql_result($result, 0);
-            $this->db->doQuery("INSERT INTO `projects` (`teamnr`, `name`) VALUES ('$teamnummer', '$projectname');");
-        } else {
-            echo "Teamnaam niet gevonden";
-        }
-    }
-
-    function getPoster($upload = false, $link = "", $content = "", $prefix = "") {
+    function getPoster($upload = false, $link = "", $content = "") {
         $poster = "";
         if ($this->getCurrentUser() != false) {
             $content = ($content == "" ? "Gebruik hier HTML om je tekst te plaatsen" : $content);
@@ -878,8 +828,6 @@ class website {
                     }
                     </script>
                     <form method="POST" onKeyDown="insertTab(this, event);" action="index.php' . $link . '" enctype="multipart/form-data">
-                        '.$prefix.'
-                        <br><br>
             ';
             $extra = '
                 id="contentarea" name="contentarea" style="width:50%;min-height:400px;height:80%;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\'){this.value = \'\';}"
@@ -917,7 +865,7 @@ class website {
                 $cv = $fields['description'];
             } else {
                 $cv = '
-                   Er is geen CV beschikbaar voor '.$this->getUser($id)->firstname.' '.$this->getUser($id)->insertion.' '.$this->getUser($id)->lastname.'. <br>
+                   Er is geen CV beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
                    Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel een CV heeft geupload.
                 ';
             }
@@ -947,29 +895,27 @@ class website {
         }
         return $cv;
     }
-    
+
     function saveProject($_POST) {
         if (isset($_POST['content'])) {
             if (strlen($_POST['content']) < 2500) {
                 $_POST['content'] = stripslashes(mysql_real_escape_string($_POST['content']));
-                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `llnr` = '". $_POST['llnr'] ."';";
+                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `llnr` = '" . $_POST['llnr'] . "';";
                 $this->db->doQuery($query);
             }
         }
     }
 
     function saveCV($cv = "") {
-        if ($cv != "") {
-            if ($this->getCurrentUser() != false) {
-                $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
-                $result = $this->db->doQuery($query);
-                if ($result != false) {
-                    $query = "UPDATE `CV` SET `description`= '$cv' WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
-                    $this->db->doQuery($query);
-                } else {
-                    $query = "INSERT INTO `CV` (`llnr`,`description`) VALUES('" . $this->getCurrentUser()->id . "','$cv');";
-                    $this->db->doQuery($query);
-                }
+        if ($this->getCurrentUser() != false) {
+            $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+            $result = $this->db->doQuery($query);
+            if ($result != false) {
+                $query = "UPDATE `CV` SET `description`= '$cv' WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+                $this->db->doQuery($query);
+            } else {
+                $query = "INSERT INTO `CV` (`llnr`,`description`) VALUES('" . $this->getCurrentUser()->id . "','$cv');";
+                $this->db->doQuery($query);
             }
         }
     }
@@ -986,4 +932,5 @@ class website {
         }
         return $cv;
     }
+
 }
