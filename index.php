@@ -88,7 +88,7 @@
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
-                    if (isset($_GET['showcase']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                    if (isset($_GET['showcase']) && $_GET['showcase'] != $website->getCurrentUser()->id) {
                         echo $website->getShowcase($_GET['user']);
                     } else {
                         echo $website->getShowcase();
@@ -104,7 +104,7 @@
                 } else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
-                    if (isset($_GET['info']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                    if (isset($_GET['info']) && $_GET['info'] != $website->getCurrentUser()->id) {
                         echo $website->getInfo($_GET['user']);
                     } else {
                         echo $website->getInfo();
