@@ -134,7 +134,7 @@ class website {
         $addProject = '
             <div align="center">
                 Voer hier de naam van een project in.<br>
-                Op het moment dat U op de Toevoegen knop klikt, zit deze in de database.<br>
+                Op het moment dat u op de Toevoegen knop klikt, zit deze in de database.<br>
                 <form action="index.php?addProjectForm=1" method="POST">
                     <table>
                         <tr>
@@ -249,7 +249,7 @@ class website {
                         <li><a href="index.php?showcase=' . $this->getCurrentUser()->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
                         <li><a href="index.php?CV=' . $this->getCurrentUser()->id . '">CV</a></li>
-                        <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Wie?</a></li>
+                        <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Overig</a></li>
                     </ul>
                 ';
             } else {
@@ -259,7 +259,7 @@ class website {
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?CV=none">CV</a></li>
-                        <li><a href="index.php?info=none">Wie?</a></li>
+                        <li><a href="index.php?info=none">Overig</a></li>
                     </ul>
                 ';
             }
@@ -271,7 +271,7 @@ class website {
                         <li><a href="index.php?showcase=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Showcase</a></li>
                         <li><a href="index.php?pop=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">POP</a></li>
                         <li><a href="index.php?CV=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">CV</a></li>
-                        <li><a href="index.php?info=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Wie?</a></li>
+                        <li><a href="index.php?info=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Overig</a></li>
                     </ul>
                 ';
             } else {
@@ -281,7 +281,7 @@ class website {
                         <li><a href="index.php?showcase=none">Showcase</a></li>
                         <li><a href="index.php?pop=none">POP</a></li>
                         <li><a href="index.php?CV=none">CV</a></li>
-                        <li><a href="index.php?info=none">Wie?</a></li>
+                        <li><a href="index.php?info=none">Overig</a></li>
                     </ul>
                 ';
             }
@@ -361,9 +361,9 @@ class website {
             } else {
                 $showcase = '
                     U bent niet ingelogd. <br>
-                    Als U een showcase wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                    Als u een showcase wilt bekijken raden wij u aan te zoeken naar de desbetreffende leerling.
                     <br><br>
-                    Als U uw eigen showcase openbaar wilt maken raden wij U aan een account aan te maken.
+                    Als u uw eigen showcase openbaar wilt maken raden wij u aan een account aan te maken.
                 ';
             }
         } else {
@@ -393,9 +393,9 @@ class website {
             } else {
                 $pop = '
                     U bent niet ingelogd. <br>
-                    Als U een Persoonlijk Ontwikkelingsplan wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                    Als u een Persoonlijk Ontwikkelingsplan wilt bekijken raden wij u aan te zoeken naar de desbetreffende leerling.
                     <br><br>
-                    Als U uw eigen Persoonlijk Ontwikkelingsplan openbaar wilt maken raden wij U aan een account aan te maken.
+                    Als u uw eigen Persoonlijk Ontwikkelingsplan openbaar wilt maken raden wij u aan een account aan te maken.
                 ';
             }
         } else {
@@ -546,13 +546,13 @@ class website {
                     <h3>Een online portfolio voor informatica studenten</h3>
                     <p>
                         Hallo en welkom op deze site. </br>
-                        Om gebruik te maken van al onze diensten raden wij U aan een account aan te maken.</br>
-                        Zodra U dit gedaan heeft kunt U uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
+                        Om gebruik te maken van al onze diensten raden wij u aan een account aan te maken.</br>
+                        Zodra u dit gedaan heeft kunt u uw Portfolio, Persoonlijk Ontwikkelingplan en extra informatie over jezelf op deze site plaatsen.</br>
                     </p>
                     <p>
-                        Als U alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij U graag door naar de zoekfunctie van onze site.</br>
+                        Als u alleen de Portfolio\'s of Persoonlijke Ontwikkelingsplannen wilt bekijken verwijzen wij u graag door naar de zoekfunctie van onze site.</br>
                         </br>
-                        Wij hopen dat U kunt vinden wat U zoekt.
+                        Wij hopen dat u kunt vinden wat u zoekt.
                     </p>
                 ';
             } else {
@@ -858,9 +858,9 @@ class website {
             if ($this->getCurrentUser() == false) {
                 $info = '
                    U bent niet ingelogd. <br>
-                   Als U de info van anderen wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                   Als u de overige informatie van anderen wilt bekijken raden wij u aan te zoeken naar de desbetreffende leerling.
                    <br><br>
-                   Als U uw eigen info openbaar wilt maken raden wij U aan een account aan te maken.
+                   Als u zelf uw overige informatie openbaar wilt maken raden wij u aan een account aan te maken.
                 ';
             } else {
                 $query = "SELECT * FROM `info` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
@@ -906,9 +906,9 @@ class website {
             if ($this->getCurrentUser() == false) {
                 $cv = '
                    U bent niet ingelogd. <br>
-                   Als U het CV wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                   Als u het CV wilt bekijken raden wij u aan te zoeken naar de desbetreffende leerling.
                    <br><br>
-                   Als U uw eigen CV openbaar wilt maken raden wij U aan een account aan te maken.
+                   Als u uw eigen CV openbaar wilt maken raden wij u aan een account aan te maken.
                ';
             } else {
                 $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
