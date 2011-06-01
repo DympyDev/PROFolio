@@ -130,7 +130,7 @@
                         echo 'U zit nog niet in een team. <a href="index.php?projects=' . $website->getCurrentUser()->id . '">Maak een nieuw team aan!</a>';
                     }
                 } else if (isset($_GET['CV'])) {
-                    if (isset($_GET['CV']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                    if (isset($_GET['CV']) && $_GET['CV'] != $website->getCurrentUser()->id) {
                         echo $website->getCV($_GET['user']);
                     } else {
                         echo $website->getCV();
