@@ -13,6 +13,16 @@
         echo $website->addProject($_POST);
     } else if (isset($_FILES['img'])) {
         $website->uploadImage($_FILES);
+    } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
+        $website->makeTeam($_POST);
+    } else if (isset($_POST['teams'])){
+        $website->createTeam($_POST);
+    } else if (isset($_POST['content'])) {
+        if (isset($_GET['CV'])) {
+            echo $website->saveCV($_POST['CV']);
+        } else {
+            echo $website->saveProject($_POST);
+        }
     }
     ?>
     <head>
@@ -48,7 +58,11 @@
                 <!-- navigation -->
                 <div class="nav">
                     <?php
-                    echo $website->getNavMenu();
+                    if (isset($_GET['user'])) {
+                        echo $website->getNavMenu($_GET['user']);
+                    } else {
+                        echo $website->getNavMenu();
+                    }
                     ?>
                 </div>
                 <!-- / navigation -->  
@@ -61,34 +75,74 @@
             <div id="content">  
                 <div id="right">
                     <?php
-                    echo $website->getUserInfo();
+                    if (isset($_GET['user'])) {
+                        echo $website->getUserInfo($_GET['user']);
+                    } else {
+                        echo $website->getUserInfo();
+                    }
                     ?>
                 </div>
                 <?php
                 if (isset($_GET['search'])) {
-                    echo $website->getResult($_GET['search']);
+                    echo $website->getSearchResult($_GET['search']);
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
-                    echo $website->getShowcase();
+                    if (isset($_GET['showcase']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                        echo $website->getShowcase($_GET['user']);
+                    } else {
+                        echo $website->getShowcase();
+                    }
                 } else if (isset($_GET['pop'])) {
-                    echo $website->getPOP();
+                    if (isset($_GET['pop']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                        echo $website->getPOP($_GET['user']);
+                    } else {
+                        echo $website->getPOP();
+                    }
                 } else if (isset($_GET['projects'])) {
                     if (isset($_POST['projectid'])) {
-                        echo $website->getTeamsProjects($_POST['projectid']);
+                        echo $website->getAvailableProjects($_POST['projectid']);
                     } else {
                         echo $website->getAvailableProjects();
                     }
-                }  else if (isset($_POST['admin'])) {
+                } else if (isset($_POST['admin'])) {
                     echo $website->getAdminForm();
-                }  else if (isset($_GET['addProjectForm'])) {
+                } else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
-                    echo $website->getInfo();
+                    if (isset($_GET['info']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                        echo $website->getInfo($_GET['user']);
+                    } else {
+                        echo $website->getInfo();
+                    }
                 } else if (isset($_GET['newProject'])) {
-                    echo $website->getProjectPoster();
+                    $query = "SELECT `projects`.name FROM `teamleden`, `projects` WHERE `teamleden`.teamnr = `projects`.teamnr AND `teamleden`.leerlingnr = '" . $website->getCurrentUser()->id . "';";
+                    $result = $website->db->doQuery($query);
+                    $teams = "";
+                    if ($result != false) {
+                        $teams = '<select name="teamnr">';
+                        while ($fields = mysql_fetch_assoc($result)) {
+                            $teams .= '<option value="' . $fields['teamnr'] . '">' . $fields['name'] . '</option>';
+                        }
+                        $teams .= '</select>';
+                        echo $website->getPoster(true, "", "", $teams);
+                    } else {
+                        echo 'U zit nog niet in een team. <a href="index.php?projects=' . $website->getCurrentUser()->id . '">Maak een nieuw team aan!</a>';
+                    }
+                } else if (isset($_GET['CV'])) {
+                    if (isset($_GET['CV']) && $_GET['CV'] != $website->getCurrentUser()->id) {
+                        echo $website->getCV($_GET['user']);
+                    } else {
+                        echo $website->getCV();
+                    }
+                } else if (isset($_GET['editCV'])) {
+                    echo $website->editCV();
                 } else {
-                    echo $website->getHomepage();
+                    if (isset($_GET['user'])) {
+                        echo $website->getHomepage($_GET['user']);
+                    } else {
+                        echo $website->getHomepage();
+                    }
                 }
                 ?>
             </div>
