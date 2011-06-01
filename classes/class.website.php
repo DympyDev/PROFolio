@@ -951,7 +951,7 @@ class website {
         if (isset($_POST['content'])) {
             if (strlen($_POST['content']) < 2500) {
                 $_POST['content'] = stripslashes(mysql_real_escape_string($_POST['content']));
-                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `teamnr` = '". $_POST['teamnr'] ."';";
+                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `llnr` = '". $_POST['llnr'] ."';";
                 $this->db->doQuery($query);
             }
         }
