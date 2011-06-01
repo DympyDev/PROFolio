@@ -58,8 +58,8 @@
                 <!-- navigation -->
                 <div class="nav">
                     <?php
-                    if (isset($_GET['homepage'])) {
-                        echo $website->getNavMenu($_GET['homepage']);
+                    if (isset($_GET['user'])) {
+                        echo $website->getNavMenu($_GET['user']);
                     } else {
                         echo $website->getNavMenu();
                     }
@@ -75,8 +75,8 @@
             <div id="content">  
                 <div id="right">
                     <?php
-                    if (isset($_GET['homepage'])) {
-                        echo $website->getUserInfo($_GET['homepage']);
+                    if (isset($_GET['user'])) {
+                        echo $website->getUserInfo($_GET['user']);
                     } else {
                         echo $website->getUserInfo();
                     }
@@ -88,13 +88,17 @@
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
-                    if (isset($_GET['showcase']) && $_GET['showcase'] != $website->getCurrentUser()->id) {
-                        echo $website->getShowcase($_GET['showcase']);
+                    if (isset($_GET['showcase']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                        echo $website->getShowcase($_GET['user']);
                     } else {
                         echo $website->getShowcase();
                     }
                 } else if (isset($_GET['pop'])) {
-                    echo $website->getPOP();
+                    if (isset($_GET['pop']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                        echo $website->getPOP($_GET['user']);
+                    } else {
+                        echo $website->getPOP();
+                    }
                 } else if (isset($_GET['projects'])) {
                     if (isset($_POST['projectid'])) {
                         echo $website->getAvailableProjects($_POST['projectid']);
@@ -106,7 +110,11 @@
                 } else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
-                    echo $website->getInfo();
+                    if (isset($_GET['info']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                        echo $website->getInfo($_GET['user']);
+                    } else {
+                        echo $website->getInfo();
+                    }
                 } else if (isset($_GET['newProject'])) {
                     $query = "SELECT `projects`.name FROM `teamleden`, `projects` WHERE `teamleden`.teamnr = `projects`.teamnr AND `teamleden`.leerlingnr = '" . $website->getCurrentUser()->id . "';";
                     $result = $website->db->doQuery($query);
@@ -122,12 +130,16 @@
                         echo 'U zit nog niet in een team. <a href="index.php?projects=' . $website->getCurrentUser()->id . '">Maak een nieuw team aan!</a>';
                     }
                 } else if (isset($_GET['CV'])) {
-                    echo $website->getCV($_GET['CV']);
+                    if (isset($_GET['CV']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                        echo $website->getCV($_GET['user']);
+                    } else {
+                        echo $website->getCV();
+                    }
                 } else if (isset($_GET['editCV'])) {
                     echo $website->editCV();
                 } else {
-                    if (isset($_GET['homepage'])) {
-                        echo $website->getHomepage($_GET['homepage']);
+                    if (isset($_GET['user'])) {
+                        echo $website->getHomepage($_GET['user']);
                     } else {
                         echo $website->getHomepage();
                     }

@@ -264,12 +264,12 @@ class website {
             if ($this->getUser($id) != false) {
                 $navmenu = '
                     <ul class="submenu">
-                        <li><a href="index.php?homepage=' . $this->getUser($id)->id . '">Home</a></li>
-                        <li><a href="index.php?showcase=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">Showcase</a></li>
-                        <li><a href="index.php?pop=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">POP</a></li>
-                        <li><a href="index.php?CV=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">CV</a></li>
-                        <li><a href="index.php?info=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">Wie?</a></li>
-                        <li><a href="index.php?projects=' . $this->getUser($id)->id . '&homepage=' . $this->getUser($id)->id . '">Projecten</a></li>
+                        <li><a href="index.php?user=' . $this->getUser($id)->id . '">Home</a></li>
+                        <li><a href="index.php?showcase=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Showcase</a></li>
+                        <li><a href="index.php?pop=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">POP</a></li>
+                        <li><a href="index.php?CV=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">CV</a></li>
+                        <li><a href="index.php?info=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Wie?</a></li>
+                        <li><a href="index.php?projects=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Projecten</a></li>
                     </ul>
                 ';
             } else {
@@ -535,11 +535,15 @@ class website {
     function getSearchResult($search) {
         $result = "";
         if (strlen($search) > 3) {
+            $result .='
+                <i>Klik op de naam van een gebruiker om naar zijn pagina\'s te gaan. <br>
+                Om terug te keren naar uw eigen pagina moet u op het logo klikken.<br><br> </i>
+                ';
             $result .= "Gebruikers die matchen met uw zoekterm:<br>";
             $query = $this->db->doQuery("SELECT * FROM `studenten` WHERE `firstname` REGEXP '$search' OR `lastname` REGEXP '$search' OR `id` = '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= '<a href="index.php?homepage=' . $fields['id'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '</a><br>';
+                    $result .= '<a href="index.php?user=' . $fields['id'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -911,15 +915,15 @@ class website {
                 $cv = $fields['description'];
             } else {
                 $cv = '
-                   Er is geen CV beschikbaar voor de opgevraagde gebruiker. <br>
-                   Controleer of de gebruiker wel bestaat of dat de ingevoerde data wel klopt en probeer het opnieuw.
+                   Er is geen CV beschikbaar voor '.$this->getUser($id)->firstname.' '.$this->getUser($id)->insertion.' '.$this->getUser($id)->lastname.'. <br>
+                   Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel een CV heeft geupload.
                 ';
             }
         } else {
             if ($this->getCurrentUser() == false) {
                 $cv = '
                    U bent niet ingelogd. <br>
-                   Als U de CV wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
+                   Als U het CV wilt bekijken raden wij U aan te zoeken naar de desbetreffende leerling.
                    <br><br>
                    Als U uw eigen CV openbaar wilt maken raden wij U aan een account aan te maken.
                ';
