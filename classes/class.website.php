@@ -728,22 +728,23 @@ class website {
     function getAvailableProjects($id = "") {
         if ($id == "") {
             $project = "";
-            $query = "SELECT * FROM `projecten`;";
-            $result = $this->db->doQuery($query);
             if ($this->getCurrentUser() != false) {
-                echo "Kies een project en een team waar je in hebt gezeten";
-                $project = '
-                    <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
-                    <select name="projectid" onChange="this.form.submit();">
-                    <option>Select Project</option>
-                ';
-                while ($fields = mysql_fetch_assoc($result)) {
-                    $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
+                $result = $this->db->doQuery("SELECT * FROM `projecten`;");
+                if ($result != false) {
+                    echo "Kies een project en een team waar je in hebt gezeten";
+                    $project = '
+                        <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
+                        <select name="projectid" onChange="this.form.submit();">
+                        <option>Select Project</option>
+                    ';
+                    while ($fields = mysql_fetch_assoc($result)) {
+                        $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
+                    }
+                    $project .= '
+                        </select>
+                        </form>
+                    ';
                 }
-                $project .= '
-                    </select>
-                    </form>
-                ';
             } else {
                 $project = "U kunt geen project toevoegen als u niet bent ingelogd!";
             }
