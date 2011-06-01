@@ -58,7 +58,13 @@ class website {
     function getLoginForm() {
         $loginform = "";
         if ($this->getCurrentUser() == false) {
-            $loginform = '
+            if ($this->errors != "") {
+                $loginform .= '<font color="red">The following error occured:</font><br>
+                    '.$this->errors.'
+                ';
+                $this->errors = "";
+            }
+            $loginform .= '
                 <form action="index.php" method="POST"><br>
                     <table align="right">
                         <tr>		
@@ -81,7 +87,7 @@ class website {
                 </form>
             ';
         } else {
-            $loginform = '
+            $loginform .= '
                 <form action="index.php" method="POST"><br>
                     <table align="right">
                         <tr>
@@ -141,7 +147,7 @@ class website {
                 </form>
                <br>
         ';
-        $result = $this->getProjects();
+        $result = $this->db->doQuery("SELECT `project_naam` FROM `schoolprojecten`;");
         if ($result != false) {
             $addProject .= 'Er bestaan al een paar projecten. Dat zijn:<br>';
             while ($fields = mysql_fetch_assoc($result)) {
@@ -154,13 +160,7 @@ class website {
 
     function addProject($_POST) {
         $project = stripslashes(mysql_real_escape_string($_POST['projectName']));
-        $query = "INSERT INTO `projecten` (`project_naam`) VALUES ('$project');";
-        $this->db->doQuery($query);
-    }
-
-    function getProjects() {
-        $query = "SELECT `project_naam` FROM `projecten`;";
-        return $this->db->doQuery($query);
+        $this->db->doQuery("INSERT INTO `schoolprojecten` (`project_naam`) VALUES ('$project');");
     }
 
     function getRegisterForm($_POST = "") {
@@ -459,10 +459,10 @@ class website {
                 $this->session->password = $password;
                 $this->getCurrentUser();
             } else {
-                return 'Onjuist wachtwoord';
+                $this->errors .= 'Onjuist wachtwoord';
             }
         } else {
-            return 'Onbekend leerlingnummer.';
+            $this->errors .= 'Onbekend leerlingnummer.';
         }
     }
 
@@ -470,7 +470,6 @@ class website {
         require website::mainConfigFile;
         setcookie($cookiename, "", time() - 600);
         $this->session->destroy();
-        return '<script type="text/javascript">window.location="index.php";</script>';
     }
 
     function register($_POST) {
