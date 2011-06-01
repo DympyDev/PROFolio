@@ -88,13 +88,13 @@
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
-                    if ($website->getCurrentUser() != false && isset($_GET['user']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                    if ($website->getCurrentUser() != false && $_GET['showcase'] != $website->getCurrentUser()->id) {
                         echo $website->getShowcase($_GET['user']);
                     } else {
                         echo $website->getShowcase();
                     }
                 } else if (isset($_GET['pop'])) {
-                    if ($website->getCurrentUser() != false && isset($_GET['user']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                    if ($website->getCurrentUser() != false && $_GET['pop'] != $website->getCurrentUser()->id) {
                         echo $website->getPOP($_GET['user']);
                     } else {
                         echo $website->getPOP();
@@ -104,7 +104,7 @@
                 } else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
                 } else if (isset($_GET['info'])) {
-                    if ($website->getCurrentUser() != false && isset($_GET['user']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                    if ($website->getCurrentUser() != false && $_GET['info'] != $website->getCurrentUser()->id) {
                         echo $website->getInfo($_GET['user']);
                     } else {
                         echo $website->getInfo();
@@ -112,7 +112,7 @@
                 } else if (isset($_GET['newProject'])) {
                     echo $website->getPoster(true, "", "", $website->getAvailableProjects());
                 } else if (isset($_GET['CV'])) {
-                    if ($website->getCurrentUser() != false && isset($_GET['user']) && $_GET['user'] != $website->getCurrentUser()->id) {
+                    if ($website->getCurrentUser() != false && $_GET['CV'] != $website->getCurrentUser()->id) {
                         echo $website->getCV($_GET['user']);
                     } else {
                         echo $website->getCV();
