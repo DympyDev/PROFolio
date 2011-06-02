@@ -113,7 +113,8 @@ class website {
             <div align="center">
                 Dit is het admin menu, hier kunnen meerdere opties worden aangepast.<br>
                 Kies hieronder een optie om verder te gaan.<br>
-                <a href="index.php?addProjectForm=1"><button class="login-submit">Projecten toevoegen</button></a>
+                <a href="index.php?addProjectForm=1"><button class="login-submit">Projecten toevoegen</button></a><br>
+                <a href="index.php?sendMailForm=1"><button class="login-submit">Mail alle gebruikers</button>
                 <!--
                 <form action="index.php" method="POST">
                     <table>
@@ -122,12 +123,37 @@ class website {
                                 <input type="submit" name="addProjectForm" class="login-submit" value="Projecten toevoegen">
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <input type="submit" name="sendMail" class="login-submit" value="Mail gebruikers">
+                            </td>
+                        </tr>
                     </table>
                 </form>
                 -->
             </div>
             ';
         return $adminform;
+    }
+
+    function getMailForm() {
+        return $mailForm = $this->getPoster(false, true, "?mail=1");
+    }
+
+    function sendMail($_POST) {
+        $subject = $_POST['Subject'];
+        $from = "admin@profolio.t15.org";
+        $headers = "From: $from" . "\r\n";
+        $headers .= "Content-type: text/html\r\n";
+        $result = $this->db->doQuery('SELECT * FROM `studenten`;');
+        if ($result != false) {
+            while ($fields = mysql_fetch_assoc($result)) {
+                $to = $fields['email'];
+                $message = 'Beste ' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . ',<br><br>';
+                $message .= $_POST['contentarea'];
+                mail($to, $subject, $message, $headers);
+            }
+        }
     }
 
     function getAddProjectForm() {
@@ -738,7 +764,7 @@ class website {
         return $project;
     }
 
-    function getPoster($upload = false, $link = "", $content = "") {
+    function getPoster($upload = false, $email=false, $link = "", $content = "") {
         $poster = "";
         if ($this->getCurrentUser() != false) {
             $content = ($content == "" ? "Gebruik hier HTML om je tekst te plaatsen" : $content);
@@ -800,6 +826,9 @@ class website {
             $extra = '
                 id="contentarea" name="contentarea" style="width:50%;min-height:400px;height:80%;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\'){this.value = \'\';}"
             ';
+            if ($email) {
+                $poster .= '<br>Onderwerp: <input type="text" name="Subject"><br>';
+            }
             $poster .= '<textarea ' . $extra . '>' . $content . '</textarea>';
             if ($upload) {
                 $poster .= '
@@ -812,8 +841,12 @@ class website {
                     </div>
                 ';
             }
+            if ($email) {
+                $poster .='<input type="submit" value="Versturen">';
+            } else {
+                $poster .='<input type="submit" value="Opslaan">';
+            }
             $poster .= '
-                        <input type="submit" value="Opslaan">
                     </form>
                 </div>
             ';
@@ -846,7 +879,7 @@ class website {
             $result = $this->db->doQuery($query);
             if ($result != false) {
                 $record = mysql_fetch_assoc($result);
-                $info = $this->getPoster(false, "?info=" . $this->getCurrentUser()->id, $record['info']);
+                $info = $this->getPoster(false, false, "?info=" . $this->getCurrentUser()->id, $record['info']);
             }
         }
         return $info;
@@ -874,7 +907,7 @@ class website {
                         </form>
                     ';
                 } else {
-                    $info = $this->getPoster(false, "?info=" . $this->getCurrentUser()->id);
+                    $info = $this->getPoster(false, false, "?info=" . $this->getCurrentUser()->id);
                 }
             }
         } else {
@@ -922,7 +955,7 @@ class website {
                         </form>
                     ';
                 } else {
-                    $cv = $this->getPoster(false, "?CV=" . $this->getCurrentUser()->id);
+                    $cv = $this->getPoster(false, false, "?CV=" . $this->getCurrentUser()->id);
                 }
             }
         } else {
@@ -979,7 +1012,7 @@ class website {
             $result = $this->db->doQuery($query);
             if ($result != false) {
                 $record = mysql_fetch_assoc($result);
-                $cv = $this->getPoster(false, "?CV=" . $this->getCurrentUser()->id, $record['description']);
+                $cv = $this->getPoster(false, false, "?CV=" . $this->getCurrentUser()->id, $record['description']);
             }
         }
         return $cv;

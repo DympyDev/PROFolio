@@ -22,6 +22,8 @@
             echo $website->saveCV($_POST['contentarea']);
         } else if (isset($_GET['info'])) {
             echo $website->saveinfo($_POST['contentarea']);
+        } else if (isset($_GET['mail'])) {
+            echo $website->sendMail($_POST);
         } else {
             echo $website->saveProject($_POST);
         }
@@ -113,6 +115,8 @@
                     echo $website->getAdminForm();
                 } else if (isset($_GET['addProjectForm'])) {
                     echo $website->getAddProjectForm();
+                } else if (isset($_GET['sendMailForm'])) {
+                    echo $website->getMailForm();
                 } else if (isset($_GET['info'])) {
                     if ($website->getCurrentUser() == false || $_GET['info'] != $website->getCurrentUser()->id) {
                         if (isset($_GET['user'])) {
