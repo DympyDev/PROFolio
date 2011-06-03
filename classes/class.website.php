@@ -137,21 +137,19 @@ class website {
     }
 
     function getMailForm() {
-        return $mailForm = $this->getPoster(false, true, "?mail=1");
+        return $mailForm = $this->getPoster(false, "?mail=1", "", true);
     }
 
     function sendMail($_POST) {
-        $subject = $_POST['Subject'];
         $from = "admin@profolio.t15.org";
         $headers = "From: $from" . "\r\n";
         $headers .= "Content-type: text/html\r\n";
         $result = $this->db->doQuery('SELECT * FROM `studenten`;');
         if ($result != false) {
             while ($fields = mysql_fetch_assoc($result)) {
-                $to = $fields['email'];
                 $message = 'Beste ' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . ',<br><br>';
                 $message .= $_POST['contentarea'];
-                mail($to, $subject, $message, $headers);
+                mail($fields['email'], $_POST['Subject'], $message, $headers);
             }
         }
     }
@@ -272,10 +270,10 @@ class website {
                 $navmenu = '
                     <ul class="submenu">
                         <li><a href="index.php">Home</a></li>
-                        <li><a href="index.php?showcase=' . $this->getCurrentUser()->id . '">Showcase</a></li>
-                        <li><a href="index.php?pop=' . $this->getCurrentUser()->id . '">POP</a></li>
-                        <li><a href="index.php?CV=' . $this->getCurrentUser()->id . '">CV</a></li>
-                        <li><a href="index.php?info=' . $this->getCurrentUser()->id . '">Overig</a></li>
+                        <li><a href="index.php?showcase=1">Showcase</a></li>
+                        <li><a href="index.php?pop=1">POP</a></li>
+                        <li><a href="index.php?CV=1">CV</a></li>
+                        <li><a href="index.php?info=1">Overig</a></li>
                     </ul>
                 ';
             } else {
@@ -294,10 +292,10 @@ class website {
                 $navmenu = '
                     <ul class="submenu">
                         <li><a href="index.php?user=' . $this->getUser($id)->id . '">Home</a></li>
-                        <li><a href="index.php?showcase=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Showcase</a></li>
-                        <li><a href="index.php?pop=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">POP</a></li>
-                        <li><a href="index.php?CV=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">CV</a></li>
-                        <li><a href="index.php?info=' . $this->getUser($id)->id . '&user=' . $this->getUser($id)->id . '">Overig</a></li>
+                        <li><a href="index.php?showcase=1&user=' . $this->getUser($id)->id . '">Showcase</a></li>
+                        <li><a href="index.php?pop=1&user=' . $this->getUser($id)->id . '">POP</a></li>
+                        <li><a href="index.php?CV=1&user=' . $this->getUser($id)->id . '">CV</a></li>
+                        <li><a href="index.php?info=1&user=' . $this->getUser($id)->id . '">Overig</a></li>
                     </ul>
                 ';
             } else {
@@ -537,7 +535,16 @@ class website {
             $query = $this->db->doQuery("SELECT * FROM `studenten` WHERE `firstname` REGEXP '$search' OR `lastname` REGEXP '$search' OR `id` = '$search';");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= '<a href="index.php?user=' . $fields['id'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '</a><br>';
+                    $image = 'images/no-pic.bmp';
+                    $path = 'avatars/' . $fields['id'] . '_img.png';
+                    if (file_exists($path) == true) {
+                        $image = $path;
+                    }
+                    $result .= '<div id="search-preview">
+                            <img src="' . $image . '" />
+                        </div>';
+                    $result .= '<a href="index.php?user=' . $fields['id'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '<br>
+                        ('.$fields['id'].')</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -764,7 +771,7 @@ class website {
         return $project;
     }
 
-    function getPoster($upload = false, $email=false, $link = "", $content = "") {
+    function getPoster($upload = false, $link = "", $content = "", $email=false) {
         $poster = "";
         if ($this->getCurrentUser() != false) {
             $content = ($content == "" ? "Gebruik hier HTML om je tekst te plaatsen" : $content);
@@ -879,7 +886,7 @@ class website {
             $result = $this->db->doQuery($query);
             if ($result != false) {
                 $record = mysql_fetch_assoc($result);
-                $info = $this->getPoster(false, false, "?info=" . $this->getCurrentUser()->id, $record['info']);
+                $info = $this->getPoster(false, "?info=" . $this->getCurrentUser()->id, $record['info']);
             }
         }
         return $info;
@@ -907,7 +914,7 @@ class website {
                         </form>
                     ';
                 } else {
-                    $info = $this->getPoster(false, false, "?info=" . $this->getCurrentUser()->id);
+                    $info = $this->getPoster(false, "?info=" . $this->getCurrentUser()->id);
                 }
             }
         } else {
@@ -955,7 +962,7 @@ class website {
                         </form>
                     ';
                 } else {
-                    $cv = $this->getPoster(false, false, "?CV=" . $this->getCurrentUser()->id);
+                    $cv = $this->getPoster(false, "?CV=" . $this->getCurrentUser()->id);
                 }
             }
         } else {
@@ -1012,7 +1019,7 @@ class website {
             $result = $this->db->doQuery($query);
             if ($result != false) {
                 $record = mysql_fetch_assoc($result);
-                $cv = $this->getPoster(false, false, "?CV=" . $this->getCurrentUser()->id, $record['description']);
+                $cv = $this->getPoster(false, "?CV=" . $this->getCurrentUser()->id, $record['description']);
             }
         }
         return $cv;

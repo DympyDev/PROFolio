@@ -92,22 +92,14 @@
                 } else if (isset($_POST['register']) || isset($_POST['profileEdit'])) {
                     echo $website->getRegisterForm($_POST);
                 } else if (isset($_GET['showcase'])) {
-                    if ($website->getCurrentUser() == false || $_GET['showcase'] != $website->getCurrentUser()->id) {
-                        if (isset($_GET['user'])) {
-                            echo $website->getShowcase($_GET['user']);
-                        } else {
-                            echo $website->getShowcase();
-                        }
+                    if (isset($_GET['user'])) {
+                        echo $website->getShowcase($_GET['user']);
                     } else {
                         echo $website->getShowcase();
                     }
                 } else if (isset($_GET['pop'])) {
-                    if ($website->getCurrentUser() == false || $_GET['pop'] != $website->getCurrentUser()->id) {
-                        if (isset($_GET['user'])) {
-                            echo $website->getPOP($_GET['user']);
-                        } else {
-                            echo $website->getPOP();
-                        }
+                    if (isset($_GET['user'])) {
+                        echo $website->getPOP($_GET['user']);
                     } else {
                         echo $website->getPOP();
                     }
@@ -118,24 +110,16 @@
                 } else if (isset($_GET['sendMailForm'])) {
                     echo $website->getMailForm();
                 } else if (isset($_GET['info'])) {
-                    if ($website->getCurrentUser() == false || $_GET['info'] != $website->getCurrentUser()->id) {
-                        if (isset($_GET['user'])) {
-                            echo $website->getInfo($_GET['user']);
-                        } else {
-                            echo $website->getInfo();
-                        }
+                    if (isset($_GET['user'])) {
+                        echo $website->getInfo($_GET['user']);
                     } else {
                         echo $website->getInfo();
                     }
                 } else if (isset($_GET['newProject'])) {
                     echo $website->getPoster(true, "", "");
                 } else if (isset($_GET['CV'])) {
-                    if ($website->getCurrentUser() == false || $_GET['CV'] != $website->getCurrentUser()->id) {
-                        if (isset($_GET['user'])) {
-                            echo $website->getCV($_GET['user']);
-                        } else {
-                            echo $website->getCV();
-                        }
+                    if (isset($_GET['user'])) {
+                        echo $website->getCV($_GET['user']);
                     } else {
                         echo $website->getCV();
                     }
