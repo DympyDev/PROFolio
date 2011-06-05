@@ -41,11 +41,11 @@ class user {
         }
     }
 
-    function getProject() {
+    function getProjects() {
         return $this->db->doQuery("
             SELECT `projects`.name as `name`
             FROM `projects`, `studenten`
-            AND `projects`.llnr = `studenten`.id
+            WHERE `projects`.llnr = `studenten`.id
             AND `studenten`.id = '" . $this->id . "';
         ");
     }
@@ -54,7 +54,7 @@ class user {
         return $this->db->doQuery("
             SELECT `teams`.teamname as `name`, `teams`.projectid as `projectid`
             FROM `teams`, `teamleden`, `studenten`
-            AND `teamleden`.llnr = `studenten`.id
+            WHERE `teamleden`.llnr = `studenten`.id
             AND `studenten`.id = '" . $this->id . "';
         ");
     }

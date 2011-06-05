@@ -4,13 +4,13 @@
     require "classes/class.website.php";
     $website = new website();
     if (isset($_POST['login'])) {
-        echo $website->login($_POST['studentnr'], $_POST['password']);
+        $website->login($_POST['studentnr'], $_POST['password']);
     } else if (isset($_POST['registreer'])) {
         $website->register($_POST);
     } else if (isset($_POST['logout'])) {
-        echo $website->logout();
+        $website->logout();
     } else if (isset($_POST['addProject'])) {
-        echo $website->addProject($_POST);
+        $website->addProject($_POST);
     } else if (isset($_FILES['img'])) {
         $website->uploadImage($_FILES);
     } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
@@ -19,13 +19,13 @@
         $website->createTeam($_POST);
     } else if (isset($_POST['contentarea'])) {
         if (isset($_GET['CV'])) {
-            echo $website->saveCV($_POST['contentarea']);
+            $website->saveCV($_POST['contentarea']);
         } else if (isset($_GET['info'])) {
-            echo $website->saveinfo($_POST['contentarea']);
+            $website->saveinfo($_POST['contentarea']);
         } else if (isset($_GET['mail'])) {
-            echo $website->sendMail($_POST);
+            $website->sendMail($_POST);
         } else {
-            echo $website->saveProject($_POST);
+            $website->saveProject($_POST);
         }
     }
     ?>
@@ -127,6 +127,8 @@
                     echo $website->editCV();
                 } else if (isset($_GET['editinfo'])) {
                     echo $website->editinfo();
+                } else if (isset($_GET['project'])) {
+                    echo $website->getProject($_GET['project']);
                 } else {
                     if (isset($_GET['user'])) {
                         echo $website->getHomepage($_GET['user']);

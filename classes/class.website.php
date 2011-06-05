@@ -386,10 +386,10 @@ class website {
                     Projecten waar u lid van bent:
                     <br>
                 ';
-                $result = $this->getUser($id)->getProjects();
+                $result = $this->getCurrentUser()->getProjects();
                 if ($result != false) {
                     while ($fields = mysql_fetch_assoc($result)) {
-                        $showcase .= '<a href="project=' . $id . '">' . $fields['name'] . '</a><br>';
+                        $showcase .= '<a href="?project=' . $fields['name'] . '">' . $fields['name'] . '</a><br>';
                     }
                 } else {
                     $showcase .= 'Geen';
@@ -456,6 +456,20 @@ class website {
             }
         }
         return $pop;
+    }
+
+    function getProject($name) {
+        $project = "";
+        $result = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` = '" . $name . "';");
+        if ($result != false) {
+            while ($fields = mysql_fetch_assoc($result)) {
+                $project .= '
+                    <h1>' . $fields['name'] . '</h1>
+                    '.$fields['content'].'
+                ';
+            }
+        }
+        return $project;
     }
 
     function login($id, $password) {
@@ -572,14 +586,14 @@ class website {
 
             $result .= "<br><hr><br>Projecten die matchen met uw zoekterm:<br>";
             $query = $this->db->doQuery("
-                SELECT `projects`.name as `projectnaam`, `studenten`.firstname as `firstname`, `studenten`.insertion as `insertion`, `studenten`.lastname as `lastname`
+                SELECT `projects`.name as `projectnaam`, `studenten`.id as `id`
                 FROM `projects`, `teams`
                 WHERE `studenten`.id = `projects`.llnr
                 AND (`projects`.name REGEXP '$search' OR `studenten`.id REGEXP '$search');
             ");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= '<a href="index.php?project=' . $fields['projectnaam'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . ' - ' . $fields['projectname'] . '</a><br>';
+                    $result .= '<a href="index.php?project=' . $fields['projectnaam'] . '">' . $this->getUser($fields['id'])->getFullName() . ' - ' . $fields['projectnaam'] . '</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
