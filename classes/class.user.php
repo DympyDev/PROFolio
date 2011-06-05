@@ -16,6 +16,7 @@ class user {
     
     function __construct($db, $id, $password = "") {
         $this->db = $db;
+        $sql = "";
         if ($password == "") {
             $sql = "SELECT * FROM `studenten` WHERE `id` = '$id';";
         } else {
@@ -38,6 +39,28 @@ class user {
         } else {
             $this->exists = false;
         }
+    }
+
+    function getProject() {
+        return $this->db->doQuery("
+            SELECT `projects`.name as `name`
+            FROM `projects`, `studenten`
+            AND `projects`.llnr = `studenten`.id
+            AND `studenten`.id = '" . $this->id . "';
+        ");
+    }
+
+    function getTeams() {
+        return $this->db->doQuery("
+            SELECT `teams`.teamname as `name`, `teams`.projectid as `projectid`
+            FROM `teams`, `teamleden`, `studenten`
+            AND `teamleden`.llnr = `studenten`.id
+            AND `studenten`.id = '" . $this->id . "';
+        ");
+    }
+
+    function getFullName() {
+        return $this->firstname . ' ' . $this->insertion . ' ' . $this->lastname;
     }
 }
 

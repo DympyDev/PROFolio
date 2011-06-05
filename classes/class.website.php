@@ -137,7 +137,7 @@ class website {
     }
 
     function getMailForm() {
-        return $mailForm = $this->getPoster(false, "?mail=1", "", true);
+        return $this->getPoster(false, "?mail=1", "", true);
     }
 
     function sendMail($_POST) {
@@ -327,7 +327,7 @@ class website {
                         <img src="' . $image . '"/>
                     </div>
                     <br>Naam leerling:<br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '</b><br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->getFullName() . '</b><br>
                     <br>Leerling Nummer:<br>
                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getCurrentUser()->id . '</b><br>
                     <br>Studie Jaar:<br>
@@ -356,7 +356,7 @@ class website {
                         <img src="' . $image . '"/>
                     </div>
                     <br>Naam leerling:<br>
-                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '</b><br>
+                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->getFullName() . '</b><br>
                     <br>Leerling Nummer:<br>
                     <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $this->getUser($id)->id . '</b><br>
                     <br>Studie Jaar:<br>
@@ -379,9 +379,21 @@ class website {
             if ($this->getCurrentUser() != false) {
                 $showcase = '
                     Dit is de showcase van 
-                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
-                    <br><a href="index.php?newProject=1">Voeg content aan een project toe</a>
+                    ' . $this->getCurrentUser()->getFullName() . '.
+                    <br>
+                    <a href="index.php?newProject=1">Voeg content aan een project toe</a>
+                    <br>
+                    Projecten waar u lid van bent:
+                    <br>
                 ';
+                $result = $this->getUser($id)->getProjects();
+                if ($result != false) {
+                    while ($fields = mysql_fetch_assoc($result)) {
+                        $showcase .= '<a href="project=' . $id . '">' . $fields['name'] . '</a><br>';
+                    }
+                } else {
+                    $showcase .= 'Geen';
+                }
             } else {
                 $showcase = '
                     U bent niet ingelogd. <br>
@@ -394,8 +406,16 @@ class website {
             if ($this->getUser($id) != false) {
                 $showcase = '
                     Dit is de showcase van 
-                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                    ' . $this->getUser($id)->getFullName() . '.
+                    <br>
+                    Projecten waar ' . $this->getUser($id)->getFullName() . ' lid van is:
                 ';
+                $result = $this->getUser($id)->getProjects();
+                if ($result != false) {
+                    while ($fields = mysql_fetch_assoc($result)) {
+                        $showcase .= '<a href="project=' . $id . '">' . $fields['name'] . '</a><br>';
+                    }
+                }
             } else {
                 $showcase = '
                     Er is geen showcase beschikbaar voor de opgevraagde gebruiker. <br>
@@ -412,7 +432,7 @@ class website {
             if ($this->getCurrentUser() != false) {
                 $pop = '
                     Dit is het Persoonlijk Onwikkelingsplan van 
-                    ' . $this->getCurrentUser()->firstname . ' ' . $this->getCurrentUser()->insertion . ' ' . $this->getCurrentUser()->lastname . '.
+                    ' . $this->getCurrentUser()->getFullName() . '.
                 ';
             } else {
                 $pop = '
@@ -426,7 +446,7 @@ class website {
             if ($this->getUser($id) != false) {
                 $pop = '
                     Dit is het Persoonlijk Ontwikkelingsplan van 
-                    ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '.
+                    ' . $this->getUser($id)->getFullName() . '.
                 ';
             } else {
                 $pop = '
@@ -544,7 +564,7 @@ class website {
                             <img src="' . $image . '" />
                         </div>';
                     $result .= '<a href="index.php?user=' . $fields['id'] . '">' . $fields['firstname'] . ' ' . $fields['insertion'] . ' ' . $fields['lastname'] . '<br>
-                        ('.$fields['id'].')</a><br>';
+                        (' . $fields['id'] . ')</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -589,13 +609,7 @@ class website {
                     </p>
                 ';
             } else {
-                $result = $this->db->doQuery("
-                    SELECT `projecten`.projectnaam as `naam`
-                    FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
-                    WHERE `projecten`.projectid = `teams`.projectid
-                    AND `projects`.llnr = `studenten`.id
-                    AND `studenten`.id = '" . $this->getCurrentUser()->id . "';
-                ");
+                $result = $this->getCurrentUser()->getProjects();
                 if ($result != false) {
                     $homepage = 'Projecten waar je lid van bent:<br>';
                     while ($fields = mysql_fetch_assoc($result)) {
@@ -608,26 +622,20 @@ class website {
             }
         } else {
             if ($this->getUser($id) != false) {
-                $result = $this->db->doQuery("
-                    SELECT `projecten`.projectnaam as `naam`
-                    FROM `projecten`, `projects`, `studenten`, `teamleden`, `teams`
-                    WHERE `projecten`.projectid = `teams`.projectid
-                    AND `projects`.llnr = `studenten`.id
-                    AND `studenten`.id = '" . $this->getUser($id)->id . "';
-                ");
+                $result = $this->getUser($id)->getProjects();
                 if ($result != false) {
                     $homepage = 'Projecten waar je lid van bent:<br>';
                     while ($fields = mysql_fetch_assoc($result)) {
                         $homepage .= $fields['naam'] . '<br>';
                     }
                 } else {
-                    $homepage = $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname .
+                    $homepage = $this->getUser($id)->getFullName() .
                             ' heeft nog geen projecten aangemaakt.
                     ';
                 }
             } else {
-                $homepage = 'De gebruiker kan niet in de database gevonden worden. <br>
-                    Controleer of de ingevoerde informatie klopt en probeer het op nieuw.
+                $homepage = 'De gebruiker kan niet in de database gevonden worden.<br>
+                    Controleer of de ingevoerde informatie klopt en probeer het opnieuw.
                 ';
             }
         }
@@ -731,16 +739,28 @@ class website {
         if ($this->getCurrentUser() != false) {
             $js = '';
 //                <script type="text/javascript">
-//                var teams = new array();
-//                var projects = new array();
-//                function addTeam(teamnr, projectid) {
-//                    teams
+//                function loadTeams(selecter, projectid) {
+//                    var teamselect = document.getElementById("team");
+//                    var options = teamselect.options;
+//                    selecter.innerHTML = "";
+//                    for (var i = 0; i < options.length; i++) {
+//                        if (options[i].value == projectid) {
+//                            var option = document.createElement("option");
+//                            option.text = "";
+//                            option.value = ""
+//                            try {
+//                                selecter.add(option, null); // NON-IE
+//                            } catch(ex) {
+//                                selecter.add(option); // IE
+//                            }
+//                        }
+//                    }
 //                }
 //                </script>
 //            ';
             $project = '
                 <form action="index.php?projects=' . $this->getCurrentUser()->id . '" method="POST">
-                    <select name="projectid">
+                    <select name="projectid" onChange="loadTeams(\'this\', \'this.value\');">
                         <option value="0">Anders</option>
             ';
             $result = $this->db->doQuery("SELECT * FROM `projecten`;");
@@ -756,7 +776,6 @@ class website {
             $result = $this->db->doQuery("SELECT * FROM `teams`;");
             if ($result != false) {
                 while ($fields = mysql_fetch_assoc($result)) {
-//                    $js = "addTeam('" . $fields['teamnr'] . "', '" . $fields['projectid'] . "');";
                     $project .= '<option value="' . $fields['teamnr'] . '">' . $fields['teamnaam'] . '</option>';
                 }
             }
@@ -926,7 +945,7 @@ class website {
                     $info = $fields['info'];
                 } else {
                     $info = '
-                       Er is geen overige info beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
+                       Er is geen overige info beschikbaar voor ' . $this->getUser($id)->getFullName() . '. <br>
                        Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel zijn of haar info heeft geupload.
                     ';
                 }
@@ -974,7 +993,7 @@ class website {
                     $cv = $fields['description'];
                 } else {
                     $cv = '
-                        Er is geen CV beschikbaar voor ' . $this->getUser($id)->firstname . ' ' . $this->getUser($id)->insertion . ' ' . $this->getUser($id)->lastname . '. <br>
+                        Er is geen CV beschikbaar voor ' . $this->getUser($id)->getFullName() . '. <br>
                         Controleer of de gegevens goed waren ingevuld, of vraag na of de gebruiker wel een CV heeft geupload.
                     ';
                 }
