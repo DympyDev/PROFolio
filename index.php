@@ -21,9 +21,11 @@
         if (isset($_GET['CV'])) {
             $website->saveCV($_POST['contentarea']);
         } else if (isset($_GET['info'])) {
-            $website->saveinfo($_POST['contentarea']);
+            $website->saveInfo($_POST['contentarea']);
         } else if (isset($_GET['mail'])) {
             $website->sendMail($_POST);
+        } else if (isset($_GET['editProject'])) {
+            $website->saveProject($_POST, true);
         } else {
             $website->saveProject($_POST);
         }
@@ -124,11 +126,11 @@
                         echo $website->getCV();
                     }
                 } else if (isset($_GET['editCV'])) {
-                    echo $website->editCV();
+                    echo $website->getEditCV();
                 } else if (isset($_GET['editinfo'])) {
-                    echo $website->editinfo();
+                    echo $website->getEditInfo();
                 } else if (isset($_GET['editProject'])) {
-                    echo $website->editProject($_GET['editProject']);
+                    echo $website->getEditProject($_GET['editProject']);
                 } else if (isset($_GET['project'])) {
                     echo $website->getProject($_GET['project']);
                 } else {

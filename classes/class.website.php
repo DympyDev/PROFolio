@@ -171,11 +171,11 @@ class website {
                 </form>
                <br>
         ';
-        $result = $this->db->doQuery("SELECT `projectnaam` FROM `schoolprojecten`;");
+        $result = $this->db->doQuery("SELECT `projectname` FROM `schoolprojecten`;");
         if ($result != false) {
             $addProject .= 'Er bestaan al een paar projecten. Dat zijn:<br>';
             while ($fields = mysql_fetch_assoc($result)) {
-                $addProject .= $fields['projectnaam'] . '<br>';
+                $addProject .= $fields['projectname'] . '<br>';
             }
         }
         $addProject .= '</div>';
@@ -184,7 +184,7 @@ class website {
 
     function addProject($_POST) {
         $project = stripslashes(mysql_real_escape_string($_POST['projectName']));
-        $this->db->doQuery("INSERT INTO `schoolprojecten` (`projectnaam`) VALUES ('$project');");
+        $this->db->doQuery("INSERT INTO `schoolprojecten` (`projectname`) VALUES ('$project');");
     }
 
     function getRegisterForm($_POST = "") {
@@ -386,10 +386,10 @@ class website {
                     Projecten waar u lid van bent:
                     <br>
                 ';
-                $result = $this->getCurrentUser()->getProjects();
-                if ($result != false) {
-                    while ($fields = mysql_fetch_assoc($result)) {
-                        $showcase .= '<a href="?project=' . $fields['name'] . '">' . $fields['name'] . '</a><br>';
+                $projectNames = $this->getCurrentUser()->getProjects();
+                if (count($projectNames) != 0) {
+                    foreach ($projectNames as $name) {
+                        $showcase .= '<a href="?project=' . $name . '">' . $name . '</a><br>';
                     }
                 } else {
                     $showcase .= 'Geen';
@@ -410,11 +410,13 @@ class website {
                     <br>
                     Projecten waar ' . $this->getUser($id)->getFullName() . ' lid van is:
                 ';
-                $result = $this->getUser($id)->getProjects();
-                if ($result != false) {
-                    while ($fields = mysql_fetch_assoc($result)) {
-                        $showcase .= '<a href="project=' . $fields['name'] . '">' . $fields['name'] . '</a><br>';
+                $projectNames = $this->getUser($id)->getProjects();
+                if (count($projectNames) != 0) {
+                    foreach ($projectNames as $name) {
+                        $showcase .= '<a href="?project=' . $name . '">' . $name . '</a><br>';
                     }
+                } else {
+                    $showcase .= 'Geen';
                 }
             } else {
                 $showcase = '
@@ -485,14 +487,37 @@ class website {
         $project = "";
         $result = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` = '" . $name . "';");
         if ($result != false) {
-            while ($fields = mysql_fetch_assoc($result)) {
-                $project .= '
-                    <h1>' . $fields['name'] . '</h1>
-                    ' . $fields['content'] . '
-                ';
+            $fields = mysql_fetch_assoc($result);
+            $project .= '
+                <h1>' . $fields['name'] . '</h1>' . $fields['content'];
+            if ($this->getCurrentUser() != false) {
+                $projectNames = $this->getCurrentUser()->getProjects();
+                if (count($projectNames) != 0) {
+                    foreach ($projectNames as $projectName) {
+                        if ($projectName == $name) {
+                            $project .= '
+                                <div align="bottom">
+                                    <button onClick="window.location=\'?editProject=' . $name . '\';">Pas aan</button>
+                                </div>
+                            ';
+                        }
+                    }
+                }
             }
+        } else {
+            $project = "Er is geen project met de naam " . $name . " gevonden in onze database.";
         }
         return $project;
+    }
+
+    function getEditProject($name) {
+        $editProject = "";
+        $result = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` = '" . $name . "';");
+        if ($result != false) {
+            $fields = mysql_fetch_assoc($result);
+            $editProject = $this->getPoster(true, "?editProject=" . $name . "&user=" . $fields['llnr'], $fields['content']);
+        }
+        return $editProject;
     }
 
     function login($id, $password) {
@@ -609,14 +634,14 @@ class website {
 
             $result .= "<br><hr><br>Projecten die matchen met uw zoekterm:<br>";
             $query = $this->db->doQuery("
-                SELECT `projects`.name as `projectnaam`, `studenten`.id as `id`
+                SELECT `projects`.name as `projectname`, `studenten`.id as `id`
                 FROM `projects`, `teams`
                 WHERE `studenten`.id = `projects`.llnr
                 AND (`projects`.name REGEXP '$search' OR `studenten`.id REGEXP '$search');
             ");
             if ($query != false) {
                 while ($fields = mysql_fetch_assoc($query)) {
-                    $result .= '<a href="index.php?project=' . $fields['projectnaam'] . '">' . $this->getUser($fields['id'])->getFullName() . ' - ' . $fields['projectnaam'] . '</a><br>';
+                    $result .= '<a href="index.php?project=' . $fields['projectname'] . '">' . $this->getUser($fields['id'])->getFullName() . ' - ' . $fields['projectname'] . '</a><br>';
                 }
             } else {
                 $result .= "Geen<br>";
@@ -646,11 +671,11 @@ class website {
                     </p>
                 ';
             } else {
-                $result = $this->getCurrentUser()->getProjects();
-                if ($result != false) {
+                $projectNames = $this->getCurrentUser()->getProjects();
+                if (count($projectNames) != 0) {
                     $homepage = 'Projecten waar je lid van bent:<br>';
-                    while ($fields = mysql_fetch_assoc($result)) {
-                        $homepage .= $fields['naam'] . '<br>';
+                    foreach ($projectNames as $name) {
+                        $homepage .= '<a href="?project=' . $name . '">' . $name . '</a><br>';
                     }
                 } else {
                     $homepage = 'U bent nog geen lid van een project.<br>
@@ -659,11 +684,11 @@ class website {
             }
         } else {
             if ($this->getUser($id) != false) {
-                $result = $this->getUser($id)->getProjects();
-                if ($result != false) {
+                $projectNames = $this->getUser($id)->getProjects();
+                if (count($projectNames) != 0) {
                     $homepage = 'Projecten waar je lid van bent:<br>';
-                    while ($fields = mysql_fetch_assoc($result)) {
-                        $homepage .= $fields['naam'] . '<br>';
+                    foreach ($projectNames as $projectName) {
+                        $homepage .= '<a href="?project=' . $projectName . '">' . $projectName . '</a><br>';
                     }
                 } else {
                     $homepage = $this->getUser($id)->getFullName() .
@@ -803,7 +828,7 @@ class website {
             $result = $this->db->doQuery("SELECT * FROM `projecten`;");
             if ($result != false) {
                 while ($fields = mysql_fetch_assoc($result)) {
-                    $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectnaam'] . '</option>';
+                    $project .= '<option value="' . $fields['projectid'] . '">' . $fields['projectname'] . '</option>';
                 }
             }
             $project .= '
@@ -919,7 +944,7 @@ class website {
         return $poster;
     }
 
-    function saveinfo($info = "") {
+    function saveInfo($info = "") {
         if ($info != "") {
             if ($this->getCurrentUser() != false) {
                 $query = "SELECT * FROM `info` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
@@ -935,7 +960,7 @@ class website {
         }
     }
 
-    function editinfo() {
+    function getEditInfo() {
         $info = "";
         if ($this->getCurrentUser() != false) {
             $query = "SELECT * FROM `info` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
@@ -1044,11 +1069,16 @@ class website {
         return $cv;
     }
 
-    function saveProject($_POST) {
-        if (isset($_POST['content'])) {
-            if (strlen($_POST['content']) < 2500) {
-                $_POST['content'] = stripslashes(mysql_real_escape_string($_POST['content']));
-                $query = "UPDATE `projects` SET `content` = '" . $_POST['content'] . "' WHERE `llnr` = '" . $_POST['llnr'] . "';";
+    function saveProject($_POST, $edit = false) {
+        if ($this->getCurrentUser() != false) {
+            if (strlen($_POST['contentarea']) < 2500) {
+                $_POST['contentarea'] = stripslashes(mysql_real_escape_string($_POST['contentarea']));
+                $query = "";
+                if ($edit == true) {
+                    $query = "UPDATE `projects` SET `content` = '" . $_POST['contentarea'] . "' WHERE `llnr` = '" . $_GET['user'] . "';";
+                } else {
+                    $query = "INSERT INTO `projects` (`llnr`, `name`, `content`) VALUES ('" . $this->getCurrentUser()->id . "', '" . $_POST['name'] . "', '" . $_POST['contentarea'] . "';";
+                }
                 $this->db->doQuery($query);
             }
         }
@@ -1068,7 +1098,7 @@ class website {
         }
     }
 
-    function editCV() {
+    function getEditCV() {
         $cv = "";
         if ($this->getCurrentUser() != false) {
             $query = "SELECT * FROM `CV` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
