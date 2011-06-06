@@ -128,11 +128,6 @@ span#logo, img#logo {
     border:0;
 }
 
-/* left column */
-div#left {
-    width:200px;
-}
-
 /* right column */
 div#right {
     width:23%;
