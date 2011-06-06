@@ -11,9 +11,10 @@
  * @author Dark
  */
 class user {
+
     var $db, $id, $firstname, $insertion, $lastname, $password, $email, $year, $admin;
     var $exists = false;
-    
+
     function __construct($db, $id, $password = "") {
         $this->db = $db;
         $sql = "";
@@ -33,7 +34,7 @@ class user {
             $this->lastname = ucfirst($fields['lastname']);
             $this->password = $fields['password'];
             $this->email = $fields['email'];
-            $this->year = $fields['year'];
+            $this->year = $fields['year'] . ' - ' . ($fields['year'] + 1);
             $this->admin = $fields['admin'];
             $this->exists = true;
         }
@@ -82,6 +83,7 @@ class user {
     function getFullName() {
         return $this->firstname . ' ' . $this->insertion . ' ' . $this->lastname;
     }
+
 }
 
 ?>
