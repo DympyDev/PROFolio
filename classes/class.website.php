@@ -428,16 +428,6 @@ class website {
         return $showcase;
     }
 
-    function popUploadForm() {
-        return '
-            <form enctype="multipart/form-data" action="index.php" method="POST">
-                <input type="hidden" name="MAX_FILE_SIZE" value="2000000"/>
-                Upload hier je POP: <input name="uploadPOP" type="file"/><br>
-                <input type="submit" value="Upload POP"/>
-            </form>
-        ';
-    }
-
     function getPOP($id = "") {
         $pop = "";
         if ($id == "") {
