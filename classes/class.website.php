@@ -426,14 +426,37 @@ class website {
         return $showcase;
     }
 
+    function popUploadForm() {
+        return '
+            <form enctype="multipart/form-data" action="index.php" method="POST">
+                <input type="hidden" name="MAX_FILE_SIZE" value="2000000"/>
+                Upload hier je POP: <input name="uploadPOP" type="file"/><br>
+                <input type="submit" value="Upload POP"/>
+            </form>
+        ';
+    }
+
     function getPOP($id = "") {
         $pop = "";
         if ($id == "") {
             if ($this->getCurrentUser() != false) {
+                $pop_dir = 'pop/' . $this->getCurrentUser()->id;
                 $pop = '
                     Dit is het Persoonlijk Onwikkelingsplan van 
                     ' . $this->getCurrentUser()->getFullName() . '.
                 ';
+                if (!is_dir($pop_dir)) {
+                    mkdir($pop_dir);
+                }
+                $dir_exists = scandir($pop_dir);
+                if (count($dir_exists) - 2 <= 0) {
+                    $pop .= $this->popUploadForm();
+                } else {
+                    $pop .= '
+                        <br>Hier vind u een downloadbare versie van het persoonlijk ontwikkelingsplan.
+                        <br>Klik op het icoontje om het bestand te downloaden.<br>
+                    ';
+                }
             } else {
                 $pop = '
                     U bent niet ingelogd. <br>
@@ -446,7 +469,7 @@ class website {
             if ($this->getUser($id) != false) {
                 $pop = '
                     Dit is het Persoonlijk Ontwikkelingsplan van 
-                    ' . $this->getUser($id)->getFullName() . '.
+                    ' . $this->getUser($id)->getFullName() . '.<br>
                 ';
             } else {
                 $pop = '
@@ -465,7 +488,7 @@ class website {
             while ($fields = mysql_fetch_assoc($result)) {
                 $project .= '
                     <h1>' . $fields['name'] . '</h1>
-                    '.$fields['content'].'
+                    ' . $fields['content'] . '
                 ';
             }
         }
