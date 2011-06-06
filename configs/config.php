@@ -13,6 +13,7 @@ $AvatarMaxSize = "2";               // Maximum grootte van je plaatje, in MB
 $AvatarSaveDir = "./avatars/";      // Map waarin de plaatjes komen
 $AvatarMaxDimensions = "50x50";
 $AvatarAllowedFiletypes = array("image/png", "image/jpg", "image/jpeg");
+$POPAllowedFiletypes = array("application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/pdf","application/msword");
 $LanguageDir = "./languages/";
 $LogDir = "./logs/";
 ?>

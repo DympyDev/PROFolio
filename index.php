@@ -15,6 +15,8 @@
         $website->uploadImage($_FILES);
     } else if (isset($_POST['teamnaam']) && isset($_POST['projectid'])) {
         $website->makeTeam($_POST);
+    } else if (isset($_FILES['uploadPOP'])) {
+        $website->uploadPOP($_FILES['uploadPOP']);
     } else if (isset($_POST['teams'])) {
         $website->createTeam($_POST);
     } else if (isset($_POST['contentarea'])) {
