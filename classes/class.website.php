@@ -137,7 +137,7 @@ class website {
     }
 
     function getMailForm() {
-        return $this->getPoster(false, "?mail=1", "", true);
+        return $this->getPoster(false, "?mail=1", "", '<br>Onderwerp: <input type="text" name="Subject"><br>', true);
     }
 
     function sendMail($_POST) {
@@ -916,7 +916,7 @@ class website {
         return $project;
     }
 
-    function getPoster($upload = false, $link = "", $content = "", $email = false) {
+    function getPoster($upload = false, $link = "", $content = "", $prefix = "", $email = false) {
         $poster = "";
         if ($this->getCurrentUser() != false) {
             $content = ($content == "" ? "Gebruik hier HTML om je tekst te plaatsen" : $content);
@@ -978,8 +978,8 @@ class website {
             $extra = '
                 id="contentarea" name="contentarea" style="width:50%;min-height:400px;height:80%;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\'){this.value = \'\';}"
             ';
-            if ($email) {
-                $poster .= '<br>Onderwerp: <input type="text" name="Subject"><br>';
+            if ($prefix != "") {
+                $poster .= $prefix; // $this->getPoster("<br>Onderwerp: <input type="text" name="Subject"><br>");
             }
             $poster .= '<textarea ' . $extra . '>' . $content . '</textarea>';
             if ($upload) {
@@ -1141,7 +1141,7 @@ class website {
                 if ($edit == true) {
                     $query = "UPDATE `projects` SET `content` = '" . $_POST['contentarea'] . "' WHERE `llnr` = '" . $_GET['user'] . "';";
                 } else {
-                    $query = "INSERT INTO `projects` (`llnr`, `name`, `content`) VALUES ('" . $this->getCurrentUser()->id . "', '" . $_POST['name'] . "', '" . $_POST['contentarea'] . "';";
+                    $query = "INSERT INTO `projects` (`llnr`, `name`, `content`) VALUES ('" . $this->getCurrentUser()->id . "', '" . $_POST['name'] . "', '" . $_POST['contentarea'] . "');";
                 }
                 $this->db->doQuery($query);
             }

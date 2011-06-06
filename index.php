@@ -120,7 +120,7 @@
                         echo $website->getInfo();
                     }
                 } else if (isset($_GET['newProject'])) {
-                    echo $website->getPoster(true, "", "");
+                    echo $website->getPoster(true, "", "", '<br>Titel: <input type="text" name="name"><br>');
                 } else if (isset($_GET['CV'])) {
                     if (isset($_GET['user'])) {
                         echo $website->getCV($_GET['user']);
