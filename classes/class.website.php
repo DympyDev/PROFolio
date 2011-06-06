@@ -559,6 +559,7 @@ class website {
                 }
                 $member .= '
                         </select>
+                        <input type="hidden" name="teamnr" value="ik weet hte ff niet">
                         <input type="submit" value="voeg toe">
                     </form>
                 ';
@@ -570,8 +571,13 @@ class website {
     }
 
     function addTeamMember() {
-        $lid = stripslashes(mysql_real_escape_string($_POST['member']));
+        $lid = stripslashes(mysql_real_escape_string($_POST['addTeamMember']));
         $query = "INSERT INTO `teamleden`;";
+        $result = $this->db->doQuery("SELECT `teamnr` FROM `teamleden` WHERE `llnr` = '".$this->getCurrentUser()->id. "';");
+        if (mysql_num_rows($result) == 0){
+            echo "maak team";
+        } 
+        
     }
 
     function getEditProject($name) {
