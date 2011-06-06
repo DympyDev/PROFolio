@@ -458,6 +458,9 @@ class website {
                         <br>Hier vind u een downloadbare versie van het persoonlijk ontwikkelingsplan.
                         <br>Klik op het icoontje om het bestand te downloaden.<br>
                     ';
+                    $finfo = pathinfo($dir_exists[2]);
+                    $link = "http://" . $_SERVER['SERVER_NAME'] . "/" . $pop_dir . "/" . $dir_exists[2];
+                    $pop .= 'Download: <a href="' . $link . '"><img src="images/' . $finfo['extension'] . '.png" width="64" height="64" alt="Submit button">' . $dir_exists[2] . '</img></a>';
                 }
             } else {
                 $pop = '
@@ -469,10 +472,26 @@ class website {
             }
         } else {
             if ($this->getUser($id) != false) {
+                $pop_dir = 'pop/' . $id;
                 $pop = '
-                    Dit is het Persoonlijk Ontwikkelingsplan van 
-                    ' . $this->getUser($id)->getFullName() . '.<br>
+                    Dit is het Persoonlijk Onwikkelingsplan van 
+                    ' . $this->getUser($id)->getFullName() . '.
                 ';
+                if (!is_dir($pop_dir)) {
+                    mkdir($pop_dir);
+                }
+                $dir_exists = scandir($pop_dir);
+                if (count($dir_exists) - 2 <= 0) {
+                    $pop ='Er is geen Persoonlijk Ontwikkelingsplan beschikbaar voor de opgevraagde gebruiker.';
+                } else {
+                    $pop .= '
+                        <br>Hier vind u een downloadbare versie van het persoonlijk ontwikkelingsplan.
+                        <br>Klik op het icoontje om het bestand te downloaden.<br>
+                    ';
+                    $finfo = pathinfo($dir_exists[2]);
+                    $link = "http://".$_SERVER['SERVER_NAME']."/".$pop_dir."/".$dir_exists[2];
+                    $pop .= 'Download: <a href="'.$link.'"><img src="images/'.$finfo['extension'].'.png" width="64" height="64" alt="Submit button">'.$dir_exists[2].'</img></a>';
+                }
             } else {
                 $pop = '
                     Er is geen Persoonlijk Ontwikkelingsplan beschikbaar voor de opgevraagde gebruiker. <br>
