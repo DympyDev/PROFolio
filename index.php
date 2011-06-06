@@ -17,10 +17,8 @@
         $website->makeTeam($_POST);
     } else if (isset($_FILES['uploadPOP'])) {
         $website->uploadPOP($_FILES['uploadPOP']);
-    } else if (isset($_POST['teams'])) {
-        $website->createTeam($_POST);
-    } else if (isset($_GET['addTeammember'])){
-        $website->addMember($_POST);
+    } else if (isset($_GET['addTeamMember'])){
+        $website->addTeamMember($_POST);
     } else if (isset($_POST['contentarea'])) {
         if (isset($_GET['CV'])) {
             $website->saveCV($_POST['contentarea']);
@@ -135,8 +133,8 @@
                     echo $website->getEditInfo();
                 } else if (isset($_GET['editProject'])) {
                     echo $website->getEditProject($_GET['editProject']);
-                } else if (isset($_GET['addTeammember'])) {
-                    echo $website->addTeammember($_GET['addTeammember']); 
+                } else if (isset($_GET['manageTeam'])) {
+                    echo $website->getAddTeamMember($_GET['manageTeam']); 
                 } else if (isset($_GET['project'])) {
                     echo $website->getProject($_GET['project']);
                 } else {

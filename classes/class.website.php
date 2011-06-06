@@ -507,7 +507,7 @@ class website {
                             $project .= '
                                 <div align="bottom">
                                     <button onClick="window.location=\'?editProject=' . $name . '\';">Pas aan</button>
-                                    <button onClick="window.location=\'?addTeammember=' . $name . '\';">Teamlid toevoegen</button>
+                                    <button onClick="window.location=\'?manageTeam=' . $name . '\';">Teamlid toevoegen</button>
                                 </div>
                             ';
                         }
@@ -520,32 +520,56 @@ class website {
         return $project;
     }
 
-    function addTeammember($name) {
+    function getAddTeamMember($name) {
         $member = "";
         if ($this->getCurrentUser() != false) {
-            $sql = "SELECT * FROM `teamleden` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
-            $result2 = $this->db->doQuery($sql);
-            if ($result2 != false) {
-                $query = "SELECT `id` FROM `studenten`;";
-                $result = $this->db->doQuery($query);
-                if ($result != false) {
-                    $member = '
-                    <form action="index.php" method="POST">
-                        <select id="member">
-                            <option>Select Member</option>';
-                    // hier filteren
-                    while ($record = mysql_fetch_assoc($result)) {
-                        $member .= '<option value="' . $record['id'] . '>' . $this->getUser($record['id'])->getFullName() . '</option>';
-                    }
-                    $member .= '</select><input type="submit" value="voeg toe"></form>';
-                } return $member;
+            $studenten = "";
+            $result = $this->db->doQuery("
+                SELECT * FROM `teamleden`, `teams`, `projects`
+                WHERE `teamleden`.teamnr = `teams`.teamnr
+                AND `teams`.projectid = `projects`.projectid
+                AND `projects`.name = '" . $name . "'
+                AND `teamleden.`llnr = '" . $this->getCurrentUser()->id . "';
+            ");
+            $result2 = "";
+            if ($result != false) {
+                $result2 = $this->db->doQuery("
+                    SELECT `id` FROM `studenten`
+                    WHERE NOT `id` IN (
+                        SELECT * FROM `teamleden`, `teams`, `projects`
+                        WHERE `teamleden`.teamnr = `teams`.teamnr
+                        AND `teams`.projectid = `projects`.projectid
+                        AND `projects`.name = '" . $name . "'
+                        AND `teamleden.`llnr = '" . $this->getCurrentUser()->id . "';
+                    );
+                ");
             } else {
-                echo "Je zit niet in een team bitch, dus maak er 1";
+                $result2 = $this->db->doQuery("SELECT `id` FROM `studenten`;");
             }
+            if ($result2 != false) {
+                $member = '
+                    <form action="index.php" method="POST">
+                        <select id="addTeamMember">
+                            <option>Select Member</option>
+                ';
+                while ($fields = mysql_fetch_assoc($result2)) {
+                    if ($fields['id'] != $this->getCurrentUser()->id) {
+                        $member .= '<option value="' . $fields['id'] . '">' . $this->getUser($fields['id'])->getFullName() . '</option>';
+                    }
+                }
+                $member .= '
+                        </select>
+                        <input type="submit" value="voeg toe">
+                    </form>
+                ';
+            } else {
+                $member = 'Er zijn geen studenten beschikbaar om in uw team te stoppen';
+            }
+            return $member;
         }
     }
 
-    function addMember() {
+    function addTeamMember() {
         $lid = stripslashes(mysql_real_escape_string($_POST['member']));
         $query = "INSERT INTO `teamleden`;";
     }
