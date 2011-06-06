@@ -498,6 +498,7 @@ class website {
                             $project .= '
                                 <div align="bottom">
                                     <button onClick="window.location=\'?editProject=' . $name . '\';">Pas aan</button>
+                                    <button onClick="window.location=\'?addTeammember=' . $name . '\';">Teamlid toevoegen</button>
                                 </div>
                             ';
                         }
@@ -508,6 +509,36 @@ class website {
             $project = "Er is geen project met de naam " . $name . " gevonden in onze database.";
         }
         return $project;
+    }
+
+    function addTeammember($name) {
+        $member = "";
+        if ($this->getCurrentUser() != false) {
+            $sql = "SELECT * FROM `teamleden` WHERE `llnr` = '" . $this->getCurrentUser()->id . "';";
+            $result2 = $this->db->doQuery($sql);
+            if ($result2 != false) {
+                $query = "SELECT `id` FROM `studenten`;";
+                $result = $this->db->doQuery($query);
+                if ($result != false) {
+                    $member = '
+                    <form action="index.php" method="POST">
+                        <select id="member">
+                            <option>Select Member</option>';
+                    // hier filteren
+                    while ($record = mysql_fetch_assoc($result)) {
+                        $member .= '<option value="' . $record['id'] . '>' . $this->getUser($record['id'])->getFullName() . '</option>';
+                    }
+                    $member .= '</select><input type="submit" value="voeg toe"></form>';
+                } return $member;
+            } else {
+                echo "Je zit niet in een team bitch, dus maak er 1";
+            }
+        }
+    }
+
+    function addMember() {
+        $lid = stripslashes(mysql_real_escape_string($_POST['member']));
+        $query = "INSERT INTO `teamleden`;";
     }
 
     function getEditProject($name) {
