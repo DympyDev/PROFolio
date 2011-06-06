@@ -413,7 +413,7 @@ class website {
                 $result = $this->getUser($id)->getProjects();
                 if ($result != false) {
                     while ($fields = mysql_fetch_assoc($result)) {
-                        $showcase .= '<a href="project=' . $id . '">' . $fields['name'] . '</a><br>';
+                        $showcase .= '<a href="project=' . $fields['name'] . '">' . $fields['name'] . '</a><br>';
                     }
                 }
             } else {
@@ -827,7 +827,7 @@ class website {
         return $project;
     }
 
-    function getPoster($upload = false, $link = "", $content = "", $email=false) {
+    function getPoster($upload = false, $link = "", $content = "", $email = false) {
         $poster = "";
         if ($this->getCurrentUser() != false) {
             $content = ($content == "" ? "Gebruik hier HTML om je tekst te plaatsen" : $content);

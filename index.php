@@ -127,6 +127,8 @@
                     echo $website->editCV();
                 } else if (isset($_GET['editinfo'])) {
                     echo $website->editinfo();
+                } else if (isset($_GET['editProject'])) {
+                    echo $website->editProject($_GET['editProject']);
                 } else if (isset($_GET['project'])) {
                     echo $website->getProject($_GET['project']);
                 } else {
