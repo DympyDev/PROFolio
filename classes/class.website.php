@@ -408,12 +408,12 @@ class website {
                     Dit is de showcase van 
                     ' . $this->getUser($id)->getFullName() . '.
                     <br>
-                    Projecten waar ' . $this->getUser($id)->getFullName() . ' lid van is:
+                    Projecten waar ' . $this->getUser($id)->getFullName() . ' lid van is:<br>
                 ';
                 $projectNames = $this->getUser($id)->getProjects();
                 if (count($projectNames) != 0) {
                     foreach ($projectNames as $name) {
-                        $showcase .= '<a href="?project=' . $name . '">' . $name . '</a><br>';
+                        $showcase .= '<a href="?project=' . $name . '&user='.$this->getUser($id)->id.'">' . $name . '</a><br>';
                     }
                 } else {
                     $showcase .= 'Geen';
