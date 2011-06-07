@@ -80,16 +80,8 @@
 
             <!-- / right column -->         
             <!-- content column -->
-            <div id="content">  
-                <div id="right">
-                    <?php
-                    if (isset($_GET['user'])) {
-                        echo $website->getUserInfo($_GET['user']);
-                    } else {
-                        echo $website->getUserInfo();
-                    }
-                    ?>
-                </div>
+            <div id="content">
+                <div id="left">
                 <?php
                 if (isset($_GET['search'])) {
                     echo $website->getSearchResult($_GET['search']);
@@ -144,7 +136,17 @@
                         echo $website->getHomepage();
                     }
                 }
-                ?>
+                ?>  
+                </div>
+                <div id="right">
+                    <?php
+                    if (isset($_GET['user'])) {
+                        echo $website->getUserInfo($_GET['user']);
+                    } else {
+                        echo $website->getUserInfo();
+                    }
+                    ?>
+                </div>
             </div>
             <!-- content column -->
         </div>
