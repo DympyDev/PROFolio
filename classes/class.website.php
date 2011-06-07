@@ -955,7 +955,7 @@ class website {
                         </select><button style="width:60%;" onClick="bbcode_ins(\'font\');">Font</button>
                     </div>
                 </div>
-                <div align="center">
+                <div align="center" style="width:150%; padding:10px 10px 10px 10px;">
                     <script type="text/javascript">
                     var counter = 1;
                     function addUpload() {
