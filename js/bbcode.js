@@ -94,7 +94,7 @@ function bbcode_ins(tag) {
         if (document.selection) {
             field.focus();
             selected = document.selection.createRange().text;
-            ins = '<a="'+url+'">' + linkText + '</a>';
+            ins = '<a href="'+url+'">' + linkText + '</a>';
             selected2 = document.selection.createRange();
             sel = document.selection.createRange();
             sel.text = ins;
@@ -103,7 +103,7 @@ function bbcode_ins(tag) {
         } else if (field.selectionStart || field.selectionStart == 0) {
             startpos = field.selectionStart;
             endpos = field.selectionEnd;
-            ins = '<a="'+url+'">' + linkText + '</a>';
+            ins = '<a href="'+url+'">' + linkText + '</a>';
             field.focus();
             field.value = field.value.substring(0, startpos) + ins + field.value.substring(endpos, field.value.length);
             field.setSelectionRange(endpos+ins.length, endpos+ins.length-selected.length);
