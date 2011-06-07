@@ -26,7 +26,7 @@
             $website->saveInfo($_POST['contentarea']);
         } else if (isset($_GET['mail'])) {
             $website->sendMail($_POST);
-        } else if (isset($_GET['editProject'])) {
+        } else if (isset($_GET['projectEdit'])) {
             $website->saveProject($_POST, true);
         } else {
             $website->saveProject($_POST);
