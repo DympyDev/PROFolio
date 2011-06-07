@@ -560,7 +560,6 @@ class website {
                 }
                 $member .= '
                         </select>
-                        <input type="hidden" name="teamnr" value="ik weet hte ff niet">
                         <input type="submit" value="voeg toe">
                     </form>
                 ';
@@ -572,13 +571,17 @@ class website {
     }
 
     function addTeamMember() {
+        $addteammember = "";
         $lid = stripslashes(mysql_real_escape_string($_POST['addTeamMember']));
-        $query = "INSERT INTO `teamleden`;";
+        $teamnr = stripslashes(mysql_real_escape_string($_POST['teamnr']));
+        $query = "INSERT INTO `teamleden` (teamnr, llnr) VALUES('$teamnr', '$lid');";
         $result = $this->db->doQuery("SELECT `teamnr` FROM `teamleden` WHERE `llnr` = '".$this->getCurrentUser()->id. "';");
         if (mysql_num_rows($result) == 0){
-            echo "maak team";
-        } 
-        
+            $addteammember = '<input type="text" name="maakteam" value="Maak team"';
+        }else{
+            $this->db->doQuery($query);
+        }
+        return $addteammember;
     }
 
     function getEditProject($name) {
