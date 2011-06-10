@@ -589,7 +589,7 @@ class website {
         $result = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` = '" . $name . "';");
         if ($result != false) {
             $fields = mysql_fetch_assoc($result);
-            $editProject = $this->getPoster(true, "?editProject=" . $fields['id'] . "&user=" . $fields['llnr'], $fields['content']);
+            $editProject = $this->getPoster(true, "?projectEdit=" . $fields['id'] . "&user=" . $fields['llnr'], $fields['content']);
         }
         return $editProject;
     }
