@@ -1149,7 +1149,7 @@ class website {
                 $_POST['contentarea'] = stripslashes(mysql_real_escape_string($_POST['contentarea']));
                 $query = "";
                 if ($edit != "") {
-                    $query = "UPDATE `projects` SET `content` = '" . $_POST['contentarea'] . "' WHERE `id` = '" . $edit . "';";
+                    $query = "UPDATE `projects` SET `content` = '" . $_POST['contentarea'] . "' WHERE `projectid` = '" . $edit . "';";
                 } else {
                     $query = "INSERT INTO `projects` (`llnr`, `name`, `content`) VALUES ('" . $this->getCurrentUser()->id . "', '" . $_POST['name'] . "', '" . $_POST['contentarea'] . "');";
                 }
