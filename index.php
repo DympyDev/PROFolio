@@ -27,7 +27,7 @@
         } else if (isset($_GET['mail'])) {
             $website->sendMail($_POST);
         } else if (isset($_GET['editProject'])) {
-            $website->saveProject($_POST, true);
+            $website->saveProject($_POST, $_GET['editProject']);
         } else {
             $website->saveProject($_POST);
         }

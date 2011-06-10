@@ -586,7 +586,7 @@ class website {
         $result = $this->db->doQuery("SELECT * FROM `projects` WHERE `name` = '" . $name . "';");
         if ($result != false) {
             $fields = mysql_fetch_assoc($result);
-            $editProject = $this->getPoster(true, "?editProject=" . $name . "&user=" . $fields['llnr'], $fields['content']);
+            $editProject = $this->getPoster(true, "?editProject=" . $fields['id'] . "&user=" . $fields['llnr'], $fields['content']);
         }
         return $editProject;
     }
@@ -986,7 +986,7 @@ class website {
                 id="contentarea" name="contentarea" style="width:50%;min-height:400px;height:80%;resize:none;" onClick="if (this.value == \'Gebruik hier HTML om je tekst te plaatsen\'){this.value = \'\';}"
             ';
             if ($prefix != "") {
-                $poster .= $prefix; // $this->getPoster("<br>Onderwerp: <input type="text" name="Subject"><br>");
+                $poster .= $prefix;
             }
             $poster .= '<textarea ' . $extra . '>' . $content . '</textarea>';
             if ($upload) {
@@ -1140,13 +1140,13 @@ class website {
         return $cv;
     }
 
-    function saveProject($_POST, $edit = false) {
+    function saveProject($_POST, $edit = "") {
         if ($this->getCurrentUser() != false) {
             if (strlen($_POST['contentarea']) < 2500) {
                 $_POST['contentarea'] = stripslashes(mysql_real_escape_string($_POST['contentarea']));
                 $query = "";
-                if ($edit == true) {
-                    $query = "UPDATE `projects` SET `content` = '" . $_POST['contentarea'] . "' WHERE `llnr` = '" . $_GET['user'] . "';";
+                if ($edit != "") {
+                    $query = "UPDATE `projects` SET `content` = '" . $_POST['contentarea'] . "' WHERE `id` = '" . $edit . "';";
                 } else {
                     $query = "INSERT INTO `projects` (`llnr`, `name`, `content`) VALUES ('" . $this->getCurrentUser()->id . "', '" . $_POST['name'] . "', '" . $_POST['contentarea'] . "');";
                 }
