@@ -408,12 +408,12 @@ class website {
                     Dit is de showcase van 
                     ' . $this->getUser($id)->getFullName() . '.
                     <br>
-                    Projecten waar ' . $this->getUser($id)->getFullName() . ' lid van is:
+                    Projecten waar ' . $this->getUser($id)->getFullName() . ' lid van is:<br>
                 ';
                 $projectNames = $this->getUser($id)->getProjects();
                 if (count($projectNames) != 0) {
                     foreach ($projectNames as $name) {
-                        $showcase .= '<a href="?project=' . $name . '">' . $name . '</a><br>';
+                        $showcase .= '<a href="?project=' . $name . '&user='.$this->getUser($id)->id.'">' . $name . '</a><br>';
                     }
                 } else {
                     $showcase .= 'Geen';
@@ -560,7 +560,6 @@ class website {
                 }
                 $member .= '
                         </select>
-                        <input type="hidden" name="teamnr" value="ik weet hte ff niet">
                         <input type="submit" value="voeg toe">
                     </form>
                 ';
@@ -572,13 +571,17 @@ class website {
     }
 
     function addTeamMember() {
+        $addteammember = "";
         $lid = stripslashes(mysql_real_escape_string($_POST['addTeamMember']));
-        $query = "INSERT INTO `teamleden`;";
+        $teamnr = stripslashes(mysql_real_escape_string($_POST['teamnr']));
+        $query = "INSERT INTO `teamleden` (teamnr, llnr) VALUES('$teamnr', '$lid');";
         $result = $this->db->doQuery("SELECT `teamnr` FROM `teamleden` WHERE `llnr` = '".$this->getCurrentUser()->id. "';");
         if (mysql_num_rows($result) == 0){
-            echo "maak team";
-        } 
-        
+            $addteammember = '<input type="text" name="maakteam" value="Maak team"';
+        }else{
+            $this->db->doQuery($query);
+        }
+        return $addteammember;
     }
 
     function getEditProject($name) {
@@ -955,7 +958,7 @@ class website {
                         </select><button style="width:60%;" onClick="bbcode_ins(\'font\');">Font</button>
                     </div>
                 </div>
-                <div align="center">
+                <div align="center" style="width:150%; padding:10px 10px 10px 10px;">
                     <script type="text/javascript">
                     var counter = 1;
                     function addUpload() {

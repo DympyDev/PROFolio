@@ -26,8 +26,8 @@
             $website->saveInfo($_POST['contentarea']);
         } else if (isset($_GET['mail'])) {
             $website->sendMail($_POST);
-        } else if (isset($_GET['editProject'])) {
-            $website->saveProject($_POST, $_GET['editProject']);
+        } else if (isset($_GET['projectEdit'])) {
+            $website->saveProject($_POST, $_GET['projectEdit']);
         } else {
             $website->saveProject($_POST);
         }
@@ -80,16 +80,8 @@
 
             <!-- / right column -->         
             <!-- content column -->
-            <div id="content">  
-                <div id="right">
-                    <?php
-                    if (isset($_GET['user'])) {
-                        echo $website->getUserInfo($_GET['user']);
-                    } else {
-                        echo $website->getUserInfo();
-                    }
-                    ?>
-                </div>
+            <div id="content">
+                <div id="left">
                 <?php
                 if (isset($_GET['search'])) {
                     echo $website->getSearchResult($_GET['search']);
@@ -144,7 +136,17 @@
                         echo $website->getHomepage();
                     }
                 }
-                ?>
+                ?>  
+                </div>
+                <div id="right">
+                    <?php
+                    if (isset($_GET['user'])) {
+                        echo $website->getUserInfo($_GET['user']);
+                    } else {
+                        echo $website->getUserInfo();
+                    }
+                    ?>
+                </div>
             </div>
             <!-- content column -->
         </div>
